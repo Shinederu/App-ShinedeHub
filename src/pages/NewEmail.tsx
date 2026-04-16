@@ -1,6 +1,6 @@
 ﻿import Title from "@/components/decoration/Title";
 import { AuthContext } from "@/shared/context/AuthContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@shinederu/auth-react";
 
@@ -21,19 +21,27 @@ const NewEmail = () => {
   const authCtx = useContext(AuthContext);
   const auth = useAuth();
   const navigate = useNavigate();
+  const hasHandledActionRef = useRef(false);
 
   const refreshAuthData = async () => {
     await authCtx.reload();
   };
 
   useEffect(() => {
+    if (hasHandledActionRef.current) {
+      return;
+    }
+
     const token = new URLSearchParams(location.search).get("token");
     const action = new URLSearchParams(location.search).get("action");
 
     if (!token || !action) {
+      hasHandledActionRef.current = true;
       navigate("/");
       return;
     }
+
+    hasHandledActionRef.current = true;
 
     const runAction = async () => {
       switch (action) {
