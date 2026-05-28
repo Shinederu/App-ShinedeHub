@@ -8,6 +8,7 @@ import NewPassword from "@/pages/NewPassword";
 import Profile from "@/pages/Profile";
 import ResetPassword from "@/pages/ResetPassword";
 import Announcements from "@/pages/Announcements";
+import CoreAccess from "@/pages/CoreAccess";
 import Users from "@/pages/Users";
 import { Navigate, Route } from "react-router-dom";
 
@@ -35,21 +36,22 @@ const logged = () => (
     </>
 )
 
-const privilegedLogged = (canManageUsers: boolean, canManageAnnouncements: boolean) => (
+const privilegedLogged = (canManageUsers: boolean, canManageAnnouncements: boolean, isGlobalAdmin: boolean) => (
     <>
         {logged()}
         {canManageUsers ? <Route path="/users" element={<Users />} /> : null}
         {canManageAnnouncements ? <Route path="/announcements" element={<Announcements />} /> : null}
+        {isGlobalAdmin ? <Route path="/core-access" element={<CoreAccess />} /> : null}
     </>
 )
 
-export const getRoutes = (isLoggedIn: boolean, canManageUsers: boolean, canManageAnnouncements: boolean) => {
+export const getRoutes = (isLoggedIn: boolean, canManageUsers: boolean, canManageAnnouncements: boolean, isGlobalAdmin: boolean) => {
     if (!isLoggedIn) {
         return anonymous();
     }
 
-    if (canManageUsers || canManageAnnouncements) {
-        return privilegedLogged(canManageUsers, canManageAnnouncements);
+    if (canManageUsers || canManageAnnouncements || isGlobalAdmin) {
+        return privilegedLogged(canManageUsers, canManageAnnouncements, isGlobalAdmin);
     }
 
     return logged();
