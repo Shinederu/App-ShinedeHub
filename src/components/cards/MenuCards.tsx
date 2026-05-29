@@ -13,6 +13,7 @@ type MenuCardsType = {
 const MenuCards = (props: MenuCardsType) => {
   const basePictureName = props.picture.replace(/\.(gif|png)$/i, "").trim();
   const [resolvedImage, setResolvedImage] = useState<string | null>(null);
+  const isExternalUrl = /^https?:\/\//i.test(props.url);
 
   const candidates = useMemo(() => {
     const lower = basePictureName.toLowerCase();
@@ -72,6 +73,14 @@ const MenuCards = (props: MenuCardsType) => {
   );
 
   if (props.active) {
+    if (isExternalUrl) {
+      return (
+        <a href={props.url} className="block w-full">
+          {cardContent}
+        </a>
+      );
+    }
+
     return (
       <Link to={props.url} className="block w-full">
         {cardContent}
