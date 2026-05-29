@@ -347,7 +347,7 @@ const CoreAccess = () => {
 
   return (
     <div className="w-full text-left">
-      <Title size={1} title="Core" />
+      <Title size={1} title="Permissions" />
 
       <div className="mt-4 flex flex-wrap gap-2">
         {([

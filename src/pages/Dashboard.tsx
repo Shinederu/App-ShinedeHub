@@ -16,7 +16,7 @@ const Dashboard = () => {
           <MenuCards active={true} name="Annonces" desc="Gere les annonces de l'accueil." url="/announcements" picture="Annonces" />
         ) : null}
         {authCtx.is_admin ? (
-          <MenuCards active={true} name="Core" desc="Gere les projets et droits centralises." url="/core-access" picture="Utilisateurs" />
+          <MenuCards active={true} name="Permissions" desc="Gere les projets et droits centralises." url="/permissions" picture="Permission" />
         ) : null}
         <MenuCards active={false} name="MelodyQuest" desc="Un blindtest amusant !" url="/MelodyQuest" picture="MelodyQuest" />
         <MenuCards active={false} name="Ananas" desc="Le celebre reseau social #FUN" url="/Ananas" picture="Ananas" />

@@ -41,7 +41,8 @@ const privilegedLogged = (canManageUsers: boolean, canManageAnnouncements: boole
         {logged()}
         {canManageUsers ? <Route path="/users" element={<Users />} /> : null}
         {canManageAnnouncements ? <Route path="/announcements" element={<Announcements />} /> : null}
-        {isGlobalAdmin ? <Route path="/core-access" element={<CoreAccess />} /> : null}
+        {isGlobalAdmin ? <Route path="/permissions" element={<CoreAccess />} /> : null}
+        {isGlobalAdmin ? <Route path="/core-access" element={<Navigate to="/permissions" replace />} /> : null}
     </>
 )
 
