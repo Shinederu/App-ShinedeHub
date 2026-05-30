@@ -50,6 +50,18 @@ Avec une integration locale workspace via:
 - `src/shared/auth/client.ts`
 - `src/shared/context/AuthContext.tsx`
 
+## Dashboard admin
+
+Le dashboard expose des tuiles selon les droits renvoyes par `auth?action=me`:
+
+- `Utilisateurs`: visible avec le droit backend `auth.users.manage` expose au frontend via `auth.users_manage`, ou super-admin global.
+- `Annonces`: visible avec le droit backend `main.announcements.manage` expose au frontend via `main.announcements_manage`, ou super-admin global.
+- `Permissions`: visible uniquement pour les super-admins, route `/permissions`.
+- `MelodyQuest`: tuile active vers `https://melodyquest.shinederu.ch/#/main`.
+
+Le panneau `/permissions` administre les tables `core_*`: projets, roles, permissions, liens role-permission et assignations utilisateur.
+Les routes projet conservent `/core-access` comme redirection de compatibilite vers `/permissions`.
+
 ## Notes
 
 - Le design est optimise desktop/mobile.
