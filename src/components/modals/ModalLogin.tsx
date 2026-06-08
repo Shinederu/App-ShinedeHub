@@ -132,16 +132,15 @@ const ModalLogin = () => {
                     onChange={handleChange}
                     className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-4"
                   />
+                  <button
+                    type="submit"
+                    className="mt-2 w-full bg-gradient-to-r bg-[#6a11cb] text-white px-4 py-2 rounded-md font-bold hover:scale-105 transition-transform"
+                  >
+                    Se connecter
+                  </button>
                 </form>
                 <button onClick={forgottedPassword} className="text-gray-500">
                   Mot de passe oublie ?
-                </button>
-                <button
-                  type="submit"
-                  onClick={sendLogin}
-                  className="mt-4 w-full bg-gradient-to-r bg-[#6a11cb] text-white px-4 py-2 rounded-md font-bold hover:scale-105 transition-transform"
-                >
-                  Se connecter
                 </button>
               </div>
 
@@ -185,14 +184,13 @@ const ModalLogin = () => {
                     onChange={handleChange}
                     className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-4"
                   />
+                  <button
+                    type="submit"
+                    className="w-full bg-gradient-to-r bg-[#11cb5f] text-white px-4 py-2 rounded-md font-bold hover:scale-105 transition-transform"
+                  >
+                    S'inscrire
+                  </button>
                 </form>
-                <button
-                  type="submit"
-                  onClick={sendRegister}
-                  className="w-full bg-gradient-to-r bg-[#11cb5f] text-white px-4 py-2 rounded-md font-bold hover:scale-105 transition-transform"
-                >
-                  S'inscrire
-                </button>
               </div>
             </div>
           </div>
