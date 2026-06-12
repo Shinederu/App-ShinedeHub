@@ -4,7 +4,7 @@ import { ModalContext } from "@/shared/context/ModalContext";
 import { createAnnouncement, deleteAnnouncement, listAnnouncementsAdmin, updateAnnouncement } from "@/shared/mainSite/client";
 import { AnnouncementType } from "@/types/Announcement";
 import { DateTimeFormatter } from "@/utils/DateTimeFormatter";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 type FormState = {
@@ -46,7 +46,7 @@ const Announcements = () => {
 
   const canManageAnnouncements = authCtx.can_manage_announcements;
 
-  const loadAnnouncements = async () => {
+  const loadAnnouncements = useCallback(async () => {
     setLoading(true);
     const response = await listAnnouncementsAdmin();
     if (!response.ok || !response.data) {
@@ -58,12 +58,12 @@ const Announcements = () => {
 
     setItems(response.data.announcements);
     setLoading(false);
-  };
+  }, [modalCtx]);
 
   useEffect(() => {
     if (!canManageAnnouncements) return;
     void loadAnnouncements();
-  }, [canManageAnnouncements]);
+  }, [canManageAnnouncements, loadAnnouncements]);
 
   const submitLabel = useMemo(() => (editingId ? "Mettre a jour" : "Creer"), [editingId]);
 

@@ -1,6 +1,6 @@
 ﻿import Title from "@/components/decoration/Title";
 import { AuthContext } from "@/shared/context/AuthContext";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@shinederu/auth-react";
 
@@ -18,14 +18,14 @@ const getResponseMessage = (data: unknown, fallback: string) => {
 
 const NewEmail = () => {
   const [message, setMessage] = useState("Chargement...");
-  const authCtx = useContext(AuthContext);
+  const { reload } = useContext(AuthContext);
   const auth = useAuth();
   const navigate = useNavigate();
   const hasHandledActionRef = useRef(false);
 
-  const refreshAuthData = async () => {
-    await authCtx.reload();
-  };
+  const refreshAuthData = useCallback(async () => {
+    await reload();
+  }, [reload]);
 
   useEffect(() => {
     if (hasHandledActionRef.current) {
@@ -76,7 +76,7 @@ const NewEmail = () => {
     };
 
     void runAction();
-  }, [auth, authCtx, navigate]);
+  }, [auth, navigate, refreshAuthData]);
 
   return (
     <>

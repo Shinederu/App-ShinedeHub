@@ -1,79 +1,153 @@
-﻿# Site Principal - Shinederu
+# ShinedeHub
 
-Frontend principal (React 18 + TypeScript + Vite + Tailwind).
+Frontend principal de l'ecosysteme Shinede, expose sur `https://shinederu.ch/`.
+Le projet a ete renomme **ShinedeHub**; le chemin runtime historique reste
+`P:\PROD\Shinederu` pour conserver le contrat de production.
 
-## Etat de pause / reprise
+## Role
 
-Projet principal mis en pause le 2026-06-12 dans un etat stable, deploye et documente.
-Lire `REPRISE.md` avant toute reprise: but du site, architecture front/API, routes,
-endpoints, migrations DB, deploiement, verifications et limites connues y sont
-centralises.
+ShinedeHub sert de portail public et d'interface admin:
 
-## Prerequis
+- accueil, chaines, communaute et page "A propos";
+- authentification commune via `Module-Auth-API`;
+- dashboard utilisateur/admin;
+- annuaire et management leger des comptes;
+- gestion des annonces;
+- gestion des permissions centralisees via `/permissions`;
+- tuiles vers MelodyQuest et ShinedeWake.
 
-- Node.js 20+
-- npm 10+
+## Repo et deploiement
 
-## Installation
+- Source: `P:\DEV\GitHub\App-ShinedeHub`
+- Remote: `https://github.com/Shinederu/App-ShinedeHub.git`
+- Build local: `P:\DEV\GitHub\App-ShinedeHub\dist`
+- Runtime production: `P:\PROD\Shinederu`
+- URL publique: `https://shinederu.ch/`
 
-```bash
-npm install
-```
+La production ne doit recevoir que le contenu de `dist/`: `index.html`, `assets/`
+et les ressources publiques necessaires. Ne pas copier `.git`, `node_modules`,
+sources TypeScript, fichiers de config dev, caches, tests, brouillons ou secrets.
 
-## Lancement
+## Endpoints
 
-```bash
-npm run dev
-```
+Le frontend consomme uniquement les APIs publiques sous `api.shinederu.ch`:
 
-## Build production
+- Auth: `https://api.shinederu.ch/auth/`
+- Site principal: `https://api.shinederu.ch/main-site/`
 
-```bash
-npm run build
-npm run preview
-```
+Les endpoints backend sont documentes dans:
 
-## Variables d'environnement
+- `P:\DEV\GitHub\Module-Auth-API\README.md`
+- `P:\DEV\GitHub\App-ShinedeHub-API\README.md`
+- `P:\DEV\GitHub\Module-ShinedeCore-PHP\README.md`
 
-Fichier: `.env` (dev) et `.env.production` (prod)
+## Authentification et permissions
 
-- `VITE_DEV_MODE`
-- `VITE_SHINEDERU_VERSION`
-- `VITE_SHINEDERU_API_AUTH_URL`
-- `VITE_SHINEDERU_API_MAIN_SITE_URL`
-- `VITE_TWITCH_CHANNEL_LINK`
-- `VITE_YOUTUBE_CHANNEL_LINK`
-- `VITE_DISCORD_INVITE`
-
-## Authentification
-
-Le site utilise maintenant la nouvelle couche partagee:
+Le site utilise les modules partages:
 
 - `@shinederu/auth-core`
 - `@shinederu/auth-react`
 
-Avec une integration locale workspace via:
+Aliases locaux dans `vite.config.ts`:
 
-- `src/shared/auth/client.ts`
-- `src/shared/context/AuthContext.tsx`
+- `@shinederu/auth-core` -> `../Module-Auth-Core/src/index.ts`
+- `@shinederu/auth-react` -> `../Module-Auth-React/src/index.ts`
 
-Le modal Connexion/Inscription soumet les formulaires au clavier: appuyer sur `Enter` dans les champs login/password ou inscription declenche le meme traitement que le bouton correspondant.
-Les pseudos doivent faire entre 4 et 24 caracteres. La limite est appliquee dans le formulaire d'inscription, la page Profil et l'API Auth.
+Permissions stables utilisees:
 
-## Dashboard admin
+- `auth.users.manage`: acces `/users` et actions admin utilisateurs;
+- `main.announcements.manage`: acces `/announcements`;
+- `core.super_admin`: acces `/permissions`.
 
-Le dashboard expose des tuiles selon les droits renvoyes par `auth?action=me`:
+Les roles se gerent dans `/permissions`; la page `/users` ne modifie que le
+pseudo, l'avatar et le blocage/deblocage d'un compte.
 
-- `Utilisateurs`: visible avec le droit backend `auth.users.manage` expose au frontend via `auth.users_manage`, ou super-admin global. La page `/users` sert d'annuaire et de management leger des comptes: recherche, etat de verification email, compteurs, apercu des roles projets centralises, modification du pseudo, modification de l'avatar et blocage/deblocage de compte. Les modifications de roles se font dans `/permissions`.
-- `Annonces`: visible avec le droit backend `main.announcements.manage` expose au frontend via `main.announcements_manage`, ou super-admin global.
-- `Permissions`: visible uniquement pour les super-admins, route `/permissions`.
-- `MelodyQuest`: tuile active vers `https://melodyquest.shinederu.ch/#/main`.
-- `ShinedeWake`: tuile active vers `https://wake.shinederu.ch/`.
+## Base de donnees
 
-Le panneau `/permissions` administre les tables `core_*`: projets, roles, permissions, liens role-permission et assignations utilisateur.
-Les routes projet conservent `/core-access` comme redirection de compatibilite vers `/permissions`.
+Le frontend n'accede jamais directement a la base. Les tables concernees cote API
+sont documentees dans les repos backend:
 
-## Notes
+- `users`, `auth_*` via `Module-Auth-API`;
+- `core_*` via `Module-ShinedeCore-PHP`;
+- `main_announcements` via `App-ShinedeHub-API`.
 
-- Le design est optimise desktop/mobile.
-- Les modales globales restent gerees localement (`ModalContext`).
+Schema partage: `ShinedeCore`.
+
+## Dossiers runtime et fichiers partages
+
+ShinedeHub n'a pas de stockage persistant propre. Les avatars, sessions,
+annonces et permissions passent par les APIs proprietaires.
+
+Le dossier `P:\PROD\Shinederu` est public et ne doit contenir aucun secret ni
+source de developpement.
+
+## Temps reel et evenements
+
+Aucun flux Mercure n'est consomme ou publie par ShinedeHub actuellement.
+Si un futur panneau temps reel est ajoute, la commande metier doit passer par
+l'API proprietaire, et Mercure ne doit servir qu'aux evenements/snapshots avec
+resynchronisation HTTP possible.
+
+## Dependances inter-projets
+
+- `Module-Auth-API`: login/register/session/profil/utilisateurs/permissions;
+- `Module-ShinedeCore-PHP`: modele de droits `core_*`;
+- `App-ShinedeHub-API`: annonces du site principal;
+- `Module-Auth-Core` et `Module-Auth-React`: client auth frontend;
+- MelodyQuest et ShinedeWake sont uniquement lies par tuiles externes.
+
+## Configuration
+
+Fichiers suivis: `.env` et `.env.production`, uniquement avec des valeurs Vite
+publiques. Ne pas y ajouter de secret.
+
+Variables principales:
+
+- `VITE_DEV_MODE`
+- `VITE_SHINEDEHUB_VERSION`
+- `VITE_SHINEDEHUB_API_AUTH_URL`
+- `VITE_SHINEDEHUB_API_MAIN_SITE_URL`
+- `VITE_TWITCH_CHANNEL_LINK`
+- `VITE_YOUTUBE_CHANNEL_LINK`
+- `VITE_YOUTUBE_CHANNEL_ID`
+- `VITE_YOUTUBE_API_KEY` (cle publique embarquee cote navigateur)
+- `VITE_DISCORD_INVITE`
+
+Les anciens noms `VITE_SHINEDERU_*` restent lus en fallback par compatibilite,
+mais les nouvelles configurations doivent utiliser `VITE_SHINEDEHUB_*`.
+
+## Verifications
+
+```powershell
+cd P:\DEV\GitHub\App-ShinedeHub
+npm run build
+npm run lint
+```
+
+`npm run lint` doit passer sans erreur ni warning bloquant.
+
+Smoke public apres deploiement:
+
+```powershell
+Invoke-WebRequest -Uri 'https://shinederu.ch/' -UseBasicParsing -TimeoutSec 20
+Invoke-WebRequest -Uri 'https://api.shinederu.ch/auth/?action=listUsers' -UseBasicParsing -TimeoutSec 20
+Invoke-WebRequest -Uri 'https://api.shinederu.ch/main-site/?action=listPublicAnnouncements' -UseBasicParsing -TimeoutSec 20
+```
+
+## Deploiement
+
+```powershell
+cd P:\DEV\GitHub\App-ShinedeHub
+npm run build
+Copy-Item -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist\index.html' -Destination 'P:\PROD\Shinederu\index.html' -Force
+Copy-Item -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist\assets' -Destination 'P:\PROD\Shinederu' -Recurse -Force
+Copy-Item -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist\img' -Destination 'P:\PROD\Shinederu' -Recurse -Force
+```
+
+Avant tout nettoyage d'anciens assets dans `P:\PROD\Shinederu\assets`, verifier
+ce que reference le `index.html` deploye.
+
+## Notes de reprise
+
+Lire `REPRISE.md` avant une reprise froide. Il contient l'historique fonctionnel,
+les scenarios manuels, les migrations appliquees et les limites connues.

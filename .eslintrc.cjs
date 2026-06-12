@@ -9,6 +9,14 @@ module.exports = {
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
+  overrides: [
+    {
+      files: ['src/shared/context/*.tsx'],
+      rules: {
+        'react-refresh/only-export-components': 'off'
+      }
+    }
+  ],
   rules: {
     'react-refresh/only-export-components': [
       'warn',

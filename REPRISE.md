@@ -1,14 +1,16 @@
-# Reprise - Shinederu.ch main
+# Reprise - ShinedeHub
 
 Etat: projet principal mis en pause le 2026-06-12 dans un etat deploye et fonctionnel.
+Nom projet actuel: **ShinedeHub**.
 
-Ce document sert de point de reprise pour le site principal `https://shinederu.ch/`.
+Ce document sert de point de reprise pour ShinedeHub, le site principal expose
+sur `https://shinederu.ch/`.
 Il couvre le frontend `App-ShinedeHub/` et les morceaux API directement utilises par ce site:
 `Module-Auth-API`, `App-ShinedeHub-API` et `Module-ShinedeCore-PHP`.
 
 ## But du projet
 
-Le site principal est le portail public et admin de l'ecosysteme Shinederu.
+ShinedeHub est le portail public et admin de l'ecosysteme Shinede.
 
 Il sert a:
 
@@ -24,6 +26,7 @@ Il sert a:
 
 Frontend principal:
 
+- nom projet: `ShinedeHub`
 - repo local: `P:\DEV\GitHub\App-ShinedeHub`
 - remote: `https://github.com/Shinederu/App-ShinedeHub.git`
 - build prod: `P:\DEV\GitHub\App-ShinedeHub\dist`
@@ -85,6 +88,14 @@ Fichiers importants:
 - `src/pages/CoreAccess.tsx`: panneau `/permissions`.
 - `src/pages/Announcements.tsx`: gestion des annonces.
 - `src/pages/Profile.tsx`: profil utilisateur.
+
+Variables Vite actuelles:
+
+- `VITE_SHINEDEHUB_VERSION`
+- `VITE_SHINEDEHUB_API_AUTH_URL`
+- `VITE_SHINEDEHUB_API_MAIN_SITE_URL`
+
+Les anciens noms `VITE_SHINEDERU_*` sont encore lus en fallback par compatibilite.
 
 Routes principales:
 
@@ -377,10 +388,7 @@ L'ancien monorepo `Legacy-Shinederu-API` conserve les hashes historiques avant e
 
 ## Limites connues
 
-- `npm run lint` echoue encore sur des problemes historiques hors des derniers changements:
-  - `src/shared/context/ModalContext.tsx`: `Unexpected any`;
-  - warnings `react-hooks/exhaustive-deps` dans `App.tsx`, `Announcements.tsx`, `CoreAccess.tsx`, `NewEmail.tsx`;
-  - warnings `react-refresh/only-export-components` dans les contextes.
+- `npm run lint` et `npm run build` passent au moment de cette mise en conformite.
 - `updateUserRole` existe encore pour compatibilite mais ne doit plus etre le chemin principal de gestion des roles.
 - Les anciens assets Vite peuvent rester dans `P:\PROD\Shinederu\assets`. Nettoyer seulement apres avoir verifie le `index.html` actif.
 - Certains anciens fichiers PHP ont eu des messages avec encodage historique imparfait. Les nouveaux fichiers touches utilisent de preference de l'ASCII.

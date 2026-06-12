@@ -2,7 +2,7 @@ import Title from "@/components/decoration/Title";
 import { AuthContext } from "@/shared/context/AuthContext";
 import { ModalContext } from "@/shared/context/ModalContext";
 import { useAuth } from "@shinederu/auth-react";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 type CoreProject = {
@@ -164,7 +164,7 @@ const CoreAccess = () => {
     [overview, selectedUserId]
   );
 
-  const loadOverview = async () => {
+  const loadOverview = useCallback(async () => {
     setLoading(true);
     const response = await auth.invoke("GET", "listCoreAccess");
     if (!response.ok) {
@@ -177,12 +177,12 @@ const CoreAccess = () => {
     const data = unwrapData<CoreOverview>(response.data);
     setOverview(data);
     setLoading(false);
-  };
+  }, [auth, modalCtx]);
 
   useEffect(() => {
     if (!authCtx.is_admin) return;
     void loadOverview();
-  }, [authCtx.is_admin]);
+  }, [authCtx.is_admin, loadOverview]);
 
   useEffect(() => {
     if (!overview) return;

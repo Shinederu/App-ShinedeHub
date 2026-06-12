@@ -17,7 +17,7 @@ type ApiResponseShape = {
   };
 };
 
-const baseUrl = import.meta.env.VITE_SHINEDERU_API_MAIN_SITE_URL;
+const baseUrl = import.meta.env.VITE_SHINEDEHUB_API_MAIN_SITE_URL ?? import.meta.env.VITE_SHINEDERU_API_MAIN_SITE_URL;
 const debugEnabled = import.meta.env.DEV || import.meta.env.VITE_DEV_MODE === "true";
 
 const debugLog = (scope: string, payload?: unknown) => {

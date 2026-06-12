@@ -16,7 +16,7 @@ export interface ModalContextType {
 }
 
 // 🛠️ Dummy function castée proprement
-const dummyOpen: ModalContextType["open"] = (() => Promise.resolve()) as any;
+const dummyOpen = (() => Promise.resolve(undefined)) as unknown as ModalContextType["open"];
 
 export const ModalContext = createContext<ModalContextType>({
     isOpen: false,

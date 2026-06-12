@@ -7,12 +7,12 @@ import { AuthContext } from "./shared/context/AuthContext";
 
 const App = () => {
 
-  const authCtx = useContext(AuthContext);
+  const { can_manage_announcements, can_manage_users, is_admin, isLoggedIn, reload } = useContext(AuthContext);
 
 
   useEffect(() => {
-    authCtx.reload();
-  }, []);
+    void reload();
+  }, [reload]);
 
 
   return (
@@ -22,7 +22,7 @@ const App = () => {
       <main
         className="w-[94%] sm:w-11/12 max-w-6xl mx-auto my-5 sm:my-8 lg:my-10 p-4 sm:p-6 lg:p-8 bg-[#1e1e1e] rounded-lg border border-[#2b2b2b] shadow-[0_0_30px_rgba(37,117,252,0.12)] text-center flex-grow"
       >
-        <Routes>{getRoutes(authCtx.isLoggedIn, authCtx.can_manage_users, authCtx.can_manage_announcements, authCtx.is_admin)}</Routes>
+        <Routes>{getRoutes(isLoggedIn, can_manage_users, can_manage_announcements, is_admin)}</Routes>
       </main>
       <Footer />
     </div>
