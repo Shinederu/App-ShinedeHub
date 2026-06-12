@@ -2,6 +2,13 @@
 
 Frontend principal (React 18 + TypeScript + Vite + Tailwind).
 
+## Etat de pause / reprise
+
+Projet principal mis en pause le 2026-06-12 dans un etat stable, deploye et documente.
+Lire `REPRISE.md` avant toute reprise: but du site, architecture front/API, routes,
+endpoints, migrations DB, deploiement, verifications et limites connues y sont
+centralises.
+
 ## Prerequis
 
 - Node.js 20+
