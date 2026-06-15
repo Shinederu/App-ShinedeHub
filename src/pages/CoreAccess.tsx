@@ -2,7 +2,7 @@ import Title from "@/components/decoration/Title";
 import { AuthContext } from "@/shared/context/AuthContext";
 import { ModalContext } from "@/shared/context/ModalContext";
 import { useAuth } from "@shinederu/auth-react";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 type CoreProject = {
@@ -123,6 +123,9 @@ const CoreAccess = () => {
   const authCtx = useContext(AuthContext);
   const modalCtx = useContext(ModalContext);
   const auth = useAuth();
+  const authRef = useRef(auth);
+  const modalRef = useRef(modalCtx);
+  const reloadAuthRef = useRef(authCtx.reload);
   const [overview, setOverview] = useState<CoreOverview | null>(null);
   const [tab, setTab] = useState<TabKey>("projects");
   const [loading, setLoading] = useState(true);
@@ -164,20 +167,32 @@ const CoreAccess = () => {
     [overview, selectedUserId]
   );
 
+  useEffect(() => {
+    authRef.current = auth;
+  }, [auth]);
+
+  useEffect(() => {
+    modalRef.current = modalCtx;
+  }, [modalCtx]);
+
+  useEffect(() => {
+    reloadAuthRef.current = authCtx.reload;
+  }, [authCtx.reload]);
+
   const loadOverview = useCallback(async () => {
     setLoading(true);
-    const response = await auth.invoke("GET", "listCoreAccess");
+    const response = await authRef.current.invoke("GET", "listCoreAccess");
     if (!response.ok) {
       setOverview(null);
       setLoading(false);
-      modalCtx.open(response.error ?? "Chargement impossible.", "error");
+      modalRef.current.open(response.error ?? "Chargement impossible.", "error");
       return;
     }
 
     const data = unwrapData<CoreOverview>(response.data);
     setOverview(data);
     setLoading(false);
-  }, [auth, modalCtx]);
+  }, []);
 
   useEffect(() => {
     if (!authCtx.is_admin) return;
@@ -212,11 +227,11 @@ const CoreAccess = () => {
 
   const mutate = async (action: string, payload: Record<string, unknown>) => {
     setSaving(true);
-    const response = await auth.invoke("PUT", action, payload);
+    const response = await authRef.current.invoke("PUT", action, payload);
     setSaving(false);
 
     if (!response.ok) {
-      modalCtx.open(response.error ?? "Enregistrement impossible.", "error");
+      modalRef.current.open(response.error ?? "Enregistrement impossible.", "error");
       return null;
     }
 
@@ -227,7 +242,7 @@ const CoreAccess = () => {
     const result = await mutate("saveCoreProject", projectForm);
     if (!result) return;
     await loadOverview();
-    modalCtx.open("Projet enregistre.", "result");
+    modalRef.current.open("Projet enregistre.", "result");
   };
 
   const saveRole = async () => {
@@ -245,14 +260,14 @@ const CoreAccess = () => {
     }
 
     await loadOverview();
-    modalCtx.open("Role enregistre.", "result");
+    modalRef.current.open("Role enregistre.", "result");
   };
 
   const savePermission = async () => {
     const result = await mutate("saveCorePermission", permissionForm);
     if (!result) return;
     await loadOverview();
-    modalCtx.open("Permission enregistree.", "result");
+    modalRef.current.open("Permission enregistree.", "result");
   };
 
   const saveUserRoles = async () => {
@@ -264,8 +279,8 @@ const CoreAccess = () => {
     });
     if (!result) return;
     await loadOverview();
-    await authCtx.reload();
-    modalCtx.open("Roles utilisateur enregistres.", "result");
+    await reloadAuthRef.current();
+    modalRef.current.open("Roles utilisateur enregistres.", "result");
   };
 
   const loadProject = (project: CoreProject | null) => {

@@ -18,9 +18,9 @@ Il sert a:
 - gerer l'authentification commune du domaine `.shinederu.ch`;
 - donner acces au dashboard utilisateur/admin;
 - administrer les annonces visibles sur l'accueil;
-- administrer les utilisateurs de maniere legere;
+- administrer les utilisateurs;
 - administrer les permissions centralisees `core_*`;
-- exposer des tuiles vers les autres projets actifs comme MelodyQuest et ShinedeWake selon les droits utilisateur.
+- exposer des tuiles vers les autres projets actifs comme MelodyQuest, ShinedeBox et ShinedeWake selon les droits utilisateur.
 
 ## Repos et chemins
 
@@ -53,6 +53,7 @@ Important infra:
 - Auth API: `https://api.shinederu.ch/auth/`
 - Main site API: `https://api.shinederu.ch/main-site/`
 - MelodyQuest front: `https://melodyquest.shinederu.ch/#/main`
+- ShinedeBox front: `https://box.shinederu.ch/`
 - ShinedeWake front: `https://wake.shinederu.ch/`
 
 Le frontend doit configurer l'API Auth sur `https://api.shinederu.ch/auth/index.php`.
@@ -88,7 +89,7 @@ Fichiers importants:
 - `src/shared/mainSite/client.ts`: client des annonces `App-ShinedeHub-API`, endpoint public `API/main-site`.
 - `src/components/modals/ModalLogin.tsx`: login/register.
 - `src/pages/Dashboard.tsx`: dashboard et tuiles projets.
-- `src/pages/Users.tsx`: annuaire et management leger des comptes.
+- `src/pages/Users.tsx`: annuaire et management des comptes.
 - `src/pages/CoreAccess.tsx`: panneau `/permissions`.
 - `src/pages/Announcements.tsx`: gestion des annonces.
 - `src/pages/Profile.tsx`: profil utilisateur.
@@ -107,7 +108,7 @@ Routes principales:
 - `/channels`, `/community`, `/aboutme`: pages publiques.
 - `/dashboard`: dashboard apres connexion.
 - `/profile`: profil utilisateur.
-- `/users`: annuaire + management leger des comptes, droit `auth.users.manage`.
+- `/users`: annuaire + management des comptes, droit `auth.users.manage`.
 - `/announcements`: gestion annonces, droit `main.announcements.manage`.
 - `/permissions`: gestion projets/roles/permissions, reserve a `core.super_admin`.
 - `/core-access`: redirection de compatibilite vers `/permissions`.
@@ -122,6 +123,7 @@ Tuiles actives:
 - `Annonces` -> `/announcements`, visible avec `main.announcements.manage`
 - `Permissions` -> `/permissions`, visible pour super-admin global
 - `MelodyQuest` -> `https://melodyquest.shinederu.ch/#/main`
+- `ShinedeBox` -> `https://box.shinederu.ch/`, visible avec `box.files.manage` ou super-admin global
 - `ShinedeWake` -> `https://wake.shinederu.ch/`, visible avec `wake.devices.wake`, `wake.devices.manage`, `wake.users.manage` ou super-admin global
 
 Tuile inactive:
@@ -150,6 +152,7 @@ Page `/users`:
 - affiche avatar, statut email, statut actif/bloque, roles projets;
 - panneau `Gerer` par utilisateur:
   - modifier le pseudo;
+  - modifier le mot de passe;
   - remplacer l'avatar;
   - bloquer/debloquer le compte avec motif.
 
@@ -192,7 +195,13 @@ Permissions utiles pour le site principal:
 - `core.super_admin`: acces global au panneau permissions.
 - `auth.users.manage`: acces `/users` et actions admin utilisateurs.
 - `main.announcements.manage`: acces `/announcements`.
+- `box.files.manage`: affichage de la tuile ShinedeBox dans `/dashboard`.
 - `wake.devices.wake`, `wake.devices.manage`, `wake.users.manage`: affichage de la tuile ShinedeWake dans `/dashboard`.
+
+La page `/permissions` utilise des refs pour le client auth et le modal. Eviter
+de remettre `auth` ou `modalCtx` comme dependances directes de `loadOverview`,
+sinon `auth.invoke()` peut relancer `listCoreAccess` en boucle via l'etat
+`isLoading` du client partage.
 
 ## Annonces du site principal
 
@@ -363,6 +372,7 @@ Admin `auth.users.manage`:
 - ouvrir `/users`;
 - filtrer/rechercher un compte;
 - modifier le pseudo d'un compte de test;
+- modifier le mot de passe d'un compte de test;
 - remplacer l'avatar d'un compte de test;
 - bloquer puis debloquer un compte de test;
 - verifier qu'un compte bloque ne peut pas se connecter.

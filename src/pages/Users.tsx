@@ -4,7 +4,7 @@ import { AuthContext } from "@/shared/context/AuthContext";
 import { ModalContext } from "@/shared/context/ModalContext";
 import { DateTimeFormatter } from "@/utils/DateTimeFormatter";
 import { useAuth } from "@shinederu/auth-react";
-import { Ban, Camera, RefreshCw, Save, Search, Settings, ShieldCheck, UserCheck, UsersRound } from "lucide-react";
+import { Ban, Camera, KeyRound, RefreshCw, Save, Search, Settings, ShieldCheck, UserCheck, UsersRound } from "lucide-react";
 import { Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 
@@ -136,6 +136,8 @@ const Users = () => {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [managedUserId, setManagedUserId] = useState<number | null>(null);
   const [editedUsername, setEditedUsername] = useState("");
+  const [editedPassword, setEditedPassword] = useState("");
+  const [editedPasswordConfirm, setEditedPasswordConfirm] = useState("");
   const [banReason, setBanReason] = useState("");
   const [savingUserId, setSavingUserId] = useState<number | null>(null);
   const [uploadingAvatarUserId, setUploadingAvatarUserId] = useState<number | null>(null);
@@ -166,6 +168,8 @@ const Users = () => {
     if (!updatedUser) return;
     setUsers((current) => current.map((user) => (user.id === updatedUser.id ? updatedUser : user)));
     setEditedUsername(updatedUser.username);
+    setEditedPassword("");
+    setEditedPasswordConfirm("");
     setBanReason(updatedUser.ban_reason);
   };
 
@@ -173,6 +177,8 @@ const Users = () => {
     const nextId = managedUserId === user.id ? null : user.id;
     setManagedUserId(nextId);
     setEditedUsername(nextId ? user.username : "");
+    setEditedPassword("");
+    setEditedPasswordConfirm("");
     setBanReason(nextId ? user.ban_reason : "");
   };
 
@@ -191,6 +197,40 @@ const Users = () => {
 
     replaceUser(getUserFromResponse(response.data));
     modalRef.current.open("Pseudo mis a jour.", "result");
+  };
+
+  const savePassword = async (user: AdminUser) => {
+    const password = editedPassword;
+    const passwordConfirm = editedPasswordConfirm;
+
+    if (password.length < 8) {
+      modalRef.current.open("Mot de passe trop court (minimum 8 caracteres).", "error");
+      return;
+    }
+
+    if (password !== passwordConfirm) {
+      modalRef.current.open("Les mots de passe ne correspondent pas.", "error");
+      return;
+    }
+
+    const confirmed = await modalRef.current.open("Modifier le mot de passe de ce compte ?", "confirm", user.username);
+    if (!confirmed) return;
+
+    setSavingUserId(user.id);
+    const response = await authRef.current.invoke("PUT", "updateUserAdmin", {
+      userId: user.id,
+      password,
+      passwordConfirm,
+    });
+    setSavingUserId(null);
+
+    if (!response.ok) {
+      modalRef.current.open(response.error ?? "Erreur pendant la mise a jour du mot de passe.", "error");
+      return;
+    }
+
+    replaceUser(getUserFromResponse(response.data));
+    modalRef.current.open("Mot de passe mis a jour.", "result");
   };
 
   const toggleBan = async (user: AdminUser) => {
@@ -466,7 +506,7 @@ const Users = () => {
                       {managedUserId === user.id ? (
                         <tr className="border-b border-[#252525]">
                           <td colSpan={6} className="bg-[#141414] px-4 py-5">
-                            <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(220px,280px)_minmax(240px,320px)]">
+                            <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_minmax(220px,280px)_minmax(240px,320px)_minmax(240px,320px)]">
                               <div className="space-y-3">
                                 <label className="block">
                                   <span className="mb-1 block text-sm text-gray-300">Pseudo</span>
@@ -516,6 +556,40 @@ const Users = () => {
                                   />
                                 </label>
                                 <p className="text-xs text-gray-500">PNG, JPEG ou WebP - max 5 Mo.</p>
+                              </div>
+
+                              <div className="space-y-3">
+                                <p className="text-sm text-gray-300">Mot de passe</p>
+                                <label className="block">
+                                  <span className="mb-1 block text-sm text-gray-300">Nouveau mot de passe</span>
+                                  <input
+                                    type="password"
+                                    value={editedPassword}
+                                    onChange={(event) => setEditedPassword(event.target.value)}
+                                    autoComplete="new-password"
+                                    className="w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                  />
+                                </label>
+                                <label className="block">
+                                  <span className="mb-1 block text-sm text-gray-300">Confirmer</span>
+                                  <input
+                                    type="password"
+                                    value={editedPasswordConfirm}
+                                    onChange={(event) => setEditedPasswordConfirm(event.target.value)}
+                                    autoComplete="new-password"
+                                    className="w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                  />
+                                </label>
+                                <button
+                                  type="button"
+                                  disabled={savingUserId === user.id || editedPassword.length < 8 || editedPassword !== editedPasswordConfirm}
+                                  onClick={() => void savePassword(user)}
+                                  className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm transition hover:bg-indigo-500 disabled:opacity-60"
+                                >
+                                  <KeyRound size={16} />
+                                  Modifier le mot de passe
+                                </button>
+                                <p className="text-xs text-gray-500">Minimum 8 caracteres.</p>
                               </div>
 
                               <div className="space-y-3">

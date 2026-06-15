@@ -12,6 +12,7 @@ type AuthDataType = {
   is_admin: boolean;
   can_manage_users: boolean;
   can_manage_announcements: boolean;
+  can_access_box: boolean;
   can_access_wake: boolean;
   created_at: string;
 };
@@ -31,6 +32,7 @@ const EMPTY_AUTH: AuthDataType = {
   is_admin: false,
   can_manage_users: false,
   can_manage_announcements: false,
+  can_access_box: false,
   can_access_wake: false,
   created_at: "",
 };
@@ -78,6 +80,7 @@ const mapUserToAuthData = (isLoggedIn: boolean, user: AuthUser | null | undefine
     is_admin: isGlobalAdmin,
     can_manage_users: isGlobalAdmin || hasProjectPermission(user, "auth", "users_manage"),
     can_manage_announcements: isGlobalAdmin || hasProjectPermission(user, "main", "announcements_manage"),
+    can_access_box: isGlobalAdmin || hasProjectPermission(user, "box", "files_manage"),
     can_access_wake:
       isGlobalAdmin ||
       hasProjectPermission(user, "wake", "devices_wake") ||
@@ -120,6 +123,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         is_admin: false,
         can_manage_users: false,
         can_manage_announcements: false,
+        can_access_box: false,
         can_access_wake: false,
         created_at: "2024-01-01T00:00:00Z",
       });
