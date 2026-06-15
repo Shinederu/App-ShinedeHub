@@ -55,6 +55,10 @@ Important infra:
 - MelodyQuest front: `https://melodyquest.shinederu.ch/#/main`
 - ShinedeWake front: `https://wake.shinederu.ch/`
 
+Le frontend doit configurer l'API Auth sur `https://api.shinederu.ch/auth/index.php`.
+Les appels `PUT` ou `DELETE` vers `https://api.shinederu.ch/auth/` peuvent
+etre bloques par Nginx avec `405 Not Allowed` avant d'atteindre PHP.
+
 ## Architecture frontend
 
 Stack:
@@ -92,7 +96,7 @@ Fichiers importants:
 Variables Vite actuelles:
 
 - `VITE_SHINEDEHUB_VERSION`
-- `VITE_SHINEDEHUB_API_AUTH_URL`
+- `VITE_SHINEDEHUB_API_AUTH_URL=https://api.shinederu.ch/auth/index.php`
 - `VITE_SHINEDEHUB_API_MAIN_SITE_URL`
 
 Les anciens noms `VITE_SHINEDERU_*` sont encore lus en fallback par compatibilite.

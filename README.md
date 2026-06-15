@@ -35,6 +35,11 @@ Le frontend consomme uniquement les APIs publiques sous `api.shinederu.ch`:
 - Auth: `https://api.shinederu.ch/auth/`
 - Site principal: `https://api.shinederu.ch/main-site/`
 
+Pour les appels navigateur, `VITE_SHINEDEHUB_API_AUTH_URL` doit pointer vers le
+front controller `https://api.shinederu.ch/auth/index.php`. Les appels `PUT` ou
+`DELETE` vers le dossier `/auth/` peuvent etre refuses par Nginx avant PHP avec
+un `405 Not Allowed`.
+
 Les endpoints backend sont documentes dans:
 
 - `P:\DEV\GitHub\Module-Auth-API\README.md`
@@ -106,7 +111,7 @@ Variables principales:
 
 - `VITE_DEV_MODE`
 - `VITE_SHINEDEHUB_VERSION`
-- `VITE_SHINEDEHUB_API_AUTH_URL`
+- `VITE_SHINEDEHUB_API_AUTH_URL=https://api.shinederu.ch/auth/index.php`
 - `VITE_SHINEDEHUB_API_MAIN_SITE_URL`
 - `VITE_TWITCH_CHANNEL_LINK`
 - `VITE_YOUTUBE_CHANNEL_LINK`
