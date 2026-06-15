@@ -19,7 +19,9 @@ const Dashboard = () => {
           <MenuCards active={true} name="Permissions" desc="Gere les projets et droits centralises." url="/permissions" picture="Permission" />
         ) : null}
         <MenuCards active={true} name="MelodyQuest" desc="Un blindtest amusant !" url="https://melodyquest.shinederu.ch/#/main" picture="MelodyQuest" />
-        <MenuCards active={true} name="ShinedeWake" desc="Reveille et gere tes machines a distance." url="https://wake.shinederu.ch/" picture="ShinedeWake" />
+        {authCtx.can_access_wake ? (
+          <MenuCards active={true} name="ShinedeWake" desc="Reveille et gere tes machines a distance." url="https://wake.shinederu.ch/" picture="ShinedeWake" />
+        ) : null}
         <MenuCards active={false} name="Ananas" desc="Le celebre reseau social #FUN" url="/Ananas" picture="Ananas" />
       </div>
 

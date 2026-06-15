@@ -20,7 +20,7 @@ Il sert a:
 - administrer les annonces visibles sur l'accueil;
 - administrer les utilisateurs de maniere legere;
 - administrer les permissions centralisees `core_*`;
-- exposer des tuiles vers les autres projets actifs comme MelodyQuest et ShinedeWake.
+- exposer des tuiles vers les autres projets actifs comme MelodyQuest et ShinedeWake selon les droits utilisateur.
 
 ## Repos et chemins
 
@@ -118,7 +118,7 @@ Tuiles actives:
 - `Annonces` -> `/announcements`, visible avec `main.announcements.manage`
 - `Permissions` -> `/permissions`, visible pour super-admin global
 - `MelodyQuest` -> `https://melodyquest.shinederu.ch/#/main`
-- `ShinedeWake` -> `https://wake.shinederu.ch/`
+- `ShinedeWake` -> `https://wake.shinederu.ch/`, visible avec `wake.devices.wake`, `wake.devices.manage`, `wake.users.manage` ou super-admin global
 
 Tuile inactive:
 
@@ -188,6 +188,7 @@ Permissions utiles pour le site principal:
 - `core.super_admin`: acces global au panneau permissions.
 - `auth.users.manage`: acces `/users` et actions admin utilisateurs.
 - `main.announcements.manage`: acces `/announcements`.
+- `wake.devices.wake`, `wake.devices.manage`, `wake.users.manage`: affichage de la tuile ShinedeWake dans `/dashboard`.
 
 ## Annonces du site principal
 
@@ -348,6 +349,7 @@ Anonyme:
 Utilisateur connecte:
 
 - ouvrir `/dashboard`;
+- verifier que la tuile ShinedeWake n'apparait que pour un compte ayant une permission Wake;
 - ouvrir `/profile`;
 - modifier son pseudo dans la limite 4-24;
 - changer son avatar.

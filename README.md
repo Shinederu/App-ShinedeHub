@@ -14,7 +14,7 @@ ShinedeHub sert de portail public et d'interface admin:
 - annuaire et management leger des comptes;
 - gestion des annonces;
 - gestion des permissions centralisees via `/permissions`;
-- tuiles vers MelodyQuest et ShinedeWake.
+- tuiles vers MelodyQuest et ShinedeWake selon les droits utilisateur.
 
 ## Repo et deploiement
 
@@ -57,7 +57,8 @@ Permissions stables utilisees:
 
 - `auth.users.manage`: acces `/users` et actions admin utilisateurs;
 - `main.announcements.manage`: acces `/announcements`;
-- `core.super_admin`: acces `/permissions`.
+- `core.super_admin`: acces `/permissions`;
+- `wake.devices.wake`, `wake.devices.manage` ou `wake.users.manage`: affichage de la tuile ShinedeWake dans `/dashboard`.
 
 Les roles se gerent dans `/permissions`; la page `/users` ne modifie que le
 pseudo, l'avatar et le blocage/deblocage d'un compte.
@@ -94,7 +95,7 @@ resynchronisation HTTP possible.
 - `Module-ShinedeCore-PHP`: modele de droits `core_*`;
 - `App-ShinedeHub-API`: annonces du site principal;
 - `Module-Auth-Core` et `Module-Auth-React`: client auth frontend;
-- MelodyQuest et ShinedeWake sont uniquement lies par tuiles externes.
+- MelodyQuest et ShinedeWake sont lies par tuiles externes; la tuile ShinedeWake est conditionnee par les permissions Wake renvoyees dans `user.project_access`.
 
 ## Configuration
 
