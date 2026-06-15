@@ -506,8 +506,8 @@ const Users = () => {
                       {managedUserId === user.id ? (
                         <tr className="border-b border-[#252525]">
                           <td colSpan={6} className="bg-[#141414] px-4 py-5">
-                            <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_minmax(220px,280px)_minmax(240px,320px)_minmax(240px,320px)]">
-                              <div className="space-y-3">
+                            <div className="grid gap-4 lg:grid-cols-2">
+                              <div className="min-w-0 space-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
                                 <label className="block">
                                   <span className="mb-1 block text-sm text-gray-300">Pseudo</span>
                                   <input
@@ -528,7 +528,7 @@ const Users = () => {
                                       editedUsername.trim().length > USERNAME_MAX_LENGTH
                                     }
                                     onClick={() => void saveUsername(user)}
-                                    className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm transition hover:bg-indigo-500 disabled:opacity-60"
+                                    className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm transition hover:bg-indigo-500 disabled:opacity-60 sm:w-auto"
                                   >
                                     <Save size={16} />
                                     Enregistrer pseudo
@@ -539,9 +539,9 @@ const Users = () => {
                                 </div>
                               </div>
 
-                              <div className="space-y-3">
+                              <div className="min-w-0 space-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
                                 <p className="text-sm text-gray-300">Photo de profil</p>
-                                <label className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-[#252525] px-3 py-2 text-sm transition hover:bg-[#303030]">
+                                <label className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-[#252525] px-3 py-2 text-sm transition hover:bg-[#303030] sm:w-auto">
                                   <Camera size={16} />
                                   {uploadingAvatarUserId === user.id ? "Envoi..." : "Changer l'avatar"}
                                   <input
@@ -558,7 +558,7 @@ const Users = () => {
                                 <p className="text-xs text-gray-500">PNG, JPEG ou WebP - max 5 Mo.</p>
                               </div>
 
-                              <div className="space-y-3">
+                              <div className="min-w-0 space-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
                                 <p className="text-sm text-gray-300">Mot de passe</p>
                                 <label className="block">
                                   <span className="mb-1 block text-sm text-gray-300">Nouveau mot de passe</span>
@@ -584,7 +584,7 @@ const Users = () => {
                                   type="button"
                                   disabled={savingUserId === user.id || editedPassword.length < 8 || editedPassword !== editedPasswordConfirm}
                                   onClick={() => void savePassword(user)}
-                                  className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm transition hover:bg-indigo-500 disabled:opacity-60"
+                                  className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm transition hover:bg-indigo-500 disabled:opacity-60 sm:w-auto"
                                 >
                                   <KeyRound size={16} />
                                   Modifier le mot de passe
@@ -592,7 +592,7 @@ const Users = () => {
                                 <p className="text-xs text-gray-500">Minimum 8 caracteres.</p>
                               </div>
 
-                              <div className="space-y-3">
+                              <div className="min-w-0 space-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
                                 <label className="block">
                                   <span className="mb-1 block text-sm text-gray-300">Motif de blocage</span>
                                   <textarea
@@ -607,7 +607,7 @@ const Users = () => {
                                   type="button"
                                   disabled={savingUserId === user.id}
                                   onClick={() => void toggleBan(user)}
-                                  className={`inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm transition disabled:opacity-60 ${
+                                  className={`inline-flex w-full items-center justify-center gap-2 rounded-md px-3 py-2 text-sm transition disabled:opacity-60 sm:w-auto ${
                                     user.is_banned ? "bg-green-700 hover:bg-green-600" : "bg-red-700 hover:bg-red-600"
                                   }`}
                                 >

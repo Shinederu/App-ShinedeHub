@@ -155,6 +155,9 @@ Page `/users`:
   - modifier le mot de passe;
   - remplacer l'avatar;
   - bloquer/debloquer le compte avec motif.
+- ce panneau reste volontairement limite a deux colonnes maximum, car il est
+  rendu dans une ligne de tableau et une grille 4 colonnes devient trop etroite
+  dans le conteneur principal.
 
 Blocage de compte:
 
