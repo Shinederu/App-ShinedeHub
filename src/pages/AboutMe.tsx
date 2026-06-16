@@ -1,94 +1,149 @@
 import Title from "@/components/decoration/Title";
+import { Code2, Gamepad2, HeartHandshake, Lightbulb, Music2, Sparkles, Twitch } from "lucide-react";
+
+const highlights = [
+  "CFC d'informaticien en poche",
+  "Suisse, pseudo Shinederu depuis le ZEvent 2020",
+  "Idees de projets a la con en stock permanent",
+  "Streams rares, mais jamais totalement disparus",
+];
+
+const games = ["Genshin Impact", "Honkai", "Minecraft", "Vampire Survivors", "Vampire Crawler", "et les jeux qui passent par la"];
+const references = ["Kaamelott", "Kaeloo", "Guzz Prod", "Wankil a l'ancienne", "sagas MP3", "YouTube, films d'animation et autres conneries"];
 
 const About = () => {
-    return (
-        <>
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 w-11/12 mx-auto mt-8">
-                {/* Section 1 */}
-                <section className="bg-[#10101f] p-6 rounded-xl border-2 border-[#6a11cb] col-span-1 lg:col-span-2 transform transition-transform duration-300 hover:scale-105">
-                    <Title size={2} title="Salut, moi c'est Shinederu !" />
-                    <p>
-                        Alors moi c'est Shinederu, ou Théo pour les amis, un Suisse actuellement en apprentissage d'informaticien.
-                        Je suis plutôt un gars banal et pas très intéressant, mais j'aime passer de bons moments en ligne à jouer avec des potes sur Discord !
-                    </p>
-                </section>
-
-                {/* Section 2 */}
-                <section className="bg-[#10101f] p-6 rounded-xl border-2 border-[#11cb5f] col-span-1 md:col-span-2 transform transition-transform duration-300 hover:scale-105">
-                    <Title size={2} title="D'où vient mon pseudo ?" />
-                    <p>
-                        Mon pseudo vient à la base du Quiz du Grenier du Zevent de 2020... Une des questions était : "Comment s'appelle Splinter en japonais ?"
-                        Et je ne sais plus qui a répondu, mais la tentative était un truc du genre "Shinadeiru"... Je trouvais ça "moche mais stylé", alors je l'ai modifié pour "Shinederu" :3
-                    </p>
-                </section>
-
-                {/* Section 3 */}
-                <section className="bg-[#10101f] p-6 rounded-xl border-2 border-[#1124cb] col-span-1 transform transition-transform duration-300 hover:scale-105">
-                    <Title size={2} title="Mes passions" />
-                    <p>
-                        Je joue évidemment aux jeux vidéo, principalement des jeux multijoueurs fun où on peut se taper de bonnes sessions de délire entre amis.
-                        Sinon je regarde du YouTube, quelques films (principalement d'animation) et j'ai eu une période où je regardais pas mal d'animés.
-                        Je suis aussi fan d'informatique et je développe régulièrement des petits projets pour m'amuser.
-                    </p>
-                </section>
-
-                {/* Section 4 */}
-                <section className="bg-[#10101f] p-6 rounded-xl border-2 border-[#cbbf11] col-span-1 lg:col-span-3 transform transition-transform duration-300 hover:scale-105">
-                    <Title size={2} title="Pourquoi je stream ?" />
-                    <p>
-                        En live, je stream surtout des jeux multi entre potes. Je n'ai pas de thème précis, tant que j'y prends du plaisir.
-                        Je suis vraiment pas du genre à me casser la tête là-dessus... D'ailleurs les 3/4 des lives sont lancés à l'arrache pour le fun xD
-                    </p>
-                    <p>
-                        J'avais envie d'essayer, puis j'ai trouvé ça amusant, donc j'ai continué... (et les dons, ça rapporte du pognon mouahahahah).
-                    </p>
-                </section>
-
-                {/* Section 5 */}
-                <section className="bg-[#10101f] p-6 rounded-xl border-2 border-[#cb1111] col-span-1 transform transition-transform duration-300 hover:scale-105">
-                    <Title size={2} title="Moments mémorables" />
-                    <p>
-                        Certains lives ont eu des moments fous, comme un camion qui s'envole sur ETS2 ou des actions incroyables sur certains jeux comme The Finals.
-                        Mais pour l'instant, rien qui surpasse tout !
-                    </p>
-                </section>
-
-                {/* Section 6 */}
-                <section className="bg-[#10101f] p-6 rounded-xl border-2 border-[#11bfcb] col-span-1 md:col-span-2 lg:col-span-1 transform transition-transform duration-300 hover:scale-105">
-                    <Title size={2} title="Quelques fun facts" />
-                    <p>
-                        Un talent caché ? Faire des blagues de merde, ça compte ? xD Sinon je ne vois pas trop quoi mettre ici...
-                    </p>
-                </section>
-
-                {/* Section 7 */}
-                <section className="bg-[#10101f] p-6 rounded-xl border-2 border-[#cb11ac] col-span-1 md:col-span-2 transform transition-transform duration-300 hover:scale-105">
-                    <Title size={2} title="Citation favorite" />
-                    <p>
-                        "J'estime ne pas avoir à subir les fantasmes carriéristes d'une entité générationnelle, réactionnaire et oppressive." — Yvain, Kaamelott
-                    </p>
-                </section>
-
-                {/* Section 8 */}
-                <section className="bg-[#10101f] p-6 rounded-xl border-2 border-[#6a11cb] col-span-1 lg:col-span-3 transform transition-transform duration-300 hover:scale-105">
-                    <Title size={2} title="Recommandations" />
-                    <p>
-                        Comme jeu, sans aucun doute Minecraft et Genshin Impact, sur lesquels j'ai passé beaucoup trop de temps pour être toujours aussi nul.
-                        Et comme séries, il y en a beaucoup... Kaamelott, The Big Bang Theory, Bloqué, et bien sûr des sagas MP3 comme Le Donjon de Naheulbeuk ou Reflet d'Acide.
-                    </p>
-                </section>
-
-                {/* Section 9 */}
-                <section className="bg-[#10101f] p-6 rounded-xl border-2 border-[#cb5511] col-span-1 transform transition-transform duration-300 hover:scale-105">
-                    <Title size={2} title="Pourquoi me suivre ?" />
-                    <p>
-                        Et pourquoi pas ? Franchement ? Je suis chill, dans la plupart des cas je dis ce que je pense, donc voilà quoi.
-                        Je suis pas le plus drôle, le plus déconneur, le plus riche ou autre. Mais au moins je m'assume !
-                    </p>
-                </section>
+  return (
+    <div className="mx-auto grid w-full max-w-5xl gap-6 text-left">
+      <section className="overflow-hidden rounded-lg border border-[#303030] bg-[#151515]">
+        <div className="grid gap-6 p-5 sm:p-7 lg:grid-cols-[minmax(0,1.35fr)_minmax(260px,0.65fr)] lg:items-center">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold uppercase tracking-wide text-indigo-300">A propos</p>
+            <Title size={1} title="Salut, moi c'est Shinederu" />
+            <div className="space-y-4 text-base leading-7 text-gray-200">
+              <p>
+                Moi c'est Shinederu, ou Theo pour les amis. Je suis un Suisse avec un CFC d'informaticien en poche, un humour parfois discutable,
+                et une capacite assez solide a lancer des projets improbables juste parce que l'idee me fait rire.
+              </p>
+              <p>
+                Je stream beaucoup moins qu'avant, mais l'envie n'est pas morte. Il y aura peut-etre encore un live qui popera de nulle part un soir,
+                sans planning, sans grande annonce, juste pour passer un moment tranquille.
+              </p>
             </div>
-        </>
-    );
+          </div>
+
+          <div className="grid gap-3 rounded-lg border border-[#2f2f2f] bg-[#101010] p-4">
+            {highlights.map((item) => (
+              <div key={item} className="flex items-start gap-3 rounded-md bg-[#1d1d1d] px-3 py-2 text-sm text-gray-200">
+                <Sparkles className="mt-0.5 shrink-0 text-cyan-300" size={16} />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-3">
+        <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
+          <div className="mb-3 flex items-center gap-2 text-green-300">
+            <Lightbulb size={20} />
+            <Title size={4} title="Le pseudo" />
+          </div>
+          <p className="leading-7 text-gray-200">
+            Shinederu vient d'une reponse foireuse entendue pendant le Quiz du Grenier au ZEvent 2020, autour de Splinter en japonais. Le son
+            etait moche mais style, alors c'est reste, avec une petite retouche.
+          </p>
+        </article>
+
+        <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
+          <div className="mb-3 flex items-center gap-2 text-amber-300">
+            <HeartHandshake size={20} />
+            <Title size={4} title="La vibe" />
+          </div>
+          <p className="leading-7 text-gray-200">
+            Pas prise de tete. Des soirees chill, des blagues nulles, parfois un peu de timidite selon le contexte, et souvent une idee bizarre
+            qui finit en prototype parce que "pourquoi pas".
+          </p>
+        </article>
+
+        <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
+          <div className="mb-3 flex items-center gap-2 text-rose-300">
+            <Twitch size={20} />
+            <Title size={4} title="Les lives" />
+          </div>
+          <p className="leading-7 text-gray-200">
+            Le stream n'est plus le centre de tout. S'il revient, ce sera probablement comme avant: un live qui apparait sans prevenir, pour jouer,
+            discuter, et garder un souvenir d'une bonne session.
+          </p>
+        </article>
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
+          <div className="mb-3 flex items-center gap-2 text-sky-300">
+            <Code2 size={20} />
+            <Title size={3} title="Les projets" />
+          </div>
+          <div className="space-y-4 leading-7 text-gray-200">
+            <p>
+              Le vibe coding n'a rien arrange: les idees continuent d'arriver, souvent trop vite, souvent trop betes, parfois vraiment utiles.
+              C'est un peu le moteur de tout l'ecosysteme Shinede.
+            </p>
+            <p>
+              MelodyQuest a une place speciale. L'idee date de ma premiere annee d'apprentissage: une version Java dans un CMD, des fichiers
+              en <span className="rounded bg-[#252525] px-1.5 py-0.5 text-sm text-gray-100">.wav</span>, et un
+              <span className="rounded bg-[#252525] px-1.5 py-0.5 text-sm text-gray-100"> start.bat </span>
+              pour lancer le bazar. Aujourd'hui c'est devenu un vrai projet web, mais l'ADN est reste le meme.
+            </p>
+          </div>
+        </article>
+
+        <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
+          <div className="mb-3 flex items-center gap-2 text-violet-300">
+            <Gamepad2 size={20} />
+            <Title size={3} title="Jeux du moment" />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {games.map((game) => (
+              <span key={game} className="rounded-md border border-[#333] bg-[#202020] px-3 py-2 text-sm text-gray-100">
+                {game}
+              </span>
+            ))}
+          </div>
+          <p className="mt-4 leading-7 text-gray-200">
+            Genshin reste tout en haut de la pile, Honkai n'est pas loin, Minecraft revient de temps en temps, et il y a toujours un jeu random
+            qui s'invite dans la rotation.
+          </p>
+        </article>
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
+          <div className="mb-3 flex items-center gap-2 text-teal-300">
+            <Music2 size={20} />
+            <Title size={3} title="References" />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {references.map((item) => (
+              <span key={item} className="rounded-md bg-[#202020] px-3 py-2 text-sm text-gray-100">
+                {item}
+              </span>
+            ))}
+          </div>
+        </article>
+
+        <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
+          <Title size={3} title="Pourquoi rester ?" />
+          <p className="leading-7 text-gray-200">
+            Pour les idees a la con, les soirees chill, les projets qui sortent de nulle part, les discussions sans pression, et cette ambiance
+            ou on peut juste passer un bon moment sans faire semblant d'etre plus serieux que necessaire.
+          </p>
+          <p className="mt-4 leading-7 text-gray-400">
+            En gros: rien de revolutionnaire, mais c'est assume. Et parfois, c'est exactement ce qu'il faut.
+          </p>
+        </article>
+      </section>
+    </div>
+  );
 };
 
 export default About;

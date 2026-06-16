@@ -89,6 +89,7 @@ Fichiers importants:
 - `src/shared/mainSite/client.ts`: client des annonces `App-ShinedeHub-API`, endpoint public `API/main-site`.
 - `src/components/modals/ModalLogin.tsx`: login/register.
 - `src/pages/Dashboard.tsx`: dashboard et tuiles projets.
+- `src/pages/AboutMe.tsx`: bio publique Shinederu, mise a jour apres CFC avec layout responsive sans mosaique a colonnes variables.
 - `src/pages/Users.tsx`: annuaire et management des comptes.
 - `src/pages/CoreAccess.tsx`: panneau `/permissions`.
 - `src/pages/Announcements.tsx`: gestion des annonces.
