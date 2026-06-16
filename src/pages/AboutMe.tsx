@@ -120,7 +120,7 @@ const About = () => {
         <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
           <div className="mb-3 flex items-center gap-2 text-teal-300">
             <Music2 size={20} />
-            <Title size={3} title="References" />
+            <Title size={3} title="Références" />
           </div>
           <div className="flex flex-wrap gap-2">
             {references.map((item) => (

@@ -395,6 +395,15 @@ Super-admin:
 
 ## Etat des derniers changements utiles
 
+Mise a jour front du 2026-06-16:
+
+- version publique `VITE_SHINEDEHUB_VERSION=0.3.3`;
+- suppression des timers d'interface inutiles sur l'accueil, `/channels` et `/community`;
+- chargement a la demande du lecteur Twitch et du widget Discord pour eviter de charger des scripts/iframes tiers au rendu initial;
+- `Title` rend maintenant le bon niveau de titre (`h1`, `h2`, `h3`, etc.) selon sa taille, ce qui reduit les multiples `h1`;
+- header, footer, modales et pages publiques ont recu une passe accessibilite et libelles FR;
+- `MenuCards` utilise des chemins d'images explicites pour eviter les probes/404 en cascade, sans modifier ni compresser les images existantes.
+
 Derniers changements fonctionnels du site principal avant pause:
 
 - `App-ShinedeHub` `40ecdd1`: actions de management utilisateur dans `/users`.

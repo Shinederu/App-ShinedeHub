@@ -39,12 +39,12 @@ const NewPassword = () => {
     const response = await auth.resetPassword(token, newPassword.password, newPassword.passwordConfirm);
 
     if (!response.ok) {
-      modalCtx.open(response.error ?? "Erreur pendant la reinitialisation.", "error");
+      modalCtx.open(response.error ?? "Erreur pendant la réinitialisation.", "error");
       return;
     }
 
     setNewPassword({ password: "", passwordConfirm: "" });
-    modalCtx.open(getResponseMessage(response.data, "Mot de passe mis a jour."), "info", "", () => {
+    modalCtx.open(getResponseMessage(response.data, "Mot de passe mis à jour."), "info", "", () => {
       navigate("/");
     });
   };
@@ -52,9 +52,15 @@ const NewPassword = () => {
   return (
     <>
       <div className="text-white max-w-md mx-auto mt-10">
-        <Title title="Reinitialisation du mot de passe" size={1} />
+        <Title title="Réinitialisation du mot de passe" size={1} />
 
-        <div className="mt-6 space-y-4">
+        <form
+          className="mt-6 space-y-4"
+          onSubmit={(event) => {
+            event.preventDefault();
+            void submitNewPassword();
+          }}
+        >
           <div>
             <label className="block mb-1 text-sm text-gray-300">Nouveau mot de passe</label>
             <input
@@ -78,11 +84,11 @@ const NewPassword = () => {
           </div>
 
           <div className="pt-2">
-            <button onClick={submitNewPassword} className="w-full px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition">
+            <button type="submit" className="w-full rounded-md bg-indigo-600 px-4 py-2 transition hover:bg-indigo-500">
               Valider
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

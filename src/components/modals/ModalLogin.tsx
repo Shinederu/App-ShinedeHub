@@ -100,17 +100,27 @@ const ModalLogin = () => {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-[#10101f] text-white rounded-lg shadow-lg w-11/12 sm:w-4/6 lg:w-3/6 p-6 relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Connexion et inscription"
+            className="relative max-h-[90vh] w-full max-w-4xl overflow-auto rounded-lg bg-[#10101f] p-5 text-white shadow-lg sm:p-6"
+          >
             <div className="flex justify-end border-b border-gray-700 pb-4">
-              <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white transition">
+              <button
+                type="button"
+                aria-label="Fermer la fenêtre de connexion"
+                onClick={() => setIsOpen(false)}
+                className="rounded-md p-1 text-gray-400 transition hover:bg-white/10 hover:text-white"
+              >
                 <X size={20} />
               </button>
             </div>
 
             <div className="py-4 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="rounded-xl border-2 border-[#5120c2] p-8">
-                <Title size={2} title="Connexion" />
+                <Title size={2} title="Connexion" level={2} />
                 <form
                   onSubmit={(event) => {
                     event.preventDefault();
@@ -135,18 +145,18 @@ const ModalLogin = () => {
                   />
                   <button
                     type="submit"
-                    className="mt-2 w-full bg-gradient-to-r bg-[#6a11cb] text-white px-4 py-2 rounded-md font-bold hover:scale-105 transition-transform"
+                    className="mt-2 w-full rounded-md bg-[#6a11cb] px-4 py-2 font-bold text-white transition-colors hover:bg-[#7b2bd8]"
                   >
                     Se connecter
                   </button>
                 </form>
                 <button onClick={forgottedPassword} className="text-gray-500">
-                  Mot de passe oublie ?
+                  Mot de passe oublié ?
                 </button>
               </div>
 
               <div className="rounded-xl border-2 border-[#20c228] p-8">
-                <Title size={2} title="Inscription" />
+                <Title size={2} title="Inscription" level={2} />
                 <form
                   onSubmit={(event) => {
                     event.preventDefault();
@@ -189,7 +199,7 @@ const ModalLogin = () => {
                   />
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r bg-[#11cb5f] text-white px-4 py-2 rounded-md font-bold hover:scale-105 transition-transform"
+                    className="w-full rounded-md bg-[#11cb5f] px-4 py-2 font-bold text-white transition-colors hover:bg-[#20d96e]"
                   >
                     S'inscrire
                   </button>

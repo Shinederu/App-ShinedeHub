@@ -65,7 +65,7 @@ const Announcements = () => {
     void loadAnnouncements();
   }, [canManageAnnouncements, loadAnnouncements]);
 
-  const submitLabel = useMemo(() => (editingId ? "Mettre a jour" : "Creer"), [editingId]);
+  const submitLabel = useMemo(() => (editingId ? "Mettre à jour" : "Créer"), [editingId]);
 
   if (!canManageAnnouncements) {
     return <Navigate to="/dashboard" replace />;
@@ -74,7 +74,7 @@ const Announcements = () => {
   return (
     <div className="w-full">
       <Title size={1} title="Gestion des annonces" />
-      <p className="text-gray-300">Creation, edition et suppression des annonces visibles sur l'accueil.</p>
+      <p className="text-gray-300">Création, édition et suppression des annonces visibles sur l'accueil.</p>
 
       <section className="mt-6 rounded-xl border border-[#2f2f2f] bg-[#181818] p-5 text-left">
         <Title size={3} title={editingId ? "Modifier une annonce" : "Nouvelle annonce"} />
@@ -100,7 +100,7 @@ const Announcements = () => {
               value={form.buttonLabel}
               onChange={(event) => setForm((prev) => ({ ...prev, buttonLabel: event.target.value }))}
               className="p-2 border border-gray-700 rounded-md bg-[#202020] text-white"
-              placeholder="Libelle du bouton (optionnel)"
+              placeholder="Libellé du bouton (optionnel)"
               maxLength={120}
             />
             <input
@@ -148,7 +148,7 @@ const Announcements = () => {
                 setEditingId(null);
                 setForm(EMPTY_FORM);
                 await loadAnnouncements();
-                modalCtx.open("Annonce enregistree.", "result");
+                modalCtx.open("Annonce enregistrée.", "result");
               }}
               className="px-3 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition disabled:opacity-60"
             >
@@ -163,7 +163,7 @@ const Announcements = () => {
               }}
               className="px-3 py-2 rounded-md bg-gray-700 hover:bg-gray-600 transition disabled:opacity-60"
             >
-              Reinitialiser
+              Réinitialiser
             </button>
           </div>
         </div>
@@ -181,7 +181,7 @@ const Announcements = () => {
               <div key={announcement.id} className="rounded-lg border border-[#2f2f2f] bg-[#141414] p-4">
                 <h3 className="text-xl font-bold">{announcement.title}</h3>
                 <p className="text-gray-200 whitespace-pre-wrap mt-2">{announcement.message}</p>
-                <p className="text-sm text-gray-400 mt-3">Publie le {DateTimeFormatter(announcement.publishedAt)}</p>
+                <p className="text-sm text-gray-400 mt-3">Publié le {DateTimeFormatter(announcement.publishedAt)}</p>
                 {announcement.buttonLabel && announcement.buttonLink ? (
                   <p className="text-sm text-blue-300 mt-1">
                     Bouton: {announcement.buttonLabel} ({announcement.buttonLink})
@@ -214,7 +214,7 @@ const Announcements = () => {
                         return;
                       }
                       await loadAnnouncements();
-                      modalCtx.open("Annonce supprimee.", "result");
+                      modalCtx.open("Annonce supprimée.", "result");
                     }}
                     className="px-3 py-2 rounded-md bg-red-700 hover:bg-red-600 transition"
                   >

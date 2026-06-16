@@ -185,7 +185,7 @@ export const updateAnnouncement = async (id: number, payload: UpsertPayload): Pr
     const json = await parseJson(response);
     debugLog("POST updateAnnouncement response", { status: response.status, payload: json });
     if (!response.ok || json.success === false) {
-      return { ok: false, data: null, error: getErrorMessage(json, "Mise a jour impossible.") };
+      return { ok: false, data: null, error: getErrorMessage(json, "Mise à jour impossible.") };
     }
 
     const mapped = mapAnnouncement(json.data?.announcement ?? null);

@@ -48,7 +48,7 @@ const NewEmail = () => {
         case "confirmEmailUpdate": {
           const response = await auth.confirmEmailUpdate(token);
           if (response.ok) {
-            setMessage(getResponseMessage(response.data, "Email mis a jour."));
+            setMessage(getResponseMessage(response.data, "Email mis à jour."));
             await refreshAuthData();
           } else {
             setMessage(response.error ?? "Erreur lors de la confirmation d'email.");

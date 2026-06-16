@@ -191,12 +191,12 @@ const Users = () => {
     setSavingUserId(null);
 
     if (!response.ok) {
-      modalRef.current.open(response.error ?? "Erreur pendant la mise a jour du pseudo.", "error");
+      modalRef.current.open(response.error ?? "Erreur pendant la mise à jour du pseudo.", "error");
       return;
     }
 
     replaceUser(getUserFromResponse(response.data));
-    modalRef.current.open("Pseudo mis a jour.", "result");
+    modalRef.current.open("Pseudo mis à jour.", "result");
   };
 
   const savePassword = async (user: AdminUser) => {
@@ -204,7 +204,7 @@ const Users = () => {
     const passwordConfirm = editedPasswordConfirm;
 
     if (password.length < 8) {
-      modalRef.current.open("Mot de passe trop court (minimum 8 caracteres).", "error");
+      modalRef.current.open("Mot de passe trop court (minimum 8 caractères).", "error");
       return;
     }
 
@@ -225,12 +225,12 @@ const Users = () => {
     setSavingUserId(null);
 
     if (!response.ok) {
-      modalRef.current.open(response.error ?? "Erreur pendant la mise a jour du mot de passe.", "error");
+      modalRef.current.open(response.error ?? "Erreur pendant la mise à jour du mot de passe.", "error");
       return;
     }
 
     replaceUser(getUserFromResponse(response.data));
-    modalRef.current.open("Mot de passe mis a jour.", "result");
+    modalRef.current.open("Mot de passe mis à jour.", "result");
   };
 
   const toggleBan = async (user: AdminUser) => {
@@ -249,12 +249,12 @@ const Users = () => {
     setSavingUserId(null);
 
     if (!response.ok) {
-      modalRef.current.open(response.error ?? "Erreur pendant la mise a jour du blocage.", "error");
+      modalRef.current.open(response.error ?? "Erreur pendant la mise à jour du blocage.", "error");
       return;
     }
 
     replaceUser(getUserFromResponse(response.data));
-    modalRef.current.open(willBan ? "Compte bloque." : "Compte debloque.", "result");
+    modalRef.current.open(willBan ? "Compte bloqué." : "Compte débloqué.", "result");
   };
 
   const updateAvatar = async (user: AdminUser, file: File | null | undefined) => {
@@ -269,12 +269,12 @@ const Users = () => {
     setUploadingAvatarUserId(null);
 
     if (!response.ok) {
-      modalRef.current.open(response.error ?? "Erreur pendant la mise a jour de l'avatar.", "error");
+      modalRef.current.open(response.error ?? "Erreur pendant la mise à jour de l'avatar.", "error");
       return;
     }
 
     replaceUser(getUserFromResponse(response.data));
-    modalRef.current.open("Avatar mis a jour.", "result");
+    modalRef.current.open("Avatar mis à jour.", "result");
   };
 
   useEffect(() => {
@@ -332,7 +332,7 @@ const Users = () => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <Title size={1} title="Utilisateurs" />
-          <p className="mt-2 text-gray-300">Annuaire des comptes, etat email et acces projet.</p>
+          <p className="mt-2 text-gray-300">Annuaire des comptes, état email et accès projet.</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -372,7 +372,7 @@ const Users = () => {
           </p>
         </div>
         <div className="rounded-lg border border-[#2f2f2f] bg-[#181818] p-4">
-          <p className="text-sm text-gray-400">Comptes bloques</p>
+          <p className="text-sm text-gray-400">Comptes bloqués</p>
           <p className="mt-2 flex items-center gap-2 text-3xl font-bold text-red-300">
             <Ban size={24} />
             {stats.blocked}
@@ -392,7 +392,7 @@ const Users = () => {
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Rechercher par pseudo, email, ID ou role"
+              placeholder="Rechercher par pseudo, email, ID ou rôle"
               className="w-full rounded-md border border-gray-700 bg-[#202020] py-2 pl-10 pr-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </label>
@@ -400,9 +400,9 @@ const Users = () => {
           <div className="flex flex-wrap gap-2">
             {([
               ["all", "Tous"],
-              ["verified", "Verifies"],
+              ["verified", "Vérifiés"],
               ["pending", "En attente"],
-              ["blocked", "Bloques"],
+              ["blocked", "Bloqués"],
               ["super_admin", "Super-admins"],
             ] as const).map(([key, label]) => (
               <button
@@ -419,7 +419,7 @@ const Users = () => {
 
         {stats.latestUser ? (
           <p className="mt-3 text-sm text-gray-400">
-            Dernier compte: <span className="text-gray-200">{stats.latestUser.username}</span>, cree le {DateTimeFormatter(stats.latestUser.created_at)}
+            Dernier compte: <span className="text-gray-200">{stats.latestUser.username}</span>, créé le {DateTimeFormatter(stats.latestUser.created_at)}
           </p>
         ) : null}
       </section>
@@ -437,8 +437,8 @@ const Users = () => {
                   <th className="py-3 pr-4">Utilisateur</th>
                   <th className="py-3 pr-4">Email</th>
                   <th className="py-3 pr-4">Statut</th>
-                  <th className="py-3 pr-4">Acces</th>
-                  <th className="py-3 pr-4">Cree le</th>
+                  <th className="py-3 pr-4">Accès</th>
+                  <th className="py-3 pr-4">Créé le</th>
                   <th className="py-3 pr-4">Action</th>
                 </tr>
               </thead>
@@ -467,12 +467,12 @@ const Users = () => {
                         <td className="py-3 pr-4">
                           <p className="text-gray-200">{user.email}</p>
                           <span className={`mt-1 inline-block rounded px-2 py-1 text-xs ${user.email_verified ? "bg-green-950 text-green-200" : "bg-amber-950 text-amber-200"}`}>
-                            {user.email_verified ? "verifie" : "en attente"}
+                            {user.email_verified ? "vérifié" : "en attente"}
                           </span>
                         </td>
                         <td className="py-3 pr-4">
                           <span className={`inline-block rounded px-2 py-1 text-xs ${user.is_banned ? "bg-red-950 text-red-200" : "bg-green-950 text-green-200"}`}>
-                            {user.is_banned ? "bloque" : "actif"}
+                            {user.is_banned ? "bloqué" : "actif"}
                           </span>
                           {user.is_banned && user.banned_at ? (
                             <p className="mt-1 text-xs text-gray-500">{DateTimeFormatter(user.banned_at)}</p>
@@ -487,7 +487,7 @@ const Users = () => {
                                 </span>
                               ))
                             ) : (
-                              <span className="rounded bg-[#252525] px-2 py-1 text-xs text-gray-400">Aucun role projet</span>
+                              <span className="rounded bg-[#252525] px-2 py-1 text-xs text-gray-400">Aucun rôle projet</span>
                             )}
                           </div>
                         </td>
@@ -499,7 +499,7 @@ const Users = () => {
                             className="inline-flex items-center gap-2 rounded-md bg-[#252525] px-3 py-2 text-sm transition hover:bg-[#303030]"
                           >
                             <Settings size={16} />
-                            Gerer
+                            Gérer
                           </button>
                         </td>
                       </tr>
@@ -589,7 +589,7 @@ const Users = () => {
                                   <KeyRound size={16} />
                                   Modifier le mot de passe
                                 </button>
-                                <p className="text-xs text-gray-500">Minimum 8 caracteres.</p>
+                                <p className="text-xs text-gray-500">Minimum 8 caractères.</p>
                               </div>
 
                               <div className="min-w-0 space-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
@@ -612,7 +612,7 @@ const Users = () => {
                                   }`}
                                 >
                                   <Ban size={16} />
-                                  {user.is_banned ? "Debloquer le compte" : "Bloquer le compte"}
+                                  {user.is_banned ? "Débloquer le compte" : "Bloquer le compte"}
                                 </button>
                                 {user.is_banned && user.ban_reason ? (
                                   <p className="text-xs text-gray-400">Motif actuel: {user.ban_reason}</p>

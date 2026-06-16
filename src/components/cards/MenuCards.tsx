@@ -1,4 +1,3 @@
-﻿import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Title from "../decoration/Title";
 
@@ -10,61 +9,38 @@ type MenuCardsType = {
   desc: string;
 };
 
+const DASHBOARD_IMAGES: Record<string, string> = {
+  Ananas: "/img/dashboard/Ananas.png",
+  Annonces: "/img/dashboard/Annonces.png",
+  MelodyQuest: "/img/dashboard/MelodyQuest.png",
+  Permission: "/img/dashboard/Permission.gif",
+  Profile: "/img/dashboard/Profile.gif",
+  ShinedeWake: "/img/dashboard/ShinedeWake.png",
+  Utilisateurs: "/img/dashboard/Utilisateurs.png",
+};
+
+const resolveDashboardImage = (picture: string) => {
+  if (picture.startsWith("/")) return picture;
+
+  const key = picture.replace(/\.(avif|gif|jpg|jpeg|png|webp)$/i, "").trim();
+  return DASHBOARD_IMAGES[key] ?? null;
+};
+
 const MenuCards = (props: MenuCardsType) => {
-  const basePictureName = props.picture.replace(/\.(gif|png)$/i, "").trim();
-  const [resolvedImage, setResolvedImage] = useState<string | null>(null);
+  const resolvedImage = resolveDashboardImage(props.picture);
   const isExternalUrl = /^https?:\/\//i.test(props.url);
-
-  const candidates = useMemo(() => {
-    const lower = basePictureName.toLowerCase();
-    const capitalized = lower ? `${lower.charAt(0).toUpperCase()}${lower.slice(1)}` : lower;
-    const names = Array.from(new Set([basePictureName, lower, capitalized])).filter(Boolean);
-    const paths: string[] = [];
-
-    names.forEach((name) => {
-      paths.push(`/img/dashboard/${name}.gif`);
-      paths.push(`/img/dashboard/${name}.png`);
-    });
-
-    return paths;
-  }, [basePictureName]);
-
-  useEffect(() => {
-    let cancelled = false;
-    setResolvedImage(null);
-
-    const tryLoad = (index: number) => {
-      if (cancelled || index >= candidates.length) return;
-
-      const image = new Image();
-      image.onload = () => {
-        if (!cancelled) setResolvedImage(candidates[index]);
-      };
-      image.onerror = () => {
-        tryLoad(index + 1);
-      };
-      image.src = candidates[index];
-    };
-
-    tryLoad(0);
-
-    return () => {
-      cancelled = true;
-    };
-  }, [candidates]);
 
   const cardContent = (
     <div
-      className={`w-full aspect-square rounded-xl border-2 ${props.active ? "border-[#3eda30]" : "border-[#da3030]"} transition-transform duration-300 hover:scale-[1.02]`}
+      className={`w-full aspect-square rounded-lg border-2 ${props.active ? "border-[#3eda30]" : "border-[#da3030]"} bg-[#222222] transition-colors duration-200 hover:border-indigo-300`}
       style={{
         backgroundImage: resolvedImage ? `url(${resolvedImage})` : "none",
-        backgroundColor: "#222222",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="bg-black rounded-xl bg-opacity-65 w-full h-full flex justify-center flex-col px-4 py-5">
+      <div className="flex h-full w-full flex-col justify-center rounded-md bg-black/65 px-4 py-5">
         <Title size={3} title={props.name} />
         <p>{props.desc}</p>
         {!props.active && <i>Prochainement...</i>}
@@ -72,23 +48,27 @@ const MenuCards = (props: MenuCardsType) => {
     </div>
   );
 
-  if (props.active) {
-    if (isExternalUrl) {
-      return (
-        <a href={props.url} className="block w-full">
-          {cardContent}
-        </a>
-      );
-    }
-
+  if (!props.active) {
     return (
-      <Link to={props.url} className="block w-full">
+      <div className="block w-full" aria-disabled="true">
         {cardContent}
-      </Link>
+      </div>
     );
   }
 
-  return cardContent;
+  if (isExternalUrl) {
+    return (
+      <a href={props.url} className="block w-full">
+        {cardContent}
+      </a>
+    );
+  }
+
+  return (
+    <Link to={props.url} className="block w-full">
+      {cardContent}
+    </Link>
+  );
 };
 
 export default MenuCards;

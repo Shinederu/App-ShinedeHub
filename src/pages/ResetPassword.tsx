@@ -30,7 +30,7 @@ const ResetPassword = () => {
       return;
     }
 
-    modalCtx.open(getResponseMessage(response.data, "Demande envoyee."), "info", "", () => {
+    modalCtx.open(getResponseMessage(response.data, "Demande envoyée."), "info", "", () => {
       setEmail("");
       navigate("/");
     });
@@ -39,9 +39,15 @@ const ResetPassword = () => {
   return (
     <>
       <div className="text-white max-w-md mx-auto mt-10">
-        <Title title="Demander une reinitialisation du mot de passe" size={1} />
+        <Title title="Demander une réinitialisation du mot de passe" size={1} />
 
-        <div className="mt-6 space-y-4">
+        <form
+          className="mt-6 space-y-4"
+          onSubmit={(event) => {
+            event.preventDefault();
+            void sendPasswordResetRequest();
+          }}
+        >
           <div>
             <label className="block mb-1 text-sm text-gray-300">Adresse Email</label>
             <input
@@ -57,13 +63,12 @@ const ResetPassword = () => {
           <div className="pt-2">
             <button
               type="submit"
-              onClick={sendPasswordResetRequest}
               className="w-full px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition"
             >
               Envoyer
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

@@ -15,6 +15,7 @@ ShinedeHub sert de portail public et d'interface admin:
 - gestion des annonces;
 - gestion des permissions centralisees via `/permissions`;
 - tuiles vers MelodyQuest, ShinedeBox et ShinedeWake selon les droits utilisateur.
+- embeds publics charges a la demande pour limiter les scripts tiers au rendu initial.
 
 ## Repo et deploiement
 
@@ -113,7 +114,7 @@ publiques. Ne pas y ajouter de secret.
 Variables principales:
 
 - `VITE_DEV_MODE`
-- `VITE_SHINEDEHUB_VERSION`
+- `VITE_SHINEDEHUB_VERSION` (version publique courante: `0.3.3`)
 - `VITE_SHINEDEHUB_API_AUTH_URL=https://api.shinederu.ch/auth/index.php`
 - `VITE_SHINEDEHUB_API_MAIN_SITE_URL`
 - `VITE_TWITCH_CHANNEL_LINK`

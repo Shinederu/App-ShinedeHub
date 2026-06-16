@@ -1,15 +1,16 @@
 const Footer = () => {
-  const version = import.meta.env.VITE_SHINEDEHUB_VERSION ?? import.meta.env.VITE_SHINEDERU_VERSION;
+  const version = import.meta.env.VITE_SHINEDEHUB_VERSION ?? import.meta.env.VITE_SHINEDERU_VERSION ?? "dev";
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="text-center py-5 bg-[#1a1a1a] mt-8 text-gray-400 text-xs sm:text-sm">
+    <footer className="mt-8 bg-[#1a1a1a] py-5 text-center text-xs text-gray-400 sm:text-sm">
       <div>Version : {version}</div>
       <p>
-        &copy; 2025{" "}
-        <a href="https://shinederu.ch" target="_blank" rel="noopener noreferrer" className="hover:underline">
+        &copy; {currentYear}{" "}
+        <a href="https://shinederu.ch" className="hover:underline">
           Shinederu.ch
         </a>{" "}
-        - Tous droits reserves
+        - Tous droits réservés
       </p>
     </footer>
   );

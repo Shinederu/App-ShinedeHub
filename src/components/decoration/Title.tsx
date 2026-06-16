@@ -1,9 +1,13 @@
-﻿type TitleProps = {
+type TitleProps = {
   title: string;
   size: number;
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
 };
 
 const Title = (props: TitleProps) => {
+  const headingLevel = props.level ?? Math.min(Math.max(Math.round(props.size), 1), 6);
+  const HeadingTag = `h${headingLevel}` as keyof JSX.IntrinsicElements;
+
   const checkSize = () => {
     switch (props.size) {
       case 1:
@@ -21,7 +25,7 @@ const Title = (props: TitleProps) => {
 
   return (
     <div className="pt-2 pb-3">
-      <h1 className={checkSize()}>{props.title}</h1>
+      <HeadingTag className={checkSize()}>{props.title}</HeadingTag>
     </div>
   );
 };

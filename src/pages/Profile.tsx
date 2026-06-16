@@ -49,7 +49,7 @@ const Profile = () => {
 
     if (!response.ok) {
       setEditedUser((prev) => ({ ...prev, username: authCtx.username }));
-      modalCtx.open(response.error ?? "Erreur pendant la mise a jour du profil.", "error");
+      modalCtx.open(response.error ?? "Erreur pendant la mise à jour du profil.", "error");
       return;
     }
 
@@ -65,7 +65,7 @@ const Profile = () => {
       return;
     }
 
-    modalCtx.open("Un email de modification du mot de passe a ete envoye a votre adresse email.", "result");
+    modalCtx.open("Un email de modification du mot de passe a été envoyé à votre adresse email.", "result");
   };
 
   const sendNewEmailRequest = async () => {
@@ -76,7 +76,7 @@ const Profile = () => {
       return;
     }
 
-    modalCtx.open(getResponseMessage(response.data, "Demande enregistree."), "result");
+    modalCtx.open(getResponseMessage(response.data, "Demande enregistrée."), "result");
     setNewEmail({ email: "", emailConfirm: "" });
   };
 
@@ -84,7 +84,7 @@ const Profile = () => {
     const response = await auth.logoutAll();
 
     if (!response.ok) {
-      modalCtx.open(response.error ?? "Erreur pendant la deconnexion globale.", "error");
+      modalCtx.open(response.error ?? "Erreur pendant la déconnexion globale.", "error");
       return;
     }
 
@@ -109,12 +109,12 @@ const Profile = () => {
     const response = await auth.updateAvatar(file, "avatar.png");
 
     if (!response.ok) {
-      modalCtx.open(response.error ?? "Erreur pendant la mise a jour de l'avatar.", "error");
+      modalCtx.open(response.error ?? "Erreur pendant la mise à jour de l'avatar.", "error");
       return;
     }
 
     await authCtx.reload();
-    modalCtx.open("Avatar mis a jour.", "result");
+    modalCtx.open("Avatar mis à jour.", "result");
     e.currentTarget.value = "";
   };
 
@@ -154,12 +154,12 @@ const Profile = () => {
                   className="p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <p className="mt-1 text-xs text-gray-400">
-                  {editedUser.username.length}/{USERNAME_MAX_LENGTH} caracteres
+                  {editedUser.username.length}/{USERNAME_MAX_LENGTH} caractères
                 </p>
               </div>
 
               <div>Email: {authCtx.email}</div>
-              <div>Cree le: {DateTimeFormatter(authCtx.created_at)}</div>
+              <div>Créé le: {DateTimeFormatter(authCtx.created_at)}</div>
 
               <div className="flex gap-3">
                 <button onClick={() => setEditMode(false)} className="px-3 py-2 rounded-md bg-gray-700 hover:bg-gray-600 transition">
@@ -175,16 +175,16 @@ const Profile = () => {
               <div>Identifiant unique: #{authCtx.id}</div>
               <div>Nom d'utilisateur: {authCtx.username}</div>
               <div>Email: {authCtx.email}</div>
-              <div>Cree le: {DateTimeFormatter(authCtx.created_at)}</div>
-              <button onClick={() => setEditMode(true)} className="mt-3 px-3 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition">
-                Modifier mon profile
+              <div>Créé le: {DateTimeFormatter(authCtx.created_at)}</div>
+              <button type="button" onClick={() => setEditMode(true)} className="mt-3 px-3 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition">
+                Modifier mon profil
               </button>
             </div>
           )}
         </div>
 
         <section className="border-t border-gray-700 pt-6 text-white mt-10">
-          <Title size={2} title="Zone Dangereuse" />
+          <Title size={2} title="Zone dangereuse" />
 
           <div className="mt-6 grid gap-8 md:grid-cols-2">
             <div>
@@ -226,12 +226,12 @@ const Profile = () => {
 
               <button
                 onClick={async () => {
-                  const confirmed = await modalCtx.open("Souhaitez-vous reellement vous deconnecter de tous les appareils ?", "confirm", "");
+                  const confirmed = await modalCtx.open("Souhaitez-vous réellement vous déconnecter de tous les appareils ?", "confirm", "");
                   if (confirmed) sendLogOutAll();
                 }}
                 className="px-3 py-2 rounded-md bg-orange-600 hover:bg-orange-500 transition"
               >
-                Se deconnecter de tous les appareils
+                Se déconnecter de tous les appareils
               </button>
 
               <button
@@ -239,7 +239,7 @@ const Profile = () => {
                   const value = await modalCtx.open(
                     "Entrez votre mot de passe pour confirmer la suppression de votre compte.",
                     "prompt",
-                    "Cette action est irreversible. (laisser vide pour annuler)"
+                    "Cette action est irréversible. (laisser vide pour annuler)"
                   );
                   if (value?.trim()) await sendDeleteAccount(value);
                 }}

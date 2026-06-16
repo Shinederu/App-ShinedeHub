@@ -11,7 +11,7 @@ const ProfileHeader = () => {
     const response = await auth.logout();
 
     if (!response.ok) {
-      modalCtx.open(response.error ?? "Erreur lors de la deconnexion.", "error");
+      modalCtx.open(response.error ?? "Erreur lors de la déconnexion.", "error");
     }
   };
 
@@ -20,8 +20,8 @@ const ProfileHeader = () => {
       <Link to="/dashboard" className="transition-colors duration-300 hover:text-[#6a11cb] whitespace-nowrap">
         Dashboard
       </Link>
-      <button onClick={sendLogout} className="transition hover:text-[#cb1111] whitespace-nowrap">
-        Se deconnecter
+      <button type="button" onClick={sendLogout} className="whitespace-nowrap transition hover:text-[#cb1111]">
+        Se déconnecter
       </button>
     </div>
   );
