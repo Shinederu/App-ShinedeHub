@@ -4,7 +4,7 @@ import { Code2, Gamepad2, HeartHandshake, Lightbulb, Music2, Sparkles, Twitch } 
 const highlights = [
   "CFC d'informaticien en poche",
   "Suisse, pseudo Shinederu depuis le ZEvent 2020",
-  "Idées de projets à la con en stock permanent",
+  "Laboratoire perso toujours ouvert",
   "Streams rares, mais jamais totalement disparus",
 ];
 
@@ -22,7 +22,7 @@ const About = () => {
             <div className="space-y-4 text-base leading-7 text-gray-200">
               <p>
                 Moi c'est Shinederu, ou Théo pour les amis. Je suis un Suisse avec un CFC d'informaticien en poche, un humour parfois discutable,
-                et une capacité assez solide à lancer des projets improbables juste parce que l'idée me fait rire.
+                et une tendance assez nette à transformer un délire en mini-projet avant même d'avoir fini d'y réfléchir.
               </p>
               <p>
                 Je stream beaucoup moins qu'avant, mais l'envie n'est pas morte. Il y aura peut-être encore un live qui popera de nulle part un soir,
@@ -60,8 +60,8 @@ const About = () => {
             <Title size={4} title="La vibe" />
           </div>
           <p className="leading-7 text-gray-200">
-            Pas prise de tête. Des soirées chill, des blagues nulles, parfois un peu de timidité selon le contexte, et souvent une idée bizarre
-            qui finit en prototype parce que "pourquoi pas".
+            Pas prise de tête. Des soirées chill, des blagues nulles, parfois un peu de timidité selon le contexte, et ce petit côté
+            "on teste et on verra bien" qui résume beaucoup de choses.
           </p>
         </article>
 
@@ -85,8 +85,8 @@ const About = () => {
           </div>
           <div className="space-y-4 leading-7 text-gray-200">
             <p>
-              Le vibe coding n'a rien arrangé: les idées continuent d'arriver, souvent trop vite, souvent trop bêtes, parfois vraiment utiles.
-              C'est un peu le moteur de tout l'écosystème Shinede.
+              Le vibe coding n'a rien arrangé: les envies de build arrivent vite, parfois trop vite, et finissent par remplir l'écosystème Shinede
+              de petits outils, de tests et de services qui vivent leur meilleure vie.
             </p>
             <p>
               MelodyQuest a une place spéciale. L'idée date de ma première année d'apprentissage: une version Java dans un CMD, des fichiers
@@ -134,8 +134,8 @@ const About = () => {
         <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
           <Title size={3} title="Pourquoi rester ?" />
           <p className="leading-7 text-gray-200">
-            Pour les idées à la con, les soirées chill, les projets qui sortent de nulle part, les discussions sans pression, et cette ambiance
-            où on peut juste passer un bon moment sans faire semblant d'être plus sérieux que nécessaire.
+            Pour les soirées chill, les discussions sans pression, les tests de jeux, les prototypes qui apparaissent au détour d'une conversation,
+            et cette ambiance où on peut juste passer un bon moment sans faire semblant d'être plus sérieux que nécessaire.
           </p>
           <p className="mt-4 leading-7 text-gray-400">
             En gros: rien de révolutionnaire, mais c'est assumé. Et parfois, c'est exactement ce qu'il faut.
