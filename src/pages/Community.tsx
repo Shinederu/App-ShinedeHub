@@ -37,7 +37,7 @@ const Community = () => {
           </div>
 
           <div className="rounded-lg border-2 border-[#6a11cb] bg-[#10101f] p-5 text-white animate-fadeInUp sm:p-6">
-            <Title size={2} title="Rejoins la Communauté" />
+            <Title size={2} title="Rejoins la Communauté" level={1} />
             <p className="mb-4">
               Le serveur Discord reste le meilleur endroit pour suivre les nouvelles, discuter de jeux, de tech, de projets, ou simplement passer
               quand l'ambiance est tranquille.

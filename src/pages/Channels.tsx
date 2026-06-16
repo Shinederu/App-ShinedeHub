@@ -12,7 +12,7 @@ const Channels = () => {
   return (
     <>
       <section className="mb-6 inline-block w-full border-b-4 border-[#6b6b6b] pb-10">
-        <Title title="Twitch" size={2} />
+        <Title title="Twitch" size={2} level={1} />
         <p>Les streams sont plus rares, mais s'il y en a un, tout se passe sur Twitch.</p>
         <TwitchEmbed />
         <div className="flex flex-col items-center rounded-lg border-2 border-[#6a11cb] bg-[#10101f] p-5 animate-fadeInUp sm:p-6">
