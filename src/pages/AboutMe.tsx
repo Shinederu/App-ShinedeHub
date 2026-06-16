@@ -4,12 +4,12 @@ import { Code2, Gamepad2, HeartHandshake, Lightbulb, Music2, Sparkles, Twitch } 
 const highlights = [
   "CFC d'informaticien en poche",
   "Suisse, pseudo Shinederu depuis le ZEvent 2020",
-  "Idees de projets a la con en stock permanent",
+  "Idées de projets à la con en stock permanent",
   "Streams rares, mais jamais totalement disparus",
 ];
 
-const games = ["Genshin Impact", "Honkai", "Minecraft", "Vampire Survivors", "Vampire Crawler", "et les jeux qui passent par la"];
-const references = ["Kaamelott", "Kaeloo", "Guzz Prod", "Wankil a l'ancienne", "sagas MP3", "YouTube, films d'animation et autres conneries"];
+const games = ["Genshin Impact", "Honkai", "Minecraft", "Vampire Survivors", "Vampire Crawler", "et les jeux qui passent par là"];
+const references = ["Kaamelott", "Kaeloo", "Guzz Prod", "Wankil à l'ancienne", "sagas MP3", "YouTube, films d'animation et autres conneries"];
 
 const About = () => {
   return (
@@ -17,15 +17,15 @@ const About = () => {
       <section className="overflow-hidden rounded-lg border border-[#303030] bg-[#151515]">
         <div className="grid gap-6 p-5 sm:p-7 lg:grid-cols-[minmax(0,1.35fr)_minmax(260px,0.65fr)] lg:items-center">
           <div className="min-w-0">
-            <p className="text-sm font-semibold uppercase tracking-wide text-indigo-300">A propos</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-indigo-300">À propos</p>
             <Title size={1} title="Salut, moi c'est Shinederu" />
             <div className="space-y-4 text-base leading-7 text-gray-200">
               <p>
-                Moi c'est Shinederu, ou Theo pour les amis. Je suis un Suisse avec un CFC d'informaticien en poche, un humour parfois discutable,
-                et une capacite assez solide a lancer des projets improbables juste parce que l'idee me fait rire.
+                Moi c'est Shinederu, ou Théo pour les amis. Je suis un Suisse avec un CFC d'informaticien en poche, un humour parfois discutable,
+                et une capacité assez solide à lancer des projets improbables juste parce que l'idée me fait rire.
               </p>
               <p>
-                Je stream beaucoup moins qu'avant, mais l'envie n'est pas morte. Il y aura peut-etre encore un live qui popera de nulle part un soir,
+                Je stream beaucoup moins qu'avant, mais l'envie n'est pas morte. Il y aura peut-être encore un live qui popera de nulle part un soir,
                 sans planning, sans grande annonce, juste pour passer un moment tranquille.
               </p>
             </div>
@@ -49,8 +49,8 @@ const About = () => {
             <Title size={4} title="Le pseudo" />
           </div>
           <p className="leading-7 text-gray-200">
-            Shinederu vient d'une reponse foireuse entendue pendant le Quiz du Grenier au ZEvent 2020, autour de Splinter en japonais. Le son
-            etait moche mais style, alors c'est reste, avec une petite retouche.
+            Shinederu vient d'une réponse foireuse entendue pendant le Quiz du Grenier au ZEvent 2020, autour de Splinter en japonais. Le son
+            était moche mais stylé, alors c'est resté, avec une petite retouche.
           </p>
         </article>
 
@@ -60,7 +60,7 @@ const About = () => {
             <Title size={4} title="La vibe" />
           </div>
           <p className="leading-7 text-gray-200">
-            Pas prise de tete. Des soirees chill, des blagues nulles, parfois un peu de timidite selon le contexte, et souvent une idee bizarre
+            Pas prise de tête. Des soirées chill, des blagues nulles, parfois un peu de timidité selon le contexte, et souvent une idée bizarre
             qui finit en prototype parce que "pourquoi pas".
           </p>
         </article>
@@ -71,7 +71,7 @@ const About = () => {
             <Title size={4} title="Les lives" />
           </div>
           <p className="leading-7 text-gray-200">
-            Le stream n'est plus le centre de tout. S'il revient, ce sera probablement comme avant: un live qui apparait sans prevenir, pour jouer,
+            Le stream n'est plus le centre de tout. S'il revient, ce sera probablement comme avant: un live qui apparaît sans prévenir, pour jouer,
             discuter, et garder un souvenir d'une bonne session.
           </p>
         </article>
@@ -85,14 +85,14 @@ const About = () => {
           </div>
           <div className="space-y-4 leading-7 text-gray-200">
             <p>
-              Le vibe coding n'a rien arrange: les idees continuent d'arriver, souvent trop vite, souvent trop betes, parfois vraiment utiles.
-              C'est un peu le moteur de tout l'ecosysteme Shinede.
+              Le vibe coding n'a rien arrangé: les idées continuent d'arriver, souvent trop vite, souvent trop bêtes, parfois vraiment utiles.
+              C'est un peu le moteur de tout l'écosystème Shinede.
             </p>
             <p>
-              MelodyQuest a une place speciale. L'idee date de ma premiere annee d'apprentissage: une version Java dans un CMD, des fichiers
+              MelodyQuest a une place spéciale. L'idée date de ma première année d'apprentissage: une version Java dans un CMD, des fichiers
               en <span className="rounded bg-[#252525] px-1.5 py-0.5 text-sm text-gray-100">.wav</span>, et un
               <span className="rounded bg-[#252525] px-1.5 py-0.5 text-sm text-gray-100"> start.bat </span>
-              pour lancer le bazar. Aujourd'hui c'est devenu un vrai projet web, mais l'ADN est reste le meme.
+              pour lancer le bazar. Aujourd'hui c'est devenu un vrai projet web, mais l'ADN est resté le même.
             </p>
           </div>
         </article>
@@ -134,11 +134,11 @@ const About = () => {
         <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
           <Title size={3} title="Pourquoi rester ?" />
           <p className="leading-7 text-gray-200">
-            Pour les idees a la con, les soirees chill, les projets qui sortent de nulle part, les discussions sans pression, et cette ambiance
-            ou on peut juste passer un bon moment sans faire semblant d'etre plus serieux que necessaire.
+            Pour les idées à la con, les soirées chill, les projets qui sortent de nulle part, les discussions sans pression, et cette ambiance
+            où on peut juste passer un bon moment sans faire semblant d'être plus sérieux que nécessaire.
           </p>
           <p className="mt-4 leading-7 text-gray-400">
-            En gros: rien de revolutionnaire, mais c'est assume. Et parfois, c'est exactement ce qu'il faut.
+            En gros: rien de révolutionnaire, mais c'est assumé. Et parfois, c'est exactement ce qu'il faut.
           </p>
         </article>
       </section>
