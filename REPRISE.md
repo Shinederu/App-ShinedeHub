@@ -1,252 +1,405 @@
 # Reprise - ShinedeHub
 
-Etat: projet principal mis en pause le 2026-06-12 dans un etat deploye et fonctionnel.
-Nom projet actuel: **ShinedeHub**.
+Derniere mise a jour: 2026-06-26.
 
-Ce document sert de point de reprise pour ShinedeHub, le site principal expose
-sur `https://shinederu.ch/`.
-Il couvre le frontend `App-ShinedeHub/` et les morceaux API directement utilises par ce site:
-`Module-Auth-API`, `App-ShinedeHub-API` et `Module-ShinedeCore-PHP`.
+Projet: **ShinedeHub**
+Repo: `P:\DEV\GitHub\App-ShinedeHub`
+Runtime: `P:\PROD\ShinedeHub`
+URL: `https://shinederu.ch/`
 
-## But du projet
+Ce document sert a reprendre le projet apres une pause sans devoir relire toute
+la conversation Codex historique.
 
-ShinedeHub est le portail public et admin de l'ecosysteme Shinede.
+## Etat global
 
-Il sert a:
+ShinedeHub est le site principal de l'ecosysteme Shinede.
 
-- presenter la page d'accueil, les chaines, la communaute et la page "A propos";
-- gerer l'authentification commune du domaine `.shinederu.ch`;
-- donner acces au dashboard utilisateur/admin;
-- administrer les annonces visibles sur l'accueil;
+Etat observe:
+
+- frontend React/Vite deploye et fonctionnel;
+- version publique affichee: `0.3.3`;
+- Git propre avant cette mise a jour documentaire;
+- dernier deploiement runtime connu: 2026-06-16;
+- PROD contient uniquement `index.html` et deux assets Vite hors dossier `img`;
+- les images dashboard lourdes sont conservees volontairement;
+- aucun flux Mercure n'est utilise par ce frontend.
+
+Le projet principal est stable mais pas considere "termine". Il sert surtout de
+portail, dashboard et zone admin.
+
+## Perimetre de reprise
+
+Par defaut, une reprise ShinedeHub concerne uniquement:
+
+- `P:\DEV\GitHub\App-ShinedeHub`
+- `P:\PROD\ShinedeHub`
+
+Ne pas modifier les repos suivants sans demande explicite:
+
+- `Module-Auth-API`
+- `Module-ShinedeCore-PHP`
+- `Module-Auth-Core`
+- `Module-Auth-React`
+- `App-ShinedeHub-API`
+- autres apps/API Shinede
+
+Si un bug frontend revele un probleme backend, documenter le constat et demander
+l'ouverture explicite du repo backend concerne.
+
+## But produit
+
+ShinedeHub sert a:
+
+- presenter Shinederu, les chaines et la communaute;
+- afficher les annonces publiques du site principal;
+- ouvrir les flux auth utilisateur;
+- centraliser un dashboard apres connexion;
+- exposer des raccourcis vers MelodyQuest, ShinedeBox et ShinedeWake;
 - administrer les utilisateurs;
-- administrer les permissions centralisees `core_*`;
-- exposer des tuiles vers les autres projets actifs comme MelodyQuest, ShinedeBox et ShinedeWake selon les droits utilisateur.
+- administrer les annonces;
+- administrer les permissions centralisees.
 
-## Repos et chemins
+## Chemins importants
 
-Frontend principal:
+Frontend:
 
-- nom projet: `ShinedeHub`
-- repo local: `P:\DEV\GitHub\App-ShinedeHub`
-- remote: `https://github.com/Shinederu/App-ShinedeHub.git`
-- build prod: `P:\DEV\GitHub\App-ShinedeHub\dist`
-- dossier deploye documente: `P:\PROD\ShinedeHub`
+- source: `P:\DEV\GitHub\App-ShinedeHub`
+- build: `P:\DEV\GitHub\App-ShinedeHub\dist`
+- prod: `P:\PROD\ShinedeHub`
 
-APIs partagees:
+Backends dependants, a ne pas modifier sans perimetre explicite:
 
-- auth/users: `P:\DEV\GitHub\Module-Auth-API` -> `P:\PROD\API\auth`
-- site principal: `P:\DEV\GitHub\App-ShinedeHub-API` -> `P:\PROD\API\main-site`
-- socle permissions: `P:\DEV\GitHub\Module-ShinedeCore-PHP` -> `P:\PROD\API\core`
-- ancien monorepo historique: `P:\DEV\GitHub\Legacy-Shinederu-API`
+- auth/users/permissions: `P:\DEV\GitHub\Module-Auth-API`
+- API main-site/annonces: `P:\DEV\GitHub\App-ShinedeHub-API`
+- socle permissions PHP: `P:\DEV\GitHub\Module-ShinedeCore-PHP`
+- client auth TS: `P:\DEV\GitHub\Module-Auth-Core`
+- bindings auth React: `P:\DEV\GitHub\Module-Auth-React`
 
-Important infra:
+Runtime API:
 
-- `P:\PROD` est le dossier de prod documente.
-- `P:\PROD` est le volume `/var/www` documente pour Docker. En cas d'ecart
-  entre fichiers copies et URL publique, verifier d'abord `P:\PROD` et la
-  configuration Nginx.
-- Ne jamais copier de secrets dans les repos ni dans `P:\PROD`.
+- `P:\PROD\API\auth`
+- `P:\PROD\API\main-site`
+- `P:\PROD\API\core`
 
-## URLs live
+## URLs
 
-- Front principal: `https://shinederu.ch/`
+- Site: `https://shinederu.ch/`
 - Auth API: `https://api.shinederu.ch/auth/`
-- Main site API: `https://api.shinederu.ch/main-site/`
-- MelodyQuest front: `https://melodyquest.shinederu.ch/#/main`
-- ShinedeBox front: `https://box.shinederu.ch/`
-- ShinedeWake front: `https://wake.shinederu.ch/`
+- Auth front controller conseille: `https://api.shinederu.ch/auth/index.php`
+- Main-site API: `https://api.shinederu.ch/main-site/`
+- MelodyQuest: `https://melodyquest.shinederu.ch/#/main`
+- ShinedeBox: `https://box.shinederu.ch/`
+- ShinedeWake: `https://wake.shinederu.ch/`
 
-Le frontend doit configurer l'API Auth sur `https://api.shinederu.ch/auth/index.php`.
-Les appels `PUT` ou `DELETE` vers `https://api.shinederu.ch/auth/` peuvent
-etre bloques par Nginx avec `405 Not Allowed` avant d'atteindre PHP.
-
-## Architecture frontend
-
-Stack:
+## Stack frontend
 
 - React 18
 - TypeScript
 - Vite
-- Tailwind
+- Tailwind CSS
+- React Router
+- lucide-react
 - `@shinederu/auth-core`
 - `@shinederu/auth-react`
 
-Aliases importants dans `vite.config.ts`:
+Scripts:
 
-- `@` -> `src`
-- `@shinederu/auth-core` -> `../Module-Auth-Core/src/index.ts`
-- `@shinederu/auth-react` -> `../Module-Auth-React/src/index.ts`
+```powershell
+npm run dev
+npm run lint
+npx tsc --noEmit
+npm run build
+npm run preview
+```
 
-Ces aliases permettent de travailler avec les libs auth locales sans publier de package.
+`npm run build` lance `tsc && vite build`.
 
-Fichiers importants:
+## Architecture
 
-- `src/App.tsx`: layout global, header/footer, recharge auth au montage.
-- `src/utils/routes.tsx`: routes autorisees selon l'etat auth et les permissions.
-- `src/shared/context/AuthContext.tsx`: mapping de `auth?action=me` vers les flags frontend.
-- `src/shared/auth/client.ts`: client auth partage.
-- `src/shared/auth/constraints.ts`: limites frontend du pseudo.
-- `src/shared/mainSite/client.ts`: client des annonces `App-ShinedeHub-API`, endpoint public `API/main-site`.
-- `src/components/modals/ModalLogin.tsx`: login/register.
-- `src/pages/Dashboard.tsx`: dashboard et tuiles projets.
-- `src/pages/AboutMe.tsx`: bio publique Shinederu, mise a jour apres CFC avec layout responsive sans mosaique a colonnes variables.
-- `src/pages/Users.tsx`: annuaire et management des comptes.
-- `src/pages/CoreAccess.tsx`: panneau `/permissions`.
-- `src/pages/Announcements.tsx`: gestion des annonces.
-- `src/pages/Profile.tsx`: profil utilisateur.
+Entrees:
 
-Variables Vite actuelles:
+- `src/main.tsx`: providers.
+- `src/App.tsx`: layout global et reload auth initial.
+- `src/index.css`: Tailwind.
 
+Routing:
+
+- `src/utils/routes.tsx`: routes selon auth et permissions.
+
+Contextes:
+
+- `src/shared/context/AuthContext.tsx`
+- `src/shared/context/ModalContext.tsx`
+
+Clients API:
+
+- `src/shared/auth/client.ts`
+- `src/shared/mainSite/client.ts`
+
+Pages:
+
+- `Homepage.tsx`
+- `Channels.tsx`
+- `Community.tsx`
+- `AboutMe.tsx`
+- `Dashboard.tsx`
+- `Profile.tsx`
+- `Users.tsx`
+- `Announcements.tsx`
+- `CoreAccess.tsx`
+- `ResetPassword.tsx`
+- `NewPassword.tsx`
+- `NewEmail.tsx`
+
+Composants sensibles:
+
+- `ModalLogin.tsx`: login/register et reset entrypoint.
+- `ModalMessage.tsx`: result/error/confirm/prompt.
+- `MenuCards.tsx`: tuiles dashboard.
+- `Title.tsx`: titres semantiques.
+- `TwitchEmbed.tsx`: chargement a la demande.
+- `YouTubeEmbed.tsx`: apercu image.
+
+## Variables d'environnement
+
+Fichiers:
+
+- `.env`
+- `.env.production`
+
+Variables attendues par nom:
+
+- `VITE_DEV_MODE`
 - `VITE_SHINEDEHUB_VERSION`
-- `VITE_SHINEDEHUB_API_AUTH_URL=https://api.shinederu.ch/auth/index.php`
+- `VITE_SHINEDEHUB_API_AUTH_URL`
 - `VITE_SHINEDEHUB_API_MAIN_SITE_URL`
+- `VITE_TWITCH_CHANNEL_LINK`
+- `VITE_YOUTUBE_CHANNEL_LINK`
+- `VITE_YOUTUBE_CHANNEL_ID`
+- `VITE_YOUTUBE_API_KEY`
+- `VITE_DISCORD_INVITE`
 
-Les anciens noms `VITE_SHINEDERU_*` sont encore lus en fallback par compatibilite.
+Ne pas recopier les valeurs dans une reponse ou une doc publique.
 
-Routes principales:
+Compatibilite:
 
-- `/`: accueil public, annonces publiques, liens Twitch/YouTube/Discord.
-- `/channels`, `/community`, `/aboutme`: pages publiques.
-- `/dashboard`: dashboard apres connexion.
-- `/profile`: profil utilisateur.
-- `/users`: annuaire + management des comptes, droit `auth.users.manage`.
-- `/announcements`: gestion annonces, droit `main.announcements.manage`.
-- `/permissions`: gestion projets/roles/permissions, reserve a `core.super_admin`.
-- `/core-access`: redirection de compatibilite vers `/permissions`.
-- `/resetPassword`, `/newPassword`, `/newEmail`: flux email/password.
+- les anciens `VITE_SHINEDERU_*` restent lus en fallback par certains fichiers;
+- les nouvelles configurations doivent utiliser `VITE_SHINEDEHUB_*`.
+
+## Auth
+
+Le frontend utilise `@shinederu/auth-react`.
+
+Au montage:
+
+1. `ExternalAuthProvider` fournit le client auth.
+2. `AuthProvider` local mappe l'utilisateur en flags pratiques.
+3. `App.tsx` appelle `reload()` une seule fois grace a `hasLoadedAuth`.
+
+Point historique:
+
+- une boucle de reload auth avait fait ramer Firefox;
+- `App.tsx` utilise maintenant un `useRef` pour eviter les reloads repetes.
+
+Mode dev:
+
+- si `VITE_DEV_MODE=true`, `AuthContext` injecte un utilisateur local de test;
+- ce mode ne doit pas etre actif en production.
+
+## Permissions
+
+Flags frontend:
+
+- `is_admin`
+- `can_manage_users`
+- `can_manage_announcements`
+- `can_access_box`
+- `can_access_wake`
+
+Mapping actuel:
+
+- `is_admin`: `user.is_admin`, `users.role='admin'` ou `project_access.is_global_admin`.
+- `can_manage_users`: super-admin ou permission auth `users_manage`.
+- `can_manage_announcements`: super-admin ou permission main `announcements_manage`.
+- `can_access_box`: super-admin ou permission box `files_manage`.
+- `can_access_wake`: super-admin ou permissions wake `devices_wake`,
+  `devices_manage` ou `users_manage`.
+
+Notation de documentation:
+
+- `auth.users.manage`
+- `main.announcements.manage`
+- `box.files.manage`
+- `wake.devices.wake`
+- `wake.devices.manage`
+- `wake.users.manage`
+
+Ne pas changer ce mapping sans verifier `Module-Auth-API`.
+
+## Routes et acces
+
+Publiques:
+
+- `/`
+- `/channels`
+- `/community`
+- `/aboutme`
+- `/resetPassword`
+- `/newPassword`
+- `/newEmail`
+
+Connectees:
+
+- `/dashboard`
+- `/profile`
+
+Protegees:
+
+- `/users`: `can_manage_users`
+- `/announcements`: `can_manage_announcements`
+- `/permissions`: `is_admin`
+- `/core-access`: redirection vers `/permissions`
+
+Fallback:
+
+- `*` redirige vers `/`.
 
 ## Dashboard
 
-Tuiles actives:
+Tuiles:
 
-- `Profile` -> `/profile`
-- `Utilisateurs` -> `/users`, visible avec `auth.users.manage`
-- `Annonces` -> `/announcements`, visible avec `main.announcements.manage`
-- `Permissions` -> `/permissions`, visible pour super-admin global
-- `MelodyQuest` -> `https://melodyquest.shinederu.ch/#/main`
-- `ShinedeBox` -> `https://box.shinederu.ch/`, visible avec `box.files.manage` ou super-admin global
-- `ShinedeWake` -> `https://wake.shinederu.ch/`, visible avec `wake.devices.wake`, `wake.devices.manage`, `wake.users.manage` ou super-admin global
+- Profil: toujours visible connecte.
+- Utilisateurs: visible avec `can_manage_users`.
+- Annonces: visible avec `can_manage_announcements`.
+- Permissions: visible avec `is_admin`.
+- MelodyQuest: visible pour tous les comptes connectes.
+- ShinedeBox: visible avec `can_access_box`.
+- ShinedeWake: visible avec `can_access_wake`.
+- Ananas: inactive.
 
-Tuile inactive:
+Images:
 
-- `Ananas`
+- Les images dans `public/img/dashboard` sont conservees telles quelles.
+- `MenuCards.tsx` utilise un mapping explicite et ne teste plus plusieurs URLs.
+- Ne pas compresser ou remplacer ces images sans demande explicite.
 
-## Auth et utilisateurs
+## Pages publiques
 
-Le frontend s'appuie sur `auth?action=me`.
-Le backend renvoie `user.project_access` avec les roles et permissions projet.
+Accueil:
 
-Regles actuelles:
+- texte d'introduction court;
+- annonces publiques;
+- cartes Twitch/YouTube.
 
-- pseudo: minimum 4 caracteres, maximum 24 caracteres;
-- limite frontend: `src/shared/auth/constraints.ts`;
-- limite backend: `Module-Auth-API/config/config.php`;
-- login/register peut etre soumis au clavier avec `Enter`;
-- l'ancien `users.role = 'admin'` existe encore comme fallback de transition;
-- les vrais droits applicatifs sont dans `core_*`.
+Channels:
 
-Page `/users`:
+- Twitch charge son lecteur uniquement au clic;
+- YouTube affiche une image locale;
+- pas de timer de rotation automatique.
 
-- recherche par pseudo, email, ID, role projet ou motif de blocage;
-- filtres: tous, verifies, en attente, bloques, super-admins;
-- compteurs: comptes, emails verifies, comptes bloques, super-admins;
-- affiche avatar, statut email, statut actif/bloque, roles projets;
-- panneau `Gerer` par utilisateur:
-  - modifier le pseudo;
-  - modifier le mot de passe;
-  - remplacer l'avatar;
-  - bloquer/debloquer le compte avec motif.
-- ce panneau reste volontairement limite a deux colonnes maximum, car il est
-  rendu dans une ligne de tableau et une grille 4 colonnes devient trop etroite
-  dans le conteneur principal.
+Community:
 
-Blocage de compte:
+- Discord charge son widget uniquement au clic;
+- pas de timer de rotation automatique.
 
-- stocke dans `users.is_banned`, `users.banned_at`, `users.banned_by_user_id`, `users.ban_reason`;
-- un compte bloque ne peut plus se connecter;
-- les sessions de l'utilisateur sont supprimees au moment du blocage;
-- `AuthMiddleware` rejette aussi les sessions restantes d'un compte bloque.
+AboutMe:
 
-Actions API admin:
+- bio mise a jour apres obtention du CFC;
+- layout responsive valide desktop/mobile;
+- un seul `h1` visible attendu.
 
-- `GET auth?action=listUsers`
-- `PUT auth` avec `action=updateUserAdmin`
-- `POST auth` avec `action=updateUserAvatarAdmin`
-- `PUT auth` avec `action=updateUserRole` reste un chemin de compatibilite, mais les roles doivent etre geres via `/permissions`.
+## Utilisateurs
 
-## Permissions centralisees
+Fichier: `src/pages/Users.tsx`.
 
-Le modele de droits est stocke dans les tables `core_*`.
+Fonctions:
 
-Panneau frontend:
+- listing utilisateurs;
+- stats rapides;
+- recherche client;
+- filtres;
+- panneau admin par utilisateur;
+- modification pseudo;
+- changement mot de passe;
+- upload avatar;
+- blocage/deblocage avec motif.
 
-- route: `/permissions`
-- fichier: `src/pages/CoreAccess.tsx`
-- reserve aux super-admins.
+Contraintes:
 
-Endpoints API:
+- pseudo min 4, max 24;
+- source frontend: `src/shared/auth/constraints.ts`;
+- validation definitive: backend auth.
 
-- `GET auth?action=listCoreAccess`
-- `PUT auth` avec:
-  - `saveCoreProject`
-  - `saveCoreRole`
-  - `saveCorePermission`
-  - `setCoreRolePermissions`
-  - `setCoreUserProjectRoles`
+Actions API utilisees:
 
-Permissions utiles pour le site principal:
+- `listUsers`
+- `updateUserAdmin`
+- `updateUserAvatarAdmin`
 
-- `core.super_admin`: acces global au panneau permissions.
-- `auth.users.manage`: acces `/users` et actions admin utilisateurs.
-- `main.announcements.manage`: acces `/announcements`.
-- `box.files.manage`: affichage de la tuile ShinedeBox dans `/dashboard`.
-- `wake.devices.wake`, `wake.devices.manage`, `wake.users.manage`: affichage de la tuile ShinedeWake dans `/dashboard`.
+Limite:
 
-La page `/permissions` utilise des refs pour le client auth et le modal. Eviter
-de remettre `auth` ou `modalCtx` comme dependances directes de `loadOverview`,
-sinon `auth.invoke()` peut relancer `listCoreAccess` en boucle via l'etat
-`isLoading` du client partage.
+- recherche/pagination sont encore cote client;
+- prevoir pagination serveur si le nombre de comptes grossit.
 
-## Annonces du site principal
+## Annonces
 
-Backend:
+Fichier admin: `src/pages/Announcements.tsx`.
+Fichier public: `src/pages/Homepage.tsx`.
+Client: `src/shared/mainSite/client.ts`.
 
-- module source: `App-ShinedeHub-API`
-- endpoint: `https://api.shinederu.ch/main-site/`
-- table cible: `main_announcements`
+Actions:
 
-Frontend:
+- `listPublicAnnouncements`
+- `listAnnouncements`
+- `createAnnouncement`
+- `updateAnnouncement`
+- `deleteAnnouncement`
 
-- affichage public: `src/pages/Homepage.tsx`
-- carte: `src/components/cards/ActusCards.tsx`
-- admin: `src/pages/Announcements.tsx`
-- client API: `src/shared/mainSite/client.ts`
+Endpoint: `https://api.shinederu.ch/main-site/`.
+Table backend: `main_announcements`.
 
-Actions API:
+## Permissions
 
-- public:
-  - `GET action=listPublicAnnouncements`
-- admin avec `main.announcements.manage`:
-  - `GET action=listAnnouncements`
-  - `POST action=createAnnouncement`
-  - `PUT action=updateAnnouncement`
-  - `DELETE action=deleteAnnouncement`
+Fichier: `src/pages/CoreAccess.tsx`.
+
+Route: `/permissions`.
+
+Fonctions:
+
+- lister les projets declares;
+- creer/modifier projets;
+- creer/modifier roles;
+- creer/modifier permissions;
+- associer permissions a un role;
+- associer roles projet a un utilisateur.
+
+Attention technique:
+
+- `CoreAccess.tsx` utilise des refs pour auth/modal;
+- eviter de remettre `auth` ou `modalCtx` comme dependances directes de
+  `loadOverview`;
+- cela peut relancer `listCoreAccess` en boucle via l'etat `isLoading` du client
+  auth partage.
+
+## Reset password et email
+
+Routes:
+
+- `/resetPassword`
+- `/newPassword`
+- `/newEmail`
+
+Historique:
+
+- le reset password avait echoue avec `405 Not Allowed` quand l'URL auth ciblait
+  `/auth/` au lieu de `/auth/index.php`;
+- `src/shared/auth/client.ts` normalise maintenant l'URL.
 
 ## Base de donnees
 
-Instance partagee:
+Le frontend ne touche pas MySQL directement.
 
-- hote: `192.168.10.10`
-- port: `3306`
-- schema: `ShinedeCore`
-
-Secrets:
-
-- les identifiants applicatifs sont dans `Module-Auth-API/.env` en source et `P:\PROD\API\auth\.env` en production;
-- les acces admin/infra sont documentes dans `P:\DEV\Access`;
-- ne jamais recopier les secrets dans les repos ou les reponses.
-
-Tables liees au site principal:
+Tables backend qui impactent ShinedeHub:
 
 - `users`
 - `auth_sessions`
@@ -259,7 +412,7 @@ Tables liees au site principal:
 - `core_user_project_roles`
 - `main_announcements`
 
-Migrations importantes:
+Migrations backend connues:
 
 - `Module-ShinedeCore-PHP/sql/001_core_project_access.sql`
 - `Module-Auth-API/sql/001_auth_prefix_tables.sql`
@@ -267,50 +420,46 @@ Migrations importantes:
 - `App-ShinedeHub-API/sql/001_main_site_announcements.sql`
 - `App-ShinedeHub-API/sql/002_rename_main_announcements.sql`
 
-Etat au moment de la pause:
-
-- `auth/sql/002_user_account_moderation.sql` a ete appliquee en production le 2026-06-12.
-- Les colonnes `ban_reason`, `banned_at`, `banned_by_user_id`, `is_banned` existent dans `users`.
-
-Pour verifier la migration sans afficher de secrets:
-
-```powershell
-php -r "require_once 'P:/DEV/GitHub/Module-Auth-API/vendor/autoload.php'; Dotenv\Dotenv::createImmutable('P:/DEV/GitHub/Module-Auth-API')->safeLoad(); `$dsn=sprintf('%s:host=%s;port=%s;dbname=%s;charset=utf8mb4', `$_ENV['DB_TYPE'] ?? 'mysql', '192.168.10.10', `$_ENV['DB_PORT'] ?? '3306', `$_ENV['DB_NAME'] ?? 'ShinedeCore'); `$pdo=new PDO(`$dsn, `$_ENV['DB_USER'] ?? 'root', `$_ENV['DB_PASS'] ?? '', [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]); `$stmt=`$pdo->prepare('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME IN (?,?,?,?) ORDER BY COLUMN_NAME'); `$stmt->execute(['users','is_banned','banned_at','banned_by_user_id','ban_reason']); echo implode(', ', `$stmt->fetchAll(PDO::FETCH_COLUMN));"
-```
-
-Pour appliquer une migration DDL en reprise:
-
-- utiliser une migration SQL idempotente;
-- utiliser l'acces MySQL admin local documente dans `P:\DEV\Access`;
-- ne pas utiliser le compte applicatif `authenticator` pour `ALTER`, il n'a pas les droits DDL.
+Ne pas appliquer de migration depuis ce repo frontend.
 
 ## Deploiement
 
-Workflow standard:
-
-1. Modifier dans `P:\DEV\GitHub\...`.
-2. Tester/build.
-3. Commit et push sur `main`.
-4. Copier vers `P:\PROD`.
-5. Verifier l'URL publique.
-6. Si l'URL ne reflete pas `P:\PROD`, verifier la configuration Nginx et le
-   dossier runtime cible.
-
-Frontend:
+Deploiement frontend uniquement:
 
 ```powershell
 cd P:\DEV\GitHub\App-ShinedeHub
+npm run lint
+npx tsc --noEmit
 npm run build
-Copy-Item -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist\index.html' -Destination 'P:\PROD\ShinedeHub\index.html' -Force
-Copy-Item -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist\assets' -Destination 'P:\PROD\ShinedeHub' -Recurse -Force
-Copy-Item -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist\img' -Destination 'P:\PROD\ShinedeHub' -Recurse -Force
 ```
 
-API:
+Puis copier `dist/` vers `P:\PROD\ShinedeHub`.
 
-- copier uniquement les fichiers touches depuis les repos API extraits vers leur dossier stable dans `P:\PROD\API`;
-- ne pas ecraser `.env`, `vendor/`, logs, fichiers runtime;
-- pour `auth`, verifier `vendor/` en production si Composer a change.
+Commande recommandee:
+
+```powershell
+$distRoot = Resolve-Path -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist'
+$distAssets = Resolve-Path -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist\assets'
+$prodRoot = Resolve-Path -LiteralPath 'P:\PROD\ShinedeHub'
+$prodAssetsPath = Join-Path $prodRoot.Path 'assets'
+if (-not (Test-Path -LiteralPath $prodAssetsPath)) {
+  New-Item -ItemType Directory -Path $prodAssetsPath | Out-Null
+}
+$prodAssets = Resolve-Path -LiteralPath $prodAssetsPath
+
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'index.html') -Destination (Join-Path $prodRoot.Path 'index.html') -Force
+Copy-Item -Path (Join-Path $distAssets.Path '*') -Destination $prodAssets.Path -Force
+
+$currentAssetNames = @(Get-ChildItem -LiteralPath $distAssets.Path -File | ForEach-Object { $_.Name })
+Get-ChildItem -LiteralPath $prodAssets.Path -File |
+  Where-Object { $currentAssetNames -notcontains $_.Name } |
+  ForEach-Object { Remove-Item -LiteralPath $_.FullName -Force }
+```
+
+Ne pas utiliser `Copy-Item -LiteralPath ...\*`: PowerShell ne developpe pas le
+wildcard en `-LiteralPath`.
+
+Ne pas deployer les docs projet en PROD.
 
 ## Verifications de reprise
 
@@ -318,118 +467,130 @@ Git:
 
 ```powershell
 git -c safe.directory=* -C P:\DEV\GitHub\App-ShinedeHub status --short --branch
-git -c safe.directory=* -C P:\DEV\GitHub\Module-Auth-API status --short --branch
-git -c safe.directory=* -C P:\DEV\GitHub\App-ShinedeHub-API status --short --branch
-git -c safe.directory=* -C P:\DEV\GitHub\Module-ShinedeCore-PHP status --short --branch
-git -c safe.directory=* -C P:\DEV\GitHub\Module-Auth-Core status --short --branch
-git -c safe.directory=* -C P:\DEV\GitHub\Module-Auth-React status --short --branch
 ```
 
-Build front:
+Checks front:
 
 ```powershell
 cd P:\DEV\GitHub\App-ShinedeHub
+npm run lint
+npx tsc --noEmit
 npm run build
 ```
 
-Lint PHP:
+Smoke HTTP:
 
 ```powershell
-Get-ChildItem P:\DEV\GitHub\Module-Auth-API -Recurse -Filter *.php | ? { $_.FullName -notmatch '\\vendor\\' } | % { php -l $_.FullName }
-Get-ChildItem P:\DEV\GitHub\App-ShinedeHub-API -Recurse -Filter *.php | % { php -l $_.FullName }
-Get-ChildItem P:\DEV\GitHub\Module-ShinedeCore-PHP -Recurse -Filter *.php | % { php -l $_.FullName }
+curl.exe -sI https://shinederu.ch/
+curl.exe -sI https://shinederu.ch/assets/index-CCH_IVkH.js
+curl.exe -sI https://shinederu.ch/assets/index-Dz72SXOh.css
 ```
 
-Smoke public:
+Smoke manuel public:
 
-```powershell
-Invoke-WebRequest -Uri 'https://shinederu.ch/' -UseBasicParsing -TimeoutSec 20
-Invoke-WebRequest -Uri 'https://api.shinederu.ch/auth/?action=listUsers' -UseBasicParsing -TimeoutSec 20
-Invoke-WebRequest -Uri 'https://api.shinederu.ch/main-site/?action=listPublicAnnouncements' -UseBasicParsing -TimeoutSec 20
-```
+- ouvrir `/`;
+- ouvrir `/aboutme`;
+- ouvrir `/channels`;
+- verifier que le lecteur Twitch n'est pas charge avant clic;
+- ouvrir `/community`;
+- verifier que le widget Discord n'est pas charge avant clic;
+- tester mobile pour absence d'overflow horizontal.
 
-Resultat attendu:
+Smoke utilisateur:
 
-- `https://shinederu.ch/`: HTTP 200.
-- `auth?action=listUsers` sans session: HTTP 401 JSON, pas d'erreur fatale.
-- `main-site?action=listPublicAnnouncements`: HTTP 200 JSON.
-
-## Scenarios manuels a tester apres reprise
-
-Anonyme:
-
-- ouvrir l'accueil;
-- ouvrir le modal connexion/inscription;
-- verifier que `Enter` soumet login/register;
-- verifier que le pseudo d'inscription est limite a 24 caracteres.
-
-Utilisateur connecte:
-
+- login;
 - ouvrir `/dashboard`;
-- verifier que la tuile ShinedeWake n'apparait que pour un compte ayant une permission Wake;
+- verifier les tuiles selon permissions;
 - ouvrir `/profile`;
-- modifier son pseudo dans la limite 4-24;
-- changer son avatar.
+- modifier pseudo dans la limite 4-24;
+- tester upload avatar si besoin.
 
-Admin `auth.users.manage`:
+Smoke admin utilisateurs:
 
 - ouvrir `/users`;
-- filtrer/rechercher un compte;
-- modifier le pseudo d'un compte de test;
-- modifier le mot de passe d'un compte de test;
-- remplacer l'avatar d'un compte de test;
-- bloquer puis debloquer un compte de test;
-- verifier qu'un compte bloque ne peut pas se connecter.
+- rechercher/filtrer;
+- modifier pseudo d'un compte de test;
+- modifier mot de passe d'un compte de test;
+- remplacer avatar d'un compte de test;
+- bloquer/debloquer un compte de test.
 
-Admin `main.announcements.manage`:
+Smoke admin annonces:
 
 - ouvrir `/announcements`;
-- creer/modifier/supprimer une annonce de test;
-- verifier l'affichage sur l'accueil.
+- creer une annonce de test;
+- verifier l'accueil;
+- modifier puis supprimer l'annonce.
 
-Super-admin:
+Smoke super-admin:
 
 - ouvrir `/permissions`;
-- verifier la liste projets/roles/permissions;
-- modifier une assignation non critique puis revenir en arriere.
+- charger overview;
+- verifier projets/roles/permissions;
+- ne modifier qu'un role/assignation non critique.
 
-## Etat des derniers changements utiles
+## Historique recent
 
-Mise a jour front du 2026-06-16:
+Commits front recents:
 
-- version publique `VITE_SHINEDEHUB_VERSION=0.3.3`;
-- suppression des timers d'interface inutiles sur l'accueil, `/channels` et `/community`;
-- chargement a la demande du lecteur Twitch et du widget Discord pour eviter de charger des scripts/iframes tiers au rendu initial;
-- `Title` rend maintenant le bon niveau de titre (`h1`, `h2`, `h3`, etc.) selon sa taille, ce qui reduit les multiples `h1`;
-- header, footer, modales et pages publiques ont recu une passe accessibilite et libelles FR;
-- `MenuCards` utilise des chemins d'images explicites pour eviter les probes/404 en cascade, sans modifier ni compresser les images existantes.
+- `17274b9` Fix page heading semantics
+- `e251712` Improve ShinedeHub UI polish
+- `c5dc0f2` Reduce repetition in about page copy
+- `471f380` Restore French accents on about page
+- `c6e0f2a` Refresh about page biography
+- `c296af1` Fix managed user panel layout
+- `f96a413` Add admin password management and Box dashboard tile
+- `c4f7edf` Fix auth front controller URL
+- `2ca2545` Gate Wake dashboard tile by access
+- `7c8669b` Prevent repeated auth reloads
 
-Derniers changements fonctionnels du site principal avant pause:
+Changements fonctionnels importants:
 
-- `App-ShinedeHub` `40ecdd1`: actions de management utilisateur dans `/users`.
-- `Module-Auth-API` `21ab224`: controles de moderation compte cote Auth.
-- `App-ShinedeHub` `4a90ff7`: refonte `/users` en annuaire.
-- `Module-Auth-API` `3f1aa78`: enrichissement `listUsers`.
-- `App-ShinedeHub` `36245af`: tuile ShinedeWake.
-- `App-ShinedeHub` `8e0e333`: documentation tuile ShinedeWake.
-
-L'ancien monorepo `Legacy-Shinederu-API` conserve les hashes historiques avant extraction. Toujours verifier `git log` dans le repo actif concerne.
+- bio `/aboutme` remise a jour: CFC obtenu, streams moins centraux, projets plus
+  presents;
+- page `/users` transformee en panneau de management utilisateur;
+- admins peuvent modifier pseudo, mot de passe, avatar et blocage;
+- ShinedeBox ajoute au dashboard;
+- ShinedeWake visible seulement selon permission;
+- URL Auth forcee vers `index.php` pour eviter les 405;
+- reload auth limite pour eviter boucle JS;
+- timers UI inutiles retires;
+- Twitch/Discord charges a la demande;
+- titres HTML corriges.
 
 ## Limites connues
 
-- `npm run lint` et `npm run build` passent au moment de cette mise en conformite.
-- `updateUserRole` existe encore pour compatibilite mais ne doit plus etre le chemin principal de gestion des roles.
-- Les anciens assets Vite peuvent rester dans `P:\PROD\ShinedeHub\assets`. Nettoyer seulement apres avoir verifie le `index.html` actif.
-- Certains anciens fichiers PHP ont eu des messages avec encodage historique imparfait. Les nouveaux fichiers touches utilisent de preference de l'ASCII.
-- Composer peut etre absent du PATH; `Module-Auth-API/vendor/` n'est pas versionne.
-- CORS est gere par Nginx; eviter de rajouter des headers CORS PHP sans besoin.
+- Pas de tests automatises applicatifs.
+- `CoreAccess.tsx` contient encore des libelles historiques sans accents.
+- Certaines dependances semblent potentiellement inutilisees:
+  - `react-icons`
+  - `@nextui-org/react`
+  - `@nextui-org/theme`
+- `src/assets/react.svg` semble etre un reliquat Vite.
+- Les images dashboard sont lourdes mais conservees volontairement.
+- `updateUserRole` reste une compatibilite cote auth; utiliser `/permissions`
+  pour les roles.
+- Pagination `/users` cote client uniquement.
+- Pas de journal d'audit admin pour `/users`.
 
-## Idees pour une future reprise
+## Idees pour future reprise
 
-- Corriger les erreurs ESLint historiques et rendre `npm run lint` bloquant.
-- Ajouter un journal d'audit pour les actions admin `/users` (qui bloque, qui modifie pseudo/avatar, quand, pourquoi).
-- Ajouter pagination/recherche serveur si le nombre de comptes grossit.
-- Retirer ou verrouiller progressivement `updateUserRole` quand la transition `core_*` sera terminee.
-- Ajouter des tests d'integration API pour `auth?action=updateUserAdmin` et `updateUserAvatarAdmin`.
-- Ajouter une confirmation visuelle plus nette sur `/users` apres upload avatar.
-- Nettoyer les anciens bundles Vite en production apres validation du deploiement courant.
+- Ajouter audit log admin pour `/users`.
+- Ajouter pagination/recherche serveur pour `/users`.
+- Nettoyer dependances inutilisees apres verification.
+- Nettoyer `src/assets/react.svg` si confirme inutilise.
+- Harmoniser les libelles FR de `CoreAccess.tsx`.
+- Ajouter tests d'integration API cote repos backend, si ces projets sont ouverts
+  explicitement.
+- Ajouter checks e2e legers sur login/dashboard/pages publiques.
+- Ajouter metadata route par route (`document.title`, description) si SEO plus
+  important plus tard.
+
+## Regle finale pour le prochain agent
+
+Avant toute action, se poser la question:
+
+```text
+Est-ce que je suis en train de modifier un autre projet que App-ShinedeHub?
+```
+
+Si oui, s'arreter, documenter le besoin, et attendre une demande explicite.
