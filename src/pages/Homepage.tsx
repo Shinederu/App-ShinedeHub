@@ -30,9 +30,9 @@ const Homepage = () => {
   return (
     <>
       <section className="mb-8 rounded-xl border border-[#2f2f2f] bg-[#181818] p-5 sm:p-7 animate-fadeInUp">
-        <Title title="Salutation jeune aventurier !" size={1} />
+        <Title title="Bienvenue sur Shinederu" size={1} />
         <p>
-          Bienvenue sur Shinederu.ch ! Ici tu trouveras mes projets, quelques nouvelles, la communauté, et les outils qui naissent quand une idée
+          Ici tu trouveras mes projets, quelques nouvelles, la communauté, et les outils qui naissent quand une idée
           part un peu trop vite en prototype.
         </p>
       </section>

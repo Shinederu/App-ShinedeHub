@@ -320,6 +320,8 @@ Fichiers:
 - `public/robots.txt`: declaration du sitemap;
 - `public/sitemap.xml`: sitemap public.
 
+Le JSON-LD `WebSite` dans `index.html` doit garder `name: "Shinederu"`. Ne pas remettre `Shinederu.ch` comme nom public; `Shinederu.ch` est seulement le domaine.
+
 Routes indexables:
 
 - `/`
