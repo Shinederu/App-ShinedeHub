@@ -1,11 +1,12 @@
 # Reprise - ShinedeHub
 
-Derniere mise a jour: 2026-06-26.
+Derniere mise a jour: 2026-07-28.
 
 Projet: **ShinedeHub**
 Repo: `P:\DEV\GitHub\App-ShinedeHub`
 Runtime: `P:\PROD\ShinedeHub`
 URL: `https://shinederu.ch/`
+Nom public du site: **Shinederu**
 
 Ce document sert a reprendre le projet apres une pause sans devoir relire toute
 la conversation Codex historique.
@@ -13,6 +14,8 @@ la conversation Codex historique.
 ## Etat global
 
 ShinedeHub est le site principal de l'ecosysteme Shinede.
+ShinedeHub est le nom projet; `Shinederu` est le nom public utilise pour le SEO,
+les titres et les apercus de partage.
 
 Etat observe:
 
@@ -308,6 +311,45 @@ AboutMe:
 - layout responsive valide desktop/mobile;
 - un seul `h1` visible attendu.
 
+## SEO
+
+Fichiers:
+
+- `index.html`: metadonnees statiques d'accueil;
+- `src/components/seo/Seo.tsx`: metadonnees dynamiques par route React;
+- `public/robots.txt`: declaration du sitemap;
+- `public/sitemap.xml`: sitemap public.
+
+Routes indexables:
+
+- `/`
+- `/aboutme`
+- `/channels`
+- `/community`
+
+Routes volontairement `noindex, follow`:
+
+- `/resetPassword`
+- `/newPassword`
+- `/newEmail`
+- `/dashboard`
+- `/profile`
+- `/users`
+- `/announcements`
+- `/permissions`
+- `/core-access`
+
+Search Console:
+
+- propriete domaine validee par DNS TXT;
+- soumettre `https://shinederu.ch/sitemap.xml` apres deploiement;
+- utiliser l'inspection d'URL pour demander l'indexation de l'accueil;
+- suivre les resultats sur plusieurs jours/semaines.
+
+Limite: le projet est une SPA. Les metadonnees route par route sont appliquees
+par React apres chargement. Pour un SEO plus ambitieux, envisager pre-render/SSR
+ou generation HTML statique des pages publiques.
+
 ## Utilisateurs
 
 Fichier: `src/pages/Users.tsx`.
@@ -448,6 +490,8 @@ if (-not (Test-Path -LiteralPath $prodAssetsPath)) {
 $prodAssets = Resolve-Path -LiteralPath $prodAssetsPath
 
 Copy-Item -LiteralPath (Join-Path $distRoot.Path 'index.html') -Destination (Join-Path $prodRoot.Path 'index.html') -Force
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'robots.txt') -Destination (Join-Path $prodRoot.Path 'robots.txt') -Force
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'sitemap.xml') -Destination (Join-Path $prodRoot.Path 'sitemap.xml') -Force
 Copy-Item -Path (Join-Path $distAssets.Path '*') -Destination $prodAssets.Path -Force
 
 $currentAssetNames = @(Get-ChildItem -LiteralPath $distAssets.Path -File | ForEach-Object { $_.Name })
@@ -482,6 +526,8 @@ Smoke HTTP:
 
 ```powershell
 curl.exe -sI https://shinederu.ch/
+curl.exe -sI https://shinederu.ch/robots.txt
+curl.exe -sI https://shinederu.ch/sitemap.xml
 curl.exe -sI https://shinederu.ch/assets/index-CCH_IVkH.js
 curl.exe -sI https://shinederu.ch/assets/index-Dz72SXOh.css
 ```
@@ -582,8 +628,7 @@ Changements fonctionnels importants:
 - Ajouter tests d'integration API cote repos backend, si ces projets sont ouverts
   explicitement.
 - Ajouter checks e2e legers sur login/dashboard/pages publiques.
-- Ajouter metadata route par route (`document.title`, description) si SEO plus
-  important plus tard.
+- Envisager pre-render/SSR si le SEO devient un vrai objectif de croissance.
 
 ## Regle finale pour le prochain agent
 

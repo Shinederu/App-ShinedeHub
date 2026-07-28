@@ -3,12 +3,15 @@
 Frontend principal de l'ecosysteme Shinede, servi sur
 `https://shinederu.ch/`.
 
-Derniere mise a jour documentaire: 2026-06-26.
+Derniere mise a jour documentaire: 2026-07-28.
 
 ## Role
 
-ShinedeHub est le portail public et le tableau de bord utilisateur/admin du
-domaine `shinederu.ch`.
+ShinedeHub est le nom du projet frontend. Le nom public affiche et indexe du
+site est **Shinederu**.
+
+Le site est le portail public et le tableau de bord utilisateur/admin du domaine
+`shinederu.ch`.
 
 Le site sert a:
 
@@ -40,6 +43,8 @@ annonces et avatars passent par les APIs proprietaires sous
 - `index.html`
 - `assets/`
 - `img/`
+- `robots.txt`
+- `sitemap.xml`
 
 Ne pas deployer `.git`, `node_modules`, `src/`, fichiers de config dev, tests,
 caches, brouillons, docs internes ou secrets.
@@ -149,6 +154,56 @@ Routes privilegiees:
 - `/core-access`: redirection historique vers `/permissions`.
 
 Les routes inconnues redirigent vers `/`.
+
+## SEO et Search Console
+
+Le site utilise une couche SEO route par route dans
+`src/components/seo/Seo.tsx`.
+
+Nom public:
+
+- site: `Shinederu`
+- projet/repo: `ShinedeHub`
+
+Metadonnees gerees:
+
+- `document.title`
+- `meta description`
+- `meta robots`
+- canonical
+- OpenGraph
+- Twitter card
+- JSON-LD `WebSite` sur `/`
+- JSON-LD `Person` sur `/aboutme`
+
+Pages indexables et presentes dans `public/sitemap.xml`:
+
+- `/`
+- `/aboutme`
+- `/channels`
+- `/community`
+
+Routes non indexables via `robots=noindex, follow`:
+
+- routes auth: `/resetPassword`, `/newPassword`, `/newEmail`
+- routes connectees: `/dashboard`, `/profile`
+- routes admin: `/users`, `/announcements`, `/permissions`, `/core-access`
+
+`public/robots.txt` autorise le crawl et declare le sitemap:
+
+- `https://shinederu.ch/sitemap.xml`
+
+Apres deploiement SEO, actions conseillees dans Google Search Console:
+
+- soumettre `https://shinederu.ch/sitemap.xml`;
+- inspecter `https://shinederu.ch/` puis demander l'indexation;
+- verifier les pages publiques principales avec l'outil d'inspection d'URL;
+- suivre l'onglet Performance apres quelques jours/semaines.
+
+Limite technique: ShinedeHub est une SPA Vite. Le HTML initial contient les
+metadonnees d'accueil; les metadonnees par route sont appliquees apres rendu
+React. Google sait rendre le JavaScript, mais un pre-render/SSR serait plus fort
+si le SEO devenait un objectif majeur.
 
 ## Pages et composants principaux
 
@@ -334,6 +389,8 @@ Smoke HTTP apres deploiement:
 
 ```powershell
 curl.exe -sI https://shinederu.ch/
+curl.exe -sI https://shinederu.ch/robots.txt
+curl.exe -sI https://shinederu.ch/sitemap.xml
 curl.exe -sI https://shinederu.ch/assets/<asset-js-courant>.js
 curl.exe -sI https://shinederu.ch/assets/<asset-css-courant>.css
 ```
@@ -372,6 +429,8 @@ if (-not (Test-Path -LiteralPath $prodAssetsPath)) {
 $prodAssets = Resolve-Path -LiteralPath $prodAssetsPath
 
 Copy-Item -LiteralPath (Join-Path $distRoot.Path 'index.html') -Destination (Join-Path $prodRoot.Path 'index.html') -Force
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'robots.txt') -Destination (Join-Path $prodRoot.Path 'robots.txt') -Force
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'sitemap.xml') -Destination (Join-Path $prodRoot.Path 'sitemap.xml') -Force
 Copy-Item -Path (Join-Path $distAssets.Path '*') -Destination $prodAssets.Path -Force
 
 $currentAssetNames = @(Get-ChildItem -LiteralPath $distAssets.Path -File | ForEach-Object { $_.Name })

@@ -3,7 +3,7 @@
 Projet courant: **ShinedeHub**, frontend principal servi sur
 `https://shinederu.ch/`.
 
-Derniere mise a jour: 2026-06-26.
+Derniere mise a jour: 2026-07-28.
 
 ## Lecture obligatoire
 
@@ -45,6 +45,8 @@ compte-rendu ou dans `P:\DEV\AI-Exchange`, puis attendre une demande explicite.
 ## Regles locales
 
 - Garder le nom produit `ShinedeHub`.
+- Garder `Shinederu` comme nom public du site pour les titres, metadonnees SEO
+  et apercus de partage.
 - Garder le runtime public `P:\PROD\ShinedeHub`.
 - Utiliser les variables `VITE_SHINEDEHUB_*`.
 - Les anciens `VITE_SHINEDERU_*` ne sont que des fallbacks de transition.
@@ -80,6 +82,8 @@ Deployer seulement apres un build:
 
 - `dist/index.html` -> `P:\PROD\ShinedeHub\index.html`
 - `dist/assets/*` -> `P:\PROD\ShinedeHub\assets`
+- `dist/robots.txt` -> `P:\PROD\ShinedeHub\robots.txt`
+- `dist/sitemap.xml` -> `P:\PROD\ShinedeHub\sitemap.xml`
 - `dist/img` si le build en produit ou si les assets publics changent
 
 Ne pas deployer la documentation projet en production: elle n'est pas runtime.
@@ -95,4 +99,6 @@ reference plus.
   les scripts/iframes tiers au rendu initial.
 - `Title` gere le niveau semantique des titres; eviter de reintroduire plusieurs
   `h1` visibles sur une meme page.
+- `src/components/seo/Seo.tsx` gere les titres/metadonnees par route; les pages
+  admin/auth doivent rester `noindex`.
 - Les images dashboard sont volontairement conservees telles quelles.
