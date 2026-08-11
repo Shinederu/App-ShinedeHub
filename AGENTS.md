@@ -3,7 +3,7 @@
 Projet courant: **ShinedeHub**, frontend principal servi sur
 `https://shinederu.ch/`.
 
-Derniere mise a jour: 2026-07-28.
+Derniere mise a jour: 2026-08-11.
 
 ## Lecture obligatoire
 
@@ -16,6 +16,13 @@ Avant toute modification:
 5. Lire `README.md`.
 6. Lire `REPRISE.md` si la tache touche auth, routes protegees, dashboard,
    `/users`, `/permissions`, annonces, build ou deploiement.
+
+## Statut produit
+
+ShinedeHub est maintenu a la demande, sans roadmap proactive permanente.
+Intervenir pour un besoin concret et borne, puis s'arreter. Une idee ou une
+amelioration voisine peut etre documentee, mais n'est pas a implementer sans
+priorisation explicite. Preferer le plus petit changement complet.
 
 ## Perimetre strict
 

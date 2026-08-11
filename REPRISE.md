@@ -1,6 +1,6 @@
 # Reprise - ShinedeHub
 
-Derniere mise a jour: 2026-07-28.
+Derniere mise a jour: 2026-08-11.
 
 Projet: **ShinedeHub**
 Repo: `P:\DEV\GitHub\App-ShinedeHub`
@@ -8,7 +8,8 @@ Runtime: `P:\PROD\ShinedeHub`
 URL: `https://shinederu.ch/`
 Nom public du site: **Shinederu**
 
-Ce document sert a reprendre le projet apres une pause sans devoir relire toute
+Ce document sert a reprendre rapidement le contexte lors d'une intervention
+sans devoir relire toute
 la conversation Codex historique.
 
 ## Etat global
@@ -29,6 +30,11 @@ Etat observe:
 
 Le projet principal est stable mais pas considere "termine". Il sert surtout de
 portail, dashboard et zone admin.
+
+Statut de travail: maintenance a la demande. ShinedeHub peut recevoir une
+correction ou une petite evolution liee a un besoin concret, mais il n'a pas de
+roadmap proactive permanente. Une intervention doit rester bornee au besoin
+ouvert.
 
 ## Perimetre de reprise
 
@@ -620,7 +626,11 @@ Changements fonctionnels importants:
 - Pagination `/users` cote client uniquement.
 - Pas de journal d'audit admin pour `/users`.
 
-## Idees pour future reprise
+## Parking d'idees (pas une roadmap)
+
+Cette liste conserve des pistes possibles sans les planifier. Ne prendre un
+point que sur decision explicite, pour un besoin concret et avec un perimetre
+borne. Ne pas enchainer les autres points « au passage ».
 
 - Ajouter audit log admin pour `/users`.
 - Ajouter pagination/recherche serveur pour `/users`.

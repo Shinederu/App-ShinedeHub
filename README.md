@@ -3,7 +3,7 @@
 Frontend principal de l'ecosysteme Shinede, servi sur
 `https://shinederu.ch/`.
 
-Derniere mise a jour documentaire: 2026-07-28.
+Derniere mise a jour documentaire: 2026-08-11.
 
 ## Role
 
@@ -12,6 +12,13 @@ site est **Shinederu**.
 
 Le site est le portail public et le tableau de bord utilisateur/admin du domaine
 `shinederu.ch`.
+
+## Statut produit
+
+ShinedeHub est maintenu a la demande. Il n'est ni en pause ni archive: une
+correction ou une petite evolution peut etre realisee lorsqu'un besoin concret
+apparait. Il n'a pas de roadmap proactive permanente; les idees non priorisees
+restent dans un parking et ne declenchent aucun travail.
 
 Le site sert a:
 
@@ -322,11 +329,9 @@ interne.
 
 ShinedeHub ne consomme et ne publie aucun flux Mercure actuellement.
 
-Si un futur panneau temps reel est ajoute:
-
-- la commande metier doit passer par l'API proprietaire;
-- Mercure ne doit transporter que des evenements/snapshots;
-- l'etat doit rester relisible via HTTP apres reconnexion.
+HTTP suffit au besoin actuel et aucun panneau temps reel n'est planifie. Ne pas
+ajouter de flux sans besoin explicite et observe. Si ce besoin apparait, les
+commandes restent dans l'API proprietaire et l'etat reste relisible en HTTP.
 
 ## Dependances inter-projets
 
