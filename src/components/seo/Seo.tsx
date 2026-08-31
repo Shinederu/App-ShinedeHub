@@ -4,14 +4,20 @@ import { useLocation } from "react-router-dom";
 const SITE_NAME = "Shinederu";
 const SITE_URL = "https://shinederu.ch";
 const DEFAULT_IMAGE = `${SITE_URL}/img/favicon/chibi.png`;
+const DEFAULT_IMAGE_ALT = "Avatar de Shinederu";
 const DEFAULT_DESCRIPTION =
-  "Shinederu est le portail public de Shinederu : projets, communaute, chaines Twitch et YouTube, annonces et dashboard personnel.";
+  "Découvre l'univers de Shinederu : projets web, streams sur Twitch, vidéos YouTube, communauté Discord et dernières nouvelles.";
+const SOCIAL_PROFILES = [
+  import.meta.env.VITE_TWITCH_CHANNEL_LINK,
+  import.meta.env.VITE_YOUTUBE_CHANNEL_LINK,
+].filter(Boolean);
 
 type SeoConfig = {
   title: string;
   description: string;
   path: string;
   robots?: string;
+  ogType?: "profile" | "website";
   structuredData?: unknown[];
 };
 
@@ -19,99 +25,120 @@ const noIndex = "noindex, follow";
 
 const routeSeo: Record<string, SeoConfig> = {
   "/": {
-    title: "Shinederu - Portail public",
+    title: "Shinederu — Projets, streams et communauté",
     description: DEFAULT_DESCRIPTION,
     path: "/",
     structuredData: [
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
         name: SITE_NAME,
         url: `${SITE_URL}/`,
         description: DEFAULT_DESCRIPTION,
         inLanguage: "fr-CH",
+        publisher: {
+          "@id": `${SITE_URL}/#person`,
+        },
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "@id": `${SITE_URL}/#person`,
+        name: SITE_NAME,
+        url: `${SITE_URL}/aboutme`,
+        sameAs: SOCIAL_PROFILES,
       },
     ],
   },
   "/channels": {
-    title: "Chaines Twitch et YouTube - Shinederu",
+    title: "Twitch et YouTube — Shinederu",
     description:
-      "Retrouve les chaines Twitch et YouTube de Shinederu, les lives occasionnels, les videos et les projets partages avec la communaute.",
+      "Retrouve les streams de Shinederu sur Twitch et ses vidéos sur YouTube, avec les liens directs vers les deux chaînes.",
     path: "/channels",
   },
   "/community": {
-    title: "Communaute Discord - Shinederu",
+    title: "Communauté Discord — Shinederu",
     description:
-      "Rejoins la communaute Shinederu sur Discord pour suivre les projets, les annonces, les idees et les soirees chill.",
+      "Rejoins la communauté Discord de Shinederu pour suivre les projets, les annonces, les lives et les prochaines soirées.",
     path: "/community",
   },
   "/aboutme": {
-    title: "A propos de Shinederu",
+    title: "À propos — Shinederu",
     description:
-      "Decouvre Shinederu, son parcours d'informaticien, ses projets web, ses jeux du moment et l'ambiance de sa communaute.",
+      "Découvre Shinederu, informaticien suisse : son parcours, ses projets web, ses jeux du moment et l'origine de son pseudo.",
     path: "/aboutme",
+    ogType: "profile",
     structuredData: [
       {
         "@context": "https://schema.org",
-        "@type": "Person",
-        name: "Shinederu",
+        "@type": "ProfilePage",
+        "@id": `${SITE_URL}/aboutme#profile`,
         url: `${SITE_URL}/aboutme`,
-        description:
-          "Informaticien suisse, createur de projets web personnels et de petites idees un peu trop ambitieuses pour rester dans un tiroir.",
+        name: "À propos de Shinederu",
+        inLanguage: "fr-CH",
+        mainEntity: {
+          "@type": "Person",
+          "@id": `${SITE_URL}/#person`,
+          name: SITE_NAME,
+          url: `${SITE_URL}/aboutme`,
+          description: "Informaticien suisse et créateur de projets web personnels.",
+          sameAs: SOCIAL_PROFILES,
+        },
       },
     ],
   },
   "/resetPassword": {
-    title: "Reinitialiser le mot de passe - Shinederu",
-    description: "Demande de reinitialisation de mot de passe Shinederu.",
+    title: "Réinitialiser le mot de passe — Shinederu",
+    description: "Demande de réinitialisation du mot de passe Shinederu.",
     path: "/resetPassword",
     robots: noIndex,
   },
   "/newPassword": {
-    title: "Nouveau mot de passe - Shinederu",
-    description: "Choix d'un nouveau mot de passe Shinederu.",
+    title: "Nouveau mot de passe — Shinederu",
+    description: "Choisis un nouveau mot de passe pour ton compte Shinederu.",
     path: "/newPassword",
     robots: noIndex,
   },
   "/newEmail": {
-    title: "Confirmation email - Shinederu",
-    description: "Confirmation d'adresse email Shinederu.",
+    title: "Confirmation de l'adresse e-mail — Shinederu",
+    description: "Confirme l'adresse e-mail de ton compte Shinederu.",
     path: "/newEmail",
     robots: noIndex,
   },
   "/dashboard": {
-    title: "Dashboard - Shinederu",
-    description: "Dashboard personnel Shinederu.",
+    title: "Tableau de bord — Shinederu",
+    description: "Accède à ton tableau de bord Shinederu.",
     path: "/dashboard",
     robots: noIndex,
   },
   "/profile": {
-    title: "Profil - Shinederu",
-    description: "Gestion du profil Shinederu.",
+    title: "Mon profil — Shinederu",
+    description: "Gère ton profil Shinederu.",
     path: "/profile",
     robots: noIndex,
   },
   "/users": {
-    title: "Gestion utilisateurs - Shinederu",
-    description: "Panneau d'administration des utilisateurs Shinederu.",
+    title: "Gestion des utilisateurs — Shinederu",
+    description: "Administration des utilisateurs Shinederu.",
     path: "/users",
     robots: noIndex,
   },
   "/announcements": {
-    title: "Gestion annonces - Shinederu",
-    description: "Panneau d'administration des annonces Shinederu.",
+    title: "Gestion des annonces — Shinederu",
+    description: "Administration des annonces publiées sur Shinederu.",
     path: "/announcements",
     robots: noIndex,
   },
   "/permissions": {
-    title: "Permissions - Shinederu",
-    description: "Gestion des permissions centralisees Shinederu.",
+    title: "Permissions — Shinederu",
+    description: "Administration des permissions Shinederu.",
     path: "/permissions",
     robots: noIndex,
   },
   "/core-access": {
-    title: "Permissions - Shinederu",
-    description: "Redirection historique vers la gestion des permissions Shinederu.",
+    title: "Permissions — Shinederu",
+    description: "Administration des permissions Shinederu.",
     path: "/core-access",
     robots: noIndex,
   },
@@ -183,15 +210,24 @@ const Seo = () => {
     document.title = seo.title;
     upsertMeta("name", "description", seo.description);
     upsertMeta("name", "robots", robots);
+    upsertMeta("name", "author", SITE_NAME);
+    upsertMeta("name", "application-name", SITE_NAME);
+    upsertMeta("name", "theme-color", "#6a11cb");
     upsertMeta("property", "og:site_name", SITE_NAME);
-    upsertMeta("property", "og:type", "website");
+    upsertMeta("property", "og:locale", "fr_CH");
+    upsertMeta("property", "og:type", seo.ogType ?? "website");
     upsertMeta("property", "og:title", seo.title);
     upsertMeta("property", "og:description", seo.description);
     upsertMeta("property", "og:url", canonical);
     upsertMeta("property", "og:image", DEFAULT_IMAGE);
+    upsertMeta("property", "og:image:alt", DEFAULT_IMAGE_ALT);
+    upsertMeta("property", "og:image:width", "1024");
+    upsertMeta("property", "og:image:height", "1024");
     upsertMeta("name", "twitter:card", "summary");
     upsertMeta("name", "twitter:title", seo.title);
     upsertMeta("name", "twitter:description", seo.description);
+    upsertMeta("name", "twitter:image", DEFAULT_IMAGE);
+    upsertMeta("name", "twitter:image:alt", DEFAULT_IMAGE_ALT);
     upsertCanonical(canonical);
     upsertStructuredData(seo.structuredData);
   }, [location.pathname]);

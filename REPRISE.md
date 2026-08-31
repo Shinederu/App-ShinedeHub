@@ -610,6 +610,10 @@ Changements fonctionnels importants:
 - timers UI inutiles retires;
 - Twitch/Discord charges a la demande;
 - titres HTML corriges.
+- titres et descriptions SEO reformules pour le public sous le seul nom
+  `Shinederu`, avec accents, metadonnees sociales et donnees structurees;
+- GIF historique ShinedeBox reintegre dans les sources et utilise par sa tuile
+  du dashboard.
 
 ## Limites connues
 

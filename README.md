@@ -183,6 +183,11 @@ Metadonnees gerees:
 - JSON-LD `WebSite` sur `/`
 - JSON-LD `Person` sur `/aboutme`
 
+La page d'accueil est presentee publiquement comme
+`Shinederu — Projets, streams et communaute`. Les titres et descriptions
+destines aux moteurs et aux apercus sociaux doivent parler aux visiteurs et ne
+doivent jamais exposer le nom technique `ShinedeHub`.
+
 Pages indexables et presentes dans `public/sitemap.xml`:
 
 - `/`
@@ -248,6 +253,7 @@ Tuiles:
 Les images dashboard restent volontairement non compressees pour l'instant.
 `MenuCards` n'essaie plus plusieurs URLs par tuile; les chemins sont explicites
 pour eviter les probes/404 en cascade.
+La tuile ShinedeBox utilise `public/img/dashboard/ShinedeBox.gif`.
 
 ## Utilisateurs
 

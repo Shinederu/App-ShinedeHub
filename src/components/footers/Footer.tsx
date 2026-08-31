@@ -8,7 +8,7 @@ const Footer = () => {
       <p>
         &copy; {currentYear}{" "}
         <a href="https://shinederu.ch" className="hover:underline">
-          Shinederu.ch
+          Shinederu
         </a>{" "}
         - Tous droits réservés
       </p>

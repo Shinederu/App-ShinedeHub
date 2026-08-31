@@ -15,6 +15,7 @@ const DASHBOARD_IMAGES: Record<string, string> = {
   MelodyQuest: "/img/dashboard/MelodyQuest.png",
   Permission: "/img/dashboard/Permission.gif",
   Profile: "/img/dashboard/Profile.gif",
+  ShinedeBox: "/img/dashboard/ShinedeBox.gif",
   ShinedeWake: "/img/dashboard/ShinedeWake.png",
   Utilisateurs: "/img/dashboard/Utilisateurs.png",
 };
