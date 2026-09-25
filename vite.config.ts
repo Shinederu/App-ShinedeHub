@@ -9,17 +9,24 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600
   },
   server: {
+    // Native Windows file events are unreliable on the P: network share.
+    watch: {
+      usePolling: process.platform === 'win32',
+      interval: 500
+    },
     fs: {
       allow: ['..']
     }
   },
   resolve: {
+    // Shared source modules must use this app's React, not a second copy.
+    dedupe: ['react', 'react-dom'],
     alias: [
-      { find: '@', replacement: path.resolve(__dirname, 'src') },
-      { find: '@pages', replacement: path.resolve(__dirname, 'src/pages') },
-      { find: '@comp', replacement: path.resolve(__dirname, 'src/components') },
-      { find: '@shinederu/auth-core', replacement: path.resolve(__dirname, '../Module-Auth-Core/src/index.ts') },
-      { find: '@shinederu/auth-react', replacement: path.resolve(__dirname, '../Module-Auth-React/src/index.ts') }
+      { find: '@', replacement: path.resolve(import.meta.dirname, 'src') },
+      { find: '@pages', replacement: path.resolve(import.meta.dirname, 'src/pages') },
+      { find: '@comp', replacement: path.resolve(import.meta.dirname, 'src/components') },
+      { find: '@shinederu/auth-core', replacement: path.resolve(import.meta.dirname, '../Module-Auth-Core/src/index.ts') },
+      { find: '@shinederu/auth-react', replacement: path.resolve(import.meta.dirname, '../Module-Auth-React/src/index.ts') }
     ]
   }
 });

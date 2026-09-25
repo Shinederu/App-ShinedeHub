@@ -29,7 +29,7 @@ const Homepage = () => {
 
   return (
     <>
-      <section className="mb-8 rounded-xl border border-[#2f2f2f] bg-[#181818] p-5 sm:p-7 animate-fadeInUp">
+      <section className="mb-8 rounded-xl border border-[#2f2f2f] bg-[#181818] p-5 sm:p-7 animate-fade-in-up">
         <Title title="Bienvenue sur Shinederu" size={1} />
         <p>
           Ici tu trouveras mes projets, quelques nouvelles, la communauté, et les outils qui naissent quand une idée

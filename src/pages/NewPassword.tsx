@@ -55,7 +55,7 @@ const NewPassword = () => {
         <Title title="Réinitialisation du mot de passe" size={1} />
 
         <form
-          className="mt-6 space-y-4"
+          className="mt-6 stack-y-4"
           onSubmit={(event) => {
             event.preventDefault();
             void submitNewPassword();
@@ -68,7 +68,7 @@ const NewPassword = () => {
               name="newPassword"
               value={newPassword.password}
               onChange={(e) => setNewPassword({ ...newPassword, password: e.target.value })}
-              className="w-full p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
@@ -79,7 +79,7 @@ const NewPassword = () => {
               name="confirmPassword"
               value={newPassword.passwordConfirm}
               onChange={(e) => setNewPassword({ ...newPassword, passwordConfirm: e.target.value })}
-              className="w-full p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 

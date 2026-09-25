@@ -1,9 +1,8 @@
-﻿import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "@/shared/context/AuthContext";
 import { ModalContext } from "@/shared/context/ModalContext";
 import Title from "@/components/decoration/Title";
 import { DateTimeFormatter } from "@/utils/DateTimeFormatter";
-import { UserType } from "@/types/User";
 import { useAuth } from "@shinederu/auth-react";
 import { USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from "@/shared/auth/constraints";
 
@@ -25,30 +24,14 @@ const Profile = () => {
   const auth = useAuth();
 
   const [editMode, setEditMode] = useState(false);
-  const [editedUser, setEditedUser] = useState<UserType>({
-    id: authCtx.id,
-    username: authCtx.username,
-    email: authCtx.email,
-    role: authCtx.role,
-    created_at: authCtx.created_at,
-  });
+  const [editedUsername, setEditedUsername] = useState(authCtx.username);
   const [newEmail, setNewEmail] = useState<{ email: string; emailConfirm: string }>({ email: "", emailConfirm: "" });
 
-  useEffect(() => {
-    setEditedUser({
-      id: authCtx.id,
-      username: authCtx.username,
-      email: authCtx.email,
-      role: authCtx.role,
-      created_at: authCtx.created_at,
-    });
-  }, [authCtx.id, authCtx.username, authCtx.email, authCtx.role, authCtx.created_at]);
-
   const updateUserProfile = async () => {
-    const response = await auth.updateProfile(editedUser.username);
+    const response = await auth.updateProfile(editedUsername);
 
     if (!response.ok) {
-      setEditedUser((prev) => ({ ...prev, username: authCtx.username }));
+      setEditedUsername(authCtx.username);
       modalCtx.open(response.error ?? "Erreur pendant la mise à jour du profil.", "error");
       return;
     }
@@ -103,7 +86,8 @@ const Profile = () => {
   };
 
   const onSelectAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const input = e.currentTarget;
+    const file = input.files?.[0];
     if (!file) return;
 
     const response = await auth.updateAvatar(file, "avatar.png");
@@ -115,7 +99,7 @@ const Profile = () => {
 
     await authCtx.reload();
     modalCtx.open("Avatar mis à jour.", "result");
-    e.currentTarget.value = "";
+    input.value = "";
   };
 
   return (
@@ -124,7 +108,7 @@ const Profile = () => {
         <Title size={1} title={`Profil de ${authCtx.username}`} />
         <section className="mt-8 w-full max-w-2xl text-white">
           <div className="mt-4 flex items-center gap-4 flex-col">
-            <img key={authCtx.avatar_url} src={authCtx.avatar_url} alt="avatar" className="w-40 h-40 rounded-full object-cover border border-gray-700" />
+            <img key={authCtx.avatar_url} src={authCtx.avatar_url || "/img/favicon/chibi.png"} alt="avatar" className="w-40 h-40 rounded-full object-cover border border-gray-700" />
             {editMode ? (
               <div>
                 <input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp" onChange={onSelectAvatar} className="hidden" />
@@ -137,9 +121,9 @@ const Profile = () => {
           </div>
         </section>
 
-        <div className="mt-6 space-y-4 text-white">
+        <div className="mt-6 stack-y-4 text-white">
           {editMode ? (
-            <div className="space-y-4">
+            <div className="stack-y-4">
               <div className="text-gray-400">Identifiant unique: #{authCtx.id}</div>
 
               <div>
@@ -147,14 +131,14 @@ const Profile = () => {
                 <input
                   type="text"
                   name="username"
-                  value={editedUser.username}
-                  onChange={(event) => setEditedUser({ ...editedUser, username: event.target.value })}
+                  value={editedUsername}
+                  onChange={(event) => setEditedUsername(event.target.value)}
                   minLength={USERNAME_MIN_LENGTH}
                   maxLength={USERNAME_MAX_LENGTH}
-                  className="p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 />
                 <p className="mt-1 text-xs text-gray-400">
-                  {editedUser.username.length}/{USERNAME_MAX_LENGTH} caractères
+                  {editedUsername.length}/{USERNAME_MAX_LENGTH} caractères
                 </p>
               </div>
 
@@ -171,12 +155,15 @@ const Profile = () => {
               </div>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="stack-y-2">
               <div>Identifiant unique: #{authCtx.id}</div>
               <div>Nom d'utilisateur: {authCtx.username}</div>
               <div>Email: {authCtx.email}</div>
               <div>Créé le: {DateTimeFormatter(authCtx.created_at)}</div>
-              <button type="button" onClick={() => setEditMode(true)} className="mt-3 px-3 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition">
+              <button type="button" onClick={() => {
+                setEditedUsername(authCtx.username);
+                setEditMode(true);
+              }} className="mt-3 px-3 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 transition">
                 Modifier mon profil
               </button>
             </div>
@@ -189,7 +176,7 @@ const Profile = () => {
           <div className="mt-6 grid gap-8 md:grid-cols-2">
             <div>
               <Title size={3} title="Modifier l'email" />
-              <div className="mt-4 space-y-4">
+              <div className="mt-4 stack-y-4">
                 <div>
                   <label className="block mb-1 text-sm text-gray-300">Nouvelle adresse email</label>
                   <input
@@ -197,7 +184,7 @@ const Profile = () => {
                     name="email"
                     value={newEmail.email}
                     onChange={(e) => setNewEmail({ ...newEmail, email: e.target.value })}
-                    className="w-full max-w-sm p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="w-full max-w-sm p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-hidden focus:ring-2 focus:ring-red-500"
                   />
                 </div>
 
@@ -208,7 +195,7 @@ const Profile = () => {
                     name="emailConfirm"
                     value={newEmail.emailConfirm}
                     onChange={(e) => setNewEmail({ ...newEmail, emailConfirm: e.target.value })}
-                    className="w-full max-w-sm p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                    className="w-full max-w-sm p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-hidden focus:ring-2 focus:ring-red-500"
                   />
                 </div>
 
@@ -218,7 +205,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-center space-y-3 mt-4">
+            <div className="flex flex-col items-center stack-y-3 mt-4">
               <Title size={3} title="Actions" />
               <button onClick={updatePassword} className="px-3 py-2 rounded-md bg-gray-700 hover:bg-gray-600 transition">
                 Modifier votre mot de passe

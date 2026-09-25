@@ -26,7 +26,7 @@ const ActusCards = ({ title, message, btnLabel, link, date, highlighted = false 
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-md bg-gradient-to-r from-[#6a11cb] to-[#2575fc] px-4 py-2.5 font-bold transition-colors duration-200 hover:from-[#7b2bd8] hover:to-[#3d86ff]"
+            className="rounded-md bg-linear-to-r/srgb from-[#6a11cb] to-[#2575fc] px-4 py-2.5 font-bold transition-colors duration-200 hover:from-[#7b2bd8] hover:to-[#3d86ff]"
           >
             {btnLabel}
           </a>

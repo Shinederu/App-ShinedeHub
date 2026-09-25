@@ -357,28 +357,40 @@ semble necessaire ailleurs, la documenter et attendre une demande explicite.
 
 ## Dependances et outillage
 
-Maintenance du 2026-09-25: mises a jour compatibles avec React 18,
-React Router 7, Vite 7, Tailwind CSS 3, TypeScript 5 et ESLint 8.
+Migration du 2026-09-25: React/React DOM 19.3, React Router 7.18,
+Vite 8.3, plugin React 6.1, Tailwind CSS 4.3, TypeScript 6.0,
+ESLint 10.11 et Lucide 1.48.
 Les versions exactes sont verrouillees dans `package-lock.json`.
 
-Validation du 2026-09-25 sur Node.js 24.16.0 et npm 11.13.0:
-installation neuve, lint, verification TypeScript et build reussis;
-`npm audit` et `npm audit --omit=dev` ne signalent aucune vulnerabilite.
-Les migrations de versions majeures restent separees de cette maintenance;
-ESLint 8 est conserve pour la configuration actuelle mais n'est plus maintenu.
-
-- `@typescript-eslint/parser` et `@typescript-eslint/eslint-plugin` sont
-  declares explicitement pour rendre le lint reproductible.
-- PostCSS est declare une seule fois, dans les dependances de developpement.
+- ESLint utilise `eslint.config.js` (flat config), les recommandations
+  TypeScript/React Hooks et les regles React Refresh de Vite.
+- TypeScript reste en `~6.0.3`: `@typescript-eslint` 8.70.1 exige une version
+  `<6.1.0`. Ne pas forcer TypeScript 7 tant que cette compatibilite manque.
+- Les types Node suivent Node 24, utilise pour la validation, pas Node 26.
+- Tailwind utilise `@tailwindcss/postcss` et un theme CSS dans `src/index.css`.
+  Les anciens fichiers `.eslintrc.cjs` et `tailwind.config.js` sont retires.
+  Autoprefixer n'est plus necessaire; PostCSS reste une dependance dev.
 - NextUI, son plugin Tailwind, `react-icons`, `tailwind-merge`, l'utilitaire
-  inutilise `src/utils/classNames.ts` et la dependance directe `@eslint/js`
-  ont ete retires.
-- Les transitions conservent leur duree par defaut de 250 ms dans
-  `tailwind.config.js`.
+  inutilise `src/utils/classNames.ts` ont ete retires lors du nettoyage initial.
+- `src/index.css` preserve palette sRGB, ombres, transitions 250 ms et
+  espacements historiques. Les utilitaires `stack-y-*` gardent les anciennes
+  marges entre freres; ne pas les remplacer aveuglement par `space-y-*` v4.
+- Vite deduplique React/React DOM pour les modules auth importes en source.
+  Aucun module partage ni backend n'est modifie par cette migration.
+- Le pictogramme Twitch existant est conserve en SVG local dans `AboutMe.tsx`:
+  Lucide 1 ne fournit plus les icones de marques.
 
-Utiliser Node.js compatible avec Vite 7: `^20.19.0 || >=22.12.0`.
+Node.js requis par l'outillage: `^22.13.0 || >=24.0.0`.
+Environnement de validation: Node.js 24.16.0 et npm 11.13.0.
 Executer les commandes depuis le PC Windows dans le repo DEV, y compris
 lorsque `P:` est un lecteur reseau.
+
+Sur Windows, Vite surveille les fichiers par polling (500 ms): les evenements
+natifs du partage `P:` provoquent sinon une erreur `UNKNOWN: watch`.
+Ce reglage ne concerne que le serveur de developpement, pas le site publie.
+
+Navigateurs minimums pour Tailwind 4: Chrome/Edge 111, Safari 16.4,
+Firefox 128. Voir le [guide de migration officiel](https://tailwindcss.com/docs/upgrade-guide).
 
 Pour recreer les dependances a partir du verrouillage et les verifier:
 
@@ -386,11 +398,21 @@ Pour recreer les dependances a partir du verrouillage et les verifier:
 cd P:\DEV\GitHub\App-ShinedeHub
 npm ci
 npm run lint
-npx tsc --noEmit
+npm run typecheck
 npm run build
 npm audit
 npm audit --omit=dev
 ```
+
+`npm run typecheck` verifie l'application, ses imports auth et la configuration
+Vite. `npm run build` execute ce controle avant la compilation de production.
+
+Validation de migration du 2026-09-25: installation neuve, lint sans erreur ni
+avertissement, typecheck, build et demarrage dev valides sur le PC. Les deux
+audits npm ne signalent aucune vulnerabilite. Un test navigateur ponctuel a
+valide 22 controles a 1440/390 px, avec 36 captures et API simulees uniquement:
+connexion/inscription, recuperation, droits dashboard, profil, utilisateurs,
+annonces et permissions. Aucune ecriture de test sur les APIs reelles.
 
 ## Configuration
 
@@ -505,6 +527,8 @@ Lire aussi:
 
 ## Limites connues
 
+- Sur mobile 390 px, l'onglet Utilisateurs de `/permissions` deborde deja
+  horizontalement avant la migration; ce defaut preexistant reste distinct.
 - Plusieurs textes historiques dans `CoreAccess.tsx` restent sans accents; cela
   n'impacte pas le fonctionnement.
 - `src/assets/react.svg` semble etre un reliquat Vite; a confirmer avant

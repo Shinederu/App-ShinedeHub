@@ -15,7 +15,7 @@ const Channels = () => {
         <Title title="Twitch" size={2} level={1} />
         <p>Les streams sont plus rares, mais s'il y en a un, tout se passe sur Twitch.</p>
         <TwitchEmbed />
-        <div className="flex flex-col items-center rounded-lg border-2 border-[#6a11cb] bg-[#10101f] p-5 animate-fadeInUp sm:p-6">
+        <div className="flex flex-col items-center rounded-lg border-2 border-[#6a11cb] bg-[#10101f] p-5 animate-fade-in-up sm:p-6">
           <p>
             Pas de planning fixe, pas de promesse compliquée: si un live apparaît, c'est surtout pour jouer, discuter et passer un moment tranquille.
           </p>
@@ -29,7 +29,7 @@ const Channels = () => {
               href={import.meta.env.VITE_TWITCH_CHANNEL_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 rounded-md bg-gradient-to-r from-[#6a11cb] to-[#2575fc] px-5 py-3 font-bold transition-colors duration-200 hover:from-[#7b2bd8] hover:to-[#3d86ff]"
+              className="mt-4 rounded-md bg-linear-to-r/srgb from-[#6a11cb] to-[#2575fc] px-5 py-3 font-bold transition-colors duration-200 hover:from-[#7b2bd8] hover:to-[#3d86ff]"
             >
               Voir la chaîne Twitch
             </a>
@@ -41,7 +41,7 @@ const Channels = () => {
         <Title title="YouTube" size={2} />
         <p>Si tu as loupé un live ou une vidéo, YouTube garde les rediffusions disponibles.</p>
         <YouTubeEmbed />
-        <div className="flex flex-col items-center rounded-lg border-2 border-[#cb1111] bg-[#10101f] p-5 animate-fadeInUp sm:p-6">
+        <div className="flex flex-col items-center rounded-lg border-2 border-[#cb1111] bg-[#10101f] p-5 animate-fade-in-up sm:p-6">
           <p>
             L'intégration affiche une prévisualisation légère ici. Le bouton ouvre directement la chaîne pour voir ce qui est disponible.
           </p>
@@ -50,7 +50,7 @@ const Channels = () => {
               href={import.meta.env.VITE_YOUTUBE_CHANNEL_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 rounded-md bg-gradient-to-r from-[#6a11cb] to-[#2575fc] px-5 py-3 font-bold transition-colors duration-200 hover:from-[#7b2bd8] hover:to-[#3d86ff]"
+              className="mt-4 rounded-md bg-linear-to-r/srgb from-[#6a11cb] to-[#2575fc] px-5 py-3 font-bold transition-colors duration-200 hover:from-[#7b2bd8] hover:to-[#3d86ff]"
             >
               Voir la chaîne YouTube
             </a>

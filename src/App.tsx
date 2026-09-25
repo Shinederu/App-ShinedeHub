@@ -22,11 +22,11 @@ const App = () => {
 
   return (
 
-    <div className="bg-[#0d0d0d] text-white font-[Poppins] min-h-screen flex flex-col">
+    <div className="bg-[#0d0d0d] text-white font-poppins min-h-screen flex flex-col">
       <Seo />
       <Header />
       <main
-        className="w-[94%] sm:w-11/12 max-w-6xl mx-auto my-5 sm:my-8 lg:my-10 p-4 sm:p-6 lg:p-8 bg-[#1e1e1e] rounded-lg border border-[#2b2b2b] shadow-[0_0_30px_rgba(37,117,252,0.12)] text-center flex-grow"
+        className="w-[94%] sm:w-11/12 max-w-6xl mx-auto my-5 sm:my-8 lg:my-10 p-4 sm:p-6 lg:p-8 bg-[#1e1e1e] rounded-lg border border-[#2b2b2b] shadow-[0_0_30px_rgba(37,117,252,0.12)] text-center grow"
       >
         <Routes>{getRoutes(isLoggedIn, can_manage_users, can_manage_announcements, is_admin)}</Routes>
       </main>

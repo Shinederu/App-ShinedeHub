@@ -6,7 +6,7 @@ type TitleProps = {
 
 const Title = (props: TitleProps) => {
   const headingLevel = props.level ?? Math.min(Math.max(Math.round(props.size), 1), 6);
-  const HeadingTag = `h${headingLevel}` as keyof JSX.IntrinsicElements;
+  const HeadingTag = `h${headingLevel}` as `h${1 | 2 | 3 | 4 | 5 | 6}`;
 
   const checkSize = () => {
     switch (props.size) {

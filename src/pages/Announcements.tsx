@@ -4,7 +4,7 @@ import { ModalContext } from "@/shared/context/ModalContext";
 import { createAnnouncement, deleteAnnouncement, listAnnouncementsAdmin, updateAnnouncement } from "@/shared/mainSite/client";
 import { AnnouncementType } from "@/types/Announcement";
 import { DateTimeFormatter } from "@/utils/DateTimeFormatter";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 type FormState = {
@@ -38,6 +38,7 @@ const formatForInput = (dateString: string) => {
 const Announcements = () => {
   const authCtx = useContext(AuthContext);
   const modalCtx = useContext(ModalContext);
+  const modalRef = useRef(modalCtx);
   const [items, setItems] = useState<AnnouncementType[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -46,19 +47,23 @@ const Announcements = () => {
 
   const canManageAnnouncements = authCtx.can_manage_announcements;
 
-  const loadAnnouncements = useCallback(async () => {
-    setLoading(true);
-    const response = await listAnnouncementsAdmin();
-    if (!response.ok || !response.data) {
-      modalCtx.open(response.error ?? "Erreur pendant le chargement des annonces.", "error");
-      setItems([]);
-      setLoading(false);
-      return;
-    }
-
-    setItems(response.data.announcements);
-    setLoading(false);
+  useEffect(() => {
+    modalRef.current = modalCtx;
   }, [modalCtx]);
+
+  const loadAnnouncements = useCallback(() =>
+    listAnnouncementsAdmin().then((response) => {
+      if (!response.ok || !response.data) {
+        modalRef.current.open(response.error ?? "Erreur pendant le chargement des annonces.", "error");
+        setItems([]);
+        setLoading(false);
+        return;
+      }
+
+      setItems(response.data.announcements);
+      setLoading(false);
+    }),
+  []);
 
   useEffect(() => {
     if (!canManageAnnouncements) return;
@@ -147,6 +152,7 @@ const Announcements = () => {
 
                 setEditingId(null);
                 setForm(EMPTY_FORM);
+                setLoading(true);
                 await loadAnnouncements();
                 modalCtx.open("Annonce enregistrée.", "result");
               }}
@@ -213,6 +219,7 @@ const Announcements = () => {
                         modalCtx.open(response.error ?? "Erreur pendant la suppression.", "error");
                         return;
                       }
+                      setLoading(true);
                       await loadAnnouncements();
                       modalCtx.open("Annonce supprimée.", "result");
                     }}

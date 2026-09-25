@@ -22,7 +22,7 @@ const Header = () => {
 
   return (
     <header>
-      <div className="bg-gradient-to-r from-[#6a11cb] to-[#2575fc] p-4 text-center text-2xl font-semibold tracking-wider sm:p-5 sm:text-3xl">
+      <div className="bg-linear-to-r/srgb from-[#6a11cb] to-[#2575fc] p-4 text-center text-2xl font-semibold tracking-wider sm:p-5 sm:text-3xl">
         {authCtx.isLoggedIn === true ? (
           <Link to="/dashboard">
             Salutation <b>{authCtx.username}</b> !

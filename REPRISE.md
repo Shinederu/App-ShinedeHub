@@ -101,13 +101,13 @@ Runtime API:
 
 ## Stack frontend
 
-- React 18
-- TypeScript 5
-- Vite 7
-- Tailwind CSS 3
+- React 19.3
+- TypeScript 6.0
+- Vite 8.3 et plugin React 6.1
+- Tailwind CSS 4.3
 - React Router 7
-- ESLint 8 et `@typescript-eslint` 8
-- lucide-react
+- ESLint 10.11 et `@typescript-eslint` 8.70
+- lucide-react 1.48
 - `@shinederu/auth-core`
 - `@shinederu/auth-react`
 
@@ -116,12 +116,13 @@ Scripts:
 ```powershell
 npm run dev
 npm run lint
-npx tsc --noEmit
+npm run typecheck
 npm run build
 npm run preview
 ```
 
-`npm run build` lance `tsc && vite build`.
+`npm run build` lance `npm run typecheck && vite build`. Le typecheck couvre
+l'application et `vite.config.ts`, sans emission JavaScript.
 
 L'installation reproductible utilise `npm ci`. Les deux packages
 `@typescript-eslint/parser` et `@typescript-eslint/eslint-plugin` sont
@@ -129,20 +130,40 @@ declares dans le projet. PostCSS reste uniquement une dependance de
 developpement. Les versions exactes sont conservees dans `package-lock.json`.
 
 Executer les builds sur le PC Windows depuis ce repo DEV, meme lorsque
-`P:` est un lecteur reseau. Vite 7 exige Node.js `^20.19.0 || >=22.12.0`.
+`P:` est un lecteur reseau. L'outillage exige Node.js `^22.13.0 || >=24.0.0`.
 
-La maintenance du 2026-09-25 conserve ces versions majeures et retire NextUI
+La maintenance du 2026-09-25 migre les versions majeures et retire NextUI
 avec son plugin Tailwind, `react-icons`, `tailwind-merge`, l'utilitaire
-inutilise `src/utils/classNames.ts` et la dependance directe `@eslint/js`.
-La duree par defaut des transitions reste 250 ms dans `tailwind.config.js`.
+inutilise `src/utils/classNames.ts` ainsi qu'Autoprefixer.
+`@eslint/js` est maintenant utilise par `eslint.config.js`; `.eslintrc.cjs`
+est retire. Les regles recommandees React Hooks sont actives, sans exclusions
+ajoutees pour contourner la migration.
+
+Le theme Tailwind est dans `src/index.css`, avec `@tailwindcss/postcss`.
+`tailwind.config.js` est retire. Palette, transitions 250 ms, ombres, gradients
+sRGB et marges historiques sont preserves. Navigateurs minimums: Chrome/Edge
+111, Safari 16.4 et Firefox 128.
+
+Vite deduplique React/React DOM pour les imports source des modules auth.
+Les modules auth et les APIs voisines restent inchanges.
+
+Sur Windows, le serveur Vite utilise le polling (500 ms) pour supporter le
+partage reseau `P:`; la surveillance native echoue avec `UNKNOWN: watch`.
+Ce comportement n'affecte pas la production.
 
 Apres une maintenance des dependances, completer lint/typecheck/build par
 `npm audit` et `npm audit --omit=dev`.
 
-Le 2026-09-25, installation neuve (`npm ci`), lint, TypeScript et build
-valides sur Node.js 24.16.0 / npm 11.13.0. Les deux audits ne signalent
-aucune vulnerabilite. ESLint 8 reste compatible mais n'est plus maintenu;
-sa migration, comme celles des autres versions majeures, est distincte.
+Environnement de validation: Node.js 24.16.0 / npm 11.13.0.
+TypeScript reste en `~6.0.3` car `@typescript-eslint` 8.70.1 exige `<6.1.0`;
+TypeScript 7 n'est pas encore compatible avec ce controleur. Les types Node
+restent sur la branche 24 correspondant au runtime utilise.
+
+Validation du 2026-09-25: installation neuve, lint, typecheck, build et mode dev
+reussis. Audits npm complet/runtime: aucune vulnerabilite signalee. Les tests
+ponctuels navigateur couvrent 22 controles et 36 captures a 1440/390 px,
+avec toutes les APIs simulees (aucune ecriture reelle): formulaires auth,
+dashboard selon droits, profil, utilisateurs, annonces et permissions.
 
 ## Architecture
 
@@ -642,6 +663,8 @@ Changements fonctionnels importants:
 
 ## Limites connues
 
+- Debordement mobile preexistant a 390 px dans l'onglet Utilisateurs de
+  `/permissions`, observe aussi sur la baseline avant migration.
 - Pas de tests automatises applicatifs.
 - `CoreAccess.tsx` contient encore des libelles historiques sans accents.
 - `src/assets/react.svg` semble etre un reliquat Vite.

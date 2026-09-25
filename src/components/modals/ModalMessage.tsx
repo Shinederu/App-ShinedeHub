@@ -1,42 +1,18 @@
-import { ModalContext } from "@/shared/context/ModalContext";
+import { ModalContext, type ModalContextType } from "@/shared/context/ModalContext";
 import { X } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
-const MessageModal = () => {
-  const modalCtx = useContext(ModalContext);
+const modalPresentation: Record<ModalContextType["type"], { title: string; color: string }> = {
+  result: { title: "Succès !", color: "#20c70e" },
+  error: { title: "Une erreur est survenue !", color: "#b50909" },
+  confirm: { title: "Confirmation", color: "#ffe342" },
+  prompt: { title: "Saisie requise", color: "#3a7bd5" },
+  info: { title: "Information", color: "#ffe342" },
+};
 
-  const [color, setColor] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
+const MessageModalContent = ({ modalCtx }: { modalCtx: ModalContextType }) => {
+  const { title, color } = modalPresentation[modalCtx.type];
   const [promptValue, setPromptValue] = useState<string>("");
-
-  useEffect(() => {
-    switch (modalCtx.type) {
-      case "result":
-        setTitle("Succès !");
-        setColor("#20c70e");
-        break;
-      case "error":
-        setTitle("Une erreur est survenue !");
-        setColor("#b50909");
-        break;
-      case "confirm":
-        setTitle("Confirmation");
-        setColor("#ffe342");
-        break;
-      case "prompt":
-        setTitle("Saisie requise");
-        setColor("#3a7bd5");
-        break;
-      default:
-        setTitle("Information");
-        setColor("#ffe342");
-        break;
-    }
-
-    setPromptValue("");
-  }, [modalCtx.type, modalCtx.isOpen]);
-
-  if (!modalCtx.isOpen) return null;
 
   const formatText = (text: string) =>
     text.split("\n").map((line, idx) => (
@@ -70,14 +46,14 @@ const MessageModal = () => {
           </button>
         </div>
 
-        <div id="message-modal-body" className="space-y-2 py-4">
-          <p className="break-words text-gray-300">{formatText(modalCtx.message)}</p>
-          {modalCtx.subMessage && <p className="break-words text-sm text-gray-400">{formatText(modalCtx.subMessage)}</p>}
+        <div id="message-modal-body" className="stack-y-2 py-4">
+          <p className="wrap-break-word text-gray-300">{formatText(modalCtx.message)}</p>
+          {modalCtx.subMessage && <p className="wrap-break-word text-sm text-gray-400">{formatText(modalCtx.subMessage)}</p>}
 
           {modalCtx.type === "prompt" && (
             <input
               type="text"
-              className="mt-2 w-full rounded-md border border-gray-600 bg-[#181828] px-3 py-2 text-white focus:outline-none focus:ring focus:border-blue-500"
+              className="mt-2 w-full rounded-md border border-gray-600 bg-[#181828] px-3 py-2 text-white focus:outline-hidden focus:ring-3 focus:border-blue-500"
               placeholder="Ta réponse ici..."
               value={promptValue}
               onChange={(e) => setPromptValue(e.target.value)}
@@ -123,6 +99,13 @@ const MessageModal = () => {
       </div>
     </div>
   );
+};
+
+const MessageModal = () => {
+  const modalCtx = useContext(ModalContext);
+
+  // Closing the modal unmounts its draft; changing its type starts a new one.
+  return modalCtx.isOpen ? <MessageModalContent key={modalCtx.type} modalCtx={modalCtx} /> : null;
 };
 
 export default MessageModal;

@@ -42,7 +42,7 @@ const ResetPassword = () => {
         <Title title="Demander une réinitialisation du mot de passe" size={1} />
 
         <form
-          className="mt-6 space-y-4"
+          className="mt-6 stack-y-4"
           onSubmit={(event) => {
             event.preventDefault();
             void sendPasswordResetRequest();
@@ -56,7 +56,7 @@ const ResetPassword = () => {
               value={email}
               placeholder="Entrez votre adresse email"
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full p-2 border border-gray-700 rounded-md bg-[#202020] text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 

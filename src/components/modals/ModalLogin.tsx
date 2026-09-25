@@ -94,7 +94,7 @@ const ModalLogin = () => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="bg-gradient-to-r from-[#6a11cb] to-[#2575fc] text-white px-4 py-2 rounded-md font-bold transition-transform hover:scale-105"
+        className="bg-linear-to-r/srgb from-[#6a11cb] to-[#2575fc] text-white px-4 py-2 rounded-md font-bold transition-transform hover:scale-105"
       >
         Connexion/Inscription
       </button>
@@ -133,7 +133,7 @@ const ModalLogin = () => {
                     placeholder="Pseudo ou Email"
                     value={formData.loginUsername}
                     onChange={handleChange}
-                    className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
+                    className="w-full p-3 border border-gray-700 rounded-sm bg-[#202020] text-white mb-2"
                   />
                   <input
                     type="password"
@@ -141,7 +141,7 @@ const ModalLogin = () => {
                     placeholder="Mot de passe"
                     value={formData.loginPassword}
                     onChange={handleChange}
-                    className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-4"
+                    className="w-full p-3 border border-gray-700 rounded-sm bg-[#202020] text-white mb-4"
                   />
                   <button
                     type="submit"
@@ -171,7 +171,7 @@ const ModalLogin = () => {
                     onChange={handleChange}
                     minLength={USERNAME_MIN_LENGTH}
                     maxLength={USERNAME_MAX_LENGTH}
-                    className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
+                    className="w-full p-3 border border-gray-700 rounded-sm bg-[#202020] text-white mb-2"
                   />
                   <input
                     type="email"
@@ -179,7 +179,7 @@ const ModalLogin = () => {
                     placeholder="Email"
                     value={formData.registerMail}
                     onChange={handleChange}
-                    className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
+                    className="w-full p-3 border border-gray-700 rounded-sm bg-[#202020] text-white mb-2"
                   />
                   <input
                     type="password"
@@ -187,7 +187,7 @@ const ModalLogin = () => {
                     placeholder="Mot de passe"
                     value={formData.registerPassword}
                     onChange={handleChange}
-                    className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-2"
+                    className="w-full p-3 border border-gray-700 rounded-sm bg-[#202020] text-white mb-2"
                   />
                   <input
                     type="password"
@@ -195,7 +195,7 @@ const ModalLogin = () => {
                     placeholder="Confirmer le mot de passe"
                     value={formData.registerConfirmPassword}
                     onChange={handleChange}
-                    className="w-full p-3 border border-gray-700 rounded bg-[#202020] text-white mb-4"
+                    className="w-full p-3 border border-gray-700 rounded-sm bg-[#202020] text-white mb-4"
                   />
                   <button
                     type="submit"

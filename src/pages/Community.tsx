@@ -36,7 +36,7 @@ const Community = () => {
             </div>
           </div>
 
-          <div className="rounded-lg border-2 border-[#6a11cb] bg-[#10101f] p-5 text-white animate-fadeInUp sm:p-6">
+          <div className="rounded-lg border-2 border-[#6a11cb] bg-[#10101f] p-5 text-white animate-fade-in-up sm:p-6">
             <Title size={2} title="Rejoins la Communauté" level={1} />
             <p className="mb-4">
               Le serveur Discord reste le meilleur endroit pour suivre les nouvelles, discuter de jeux, de tech, de projets, ou simplement passer
@@ -52,7 +52,7 @@ const Community = () => {
                 href={import.meta.env.VITE_DISCORD_INVITE}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-md bg-gradient-to-r from-[#6a11cb] to-[#2575fc] px-5 py-3 font-bold transition-colors duration-200 hover:from-[#7b2bd8] hover:to-[#3d86ff]"
+                className="rounded-md bg-linear-to-r/srgb from-[#6a11cb] to-[#2575fc] px-5 py-3 font-bold transition-colors duration-200 hover:from-[#7b2bd8] hover:to-[#3d86ff]"
               >
                 Rejoindre le Discord
               </a>
@@ -62,7 +62,7 @@ const Community = () => {
       </section>
 
       <section className="flex flex-col items-center">
-        <div className="w-full max-w-5xl rounded-lg border-2 border-[#ffed46a6] bg-[#10101f] p-5 animate-fadeInUp sm:p-6">
+        <div className="w-full max-w-5xl rounded-lg border-2 border-[#ffed46a6] bg-[#10101f] p-5 animate-fade-in-up sm:p-6">
           <Title title="Et après ?" size={2} />
           <p>
             Cette page peut devenir un petit point d'entrée pour la communauté: projets en cours, idées à tester, liens utiles et moments à ne pas

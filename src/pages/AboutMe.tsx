@@ -1,5 +1,5 @@
 import Title from "@/components/decoration/Title";
-import { Code2, Gamepad2, HeartHandshake, Lightbulb, Music2, Sparkles, Twitch } from "lucide-react";
+import { Code2, Gamepad2, HeartHandshake, Lightbulb, Music2, Sparkles } from "lucide-react";
 
 const highlights = [
   "CFC d'informaticien en poche",
@@ -19,7 +19,7 @@ const About = () => {
           <div className="min-w-0">
             <p className="text-sm font-semibold uppercase tracking-wide text-indigo-300">À propos</p>
             <Title size={1} title="Salut, moi c'est Shinederu" />
-            <div className="space-y-4 text-base leading-7 text-gray-200">
+            <div className="stack-y-4 text-base leading-7 text-gray-200">
               <p>
                 Moi c'est Shinederu, ou Théo pour les amis. Je suis un Suisse avec un CFC d'informaticien en poche, un humour parfois discutable,
                 et une tendance assez nette à transformer un délire en mini-projet avant même d'avoir fini d'y réfléchir.
@@ -67,7 +67,10 @@ const About = () => {
 
         <article className="rounded-lg border border-[#303030] bg-[#151515] p-5">
           <div className="mb-3 flex items-center gap-2 text-rose-300">
-            <Twitch size={20} />
+            {/* Preserve the existing brand mark after Lucide removed brand icons. */}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 2H3v16h5v4l4-4h5l4-4V2zm-10 9V7m5 4V7" />
+            </svg>
             <Title size={4} title="Les lives" />
           </div>
           <p className="leading-7 text-gray-200">
@@ -83,15 +86,15 @@ const About = () => {
             <Code2 size={20} />
             <Title size={3} title="Les projets" />
           </div>
-          <div className="space-y-4 leading-7 text-gray-200">
+          <div className="stack-y-4 leading-7 text-gray-200">
             <p>
               Le vibe coding n'a rien arrangé: les envies de build arrivent vite, parfois trop vite, et finissent par remplir l'écosystème Shinede
               de petits outils, de tests et de services qui vivent leur meilleure vie.
             </p>
             <p>
               MelodyQuest a une place spéciale. L'idée date de ma première année d'apprentissage: une version Java dans un CMD, des fichiers
-              en <span className="rounded bg-[#252525] px-1.5 py-0.5 text-sm text-gray-100">.wav</span>, et un
-              <span className="rounded bg-[#252525] px-1.5 py-0.5 text-sm text-gray-100"> start.bat </span>
+              en <span className="rounded-sm bg-[#252525] px-1.5 py-0.5 text-sm text-gray-100">.wav</span>, et un
+              <span className="rounded-sm bg-[#252525] px-1.5 py-0.5 text-sm text-gray-100"> start.bat </span>
               pour lancer le bazar. Aujourd'hui c'est devenu un vrai projet web, mais l'ADN est resté le même.
             </p>
           </div>

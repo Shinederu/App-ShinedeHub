@@ -151,7 +151,6 @@ const Users = () => {
   }, [modalCtx]);
 
   const loadUsers = useCallback(async () => {
-    setIsLoading(true);
     const response = await authRef.current.listUsers();
     if (!response.ok) {
       modalRef.current.open(response.error ?? "Erreur pendant le chargement des utilisateurs.", "error");
@@ -338,7 +337,10 @@ const Users = () => {
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => void loadUsers()}
+            onClick={() => {
+              setIsLoading(true);
+              void loadUsers();
+            }}
             className="inline-flex items-center gap-2 rounded-md bg-[#252525] px-3 py-2 text-sm transition hover:bg-[#303030]"
           >
             <RefreshCw size={16} />
@@ -393,7 +395,7 @@ const Users = () => {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Rechercher par pseudo, email, ID ou rôle"
-              className="w-full rounded-md border border-gray-700 bg-[#202020] py-2 pl-10 pr-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-md border border-gray-700 bg-[#202020] py-2 pl-10 pr-3 text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
             />
           </label>
 
@@ -466,12 +468,12 @@ const Users = () => {
                         </td>
                         <td className="py-3 pr-4">
                           <p className="text-gray-200">{user.email}</p>
-                          <span className={`mt-1 inline-block rounded px-2 py-1 text-xs ${user.email_verified ? "bg-green-950 text-green-200" : "bg-amber-950 text-amber-200"}`}>
+                          <span className={`mt-1 inline-block rounded-sm px-2 py-1 text-xs ${user.email_verified ? "bg-green-950 text-green-200" : "bg-amber-950 text-amber-200"}`}>
                             {user.email_verified ? "vérifié" : "en attente"}
                           </span>
                         </td>
                         <td className="py-3 pr-4">
-                          <span className={`inline-block rounded px-2 py-1 text-xs ${user.is_banned ? "bg-red-950 text-red-200" : "bg-green-950 text-green-200"}`}>
+                          <span className={`inline-block rounded-sm px-2 py-1 text-xs ${user.is_banned ? "bg-red-950 text-red-200" : "bg-green-950 text-green-200"}`}>
                             {user.is_banned ? "bloqué" : "actif"}
                           </span>
                           {user.is_banned && user.banned_at ? (
@@ -482,12 +484,12 @@ const Users = () => {
                           <div className="flex max-w-xl flex-wrap gap-2">
                             {chips.length > 0 ? (
                               chips.map((chip) => (
-                                <span key={`${user.id}-${chip}`} className="rounded bg-[#252525] px-2 py-1 text-xs text-gray-200">
+                                <span key={`${user.id}-${chip}`} className="rounded-sm bg-[#252525] px-2 py-1 text-xs text-gray-200">
                                   {getProjectLabel(chip)}
                                 </span>
                               ))
                             ) : (
-                              <span className="rounded bg-[#252525] px-2 py-1 text-xs text-gray-400">Aucun rôle projet</span>
+                              <span className="rounded-sm bg-[#252525] px-2 py-1 text-xs text-gray-400">Aucun rôle projet</span>
                             )}
                           </div>
                         </td>
@@ -507,7 +509,7 @@ const Users = () => {
                         <tr className="border-b border-[#252525]">
                           <td colSpan={6} className="bg-[#141414] px-4 py-5">
                             <div className="grid gap-4 lg:grid-cols-2">
-                              <div className="min-w-0 space-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
+                              <div className="min-w-0 stack-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
                                 <label className="block">
                                   <span className="mb-1 block text-sm text-gray-300">Pseudo</span>
                                   <input
@@ -515,7 +517,7 @@ const Users = () => {
                                     onChange={(event) => setEditedUsername(event.target.value)}
                                     minLength={USERNAME_MIN_LENGTH}
                                     maxLength={USERNAME_MAX_LENGTH}
-                                    className="w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                                   />
                                 </label>
                                 <div className="flex flex-wrap items-center gap-2">
@@ -539,7 +541,7 @@ const Users = () => {
                                 </div>
                               </div>
 
-                              <div className="min-w-0 space-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
+                              <div className="min-w-0 stack-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
                                 <p className="text-sm text-gray-300">Photo de profil</p>
                                 <label className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-[#252525] px-3 py-2 text-sm transition hover:bg-[#303030] sm:w-auto">
                                   <Camera size={16} />
@@ -558,7 +560,7 @@ const Users = () => {
                                 <p className="text-xs text-gray-500">PNG, JPEG ou WebP - max 5 Mo.</p>
                               </div>
 
-                              <div className="min-w-0 space-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
+                              <div className="min-w-0 stack-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
                                 <p className="text-sm text-gray-300">Mot de passe</p>
                                 <label className="block">
                                   <span className="mb-1 block text-sm text-gray-300">Nouveau mot de passe</span>
@@ -567,7 +569,7 @@ const Users = () => {
                                     value={editedPassword}
                                     onChange={(event) => setEditedPassword(event.target.value)}
                                     autoComplete="new-password"
-                                    className="w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                                   />
                                 </label>
                                 <label className="block">
@@ -577,7 +579,7 @@ const Users = () => {
                                     value={editedPasswordConfirm}
                                     onChange={(event) => setEditedPasswordConfirm(event.target.value)}
                                     autoComplete="new-password"
-                                    className="w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                                   />
                                 </label>
                                 <button
@@ -592,14 +594,14 @@ const Users = () => {
                                 <p className="text-xs text-gray-500">Minimum 8 caractères.</p>
                               </div>
 
-                              <div className="min-w-0 space-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
+                              <div className="min-w-0 stack-y-3 rounded-lg border border-[#252525] bg-[#181818] p-4">
                                 <label className="block">
                                   <span className="mb-1 block text-sm text-gray-300">Motif de blocage</span>
                                   <textarea
                                     value={banReason}
                                     onChange={(event) => setBanReason(event.target.value)}
                                     maxLength={255}
-                                    className="min-h-20 w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                                    className="min-h-20 w-full rounded-md border border-gray-700 bg-[#202020] p-2 text-white focus:outline-hidden focus:ring-2 focus:ring-red-500"
                                     placeholder="Visible uniquement dans l'administration"
                                   />
                                 </label>

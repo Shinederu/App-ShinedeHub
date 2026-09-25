@@ -138,7 +138,7 @@ const CoreAccess = () => {
   const [selectedPermissionProjectId, setSelectedPermissionProjectId] = useState(0);
   const [selectedUserId, setSelectedUserId] = useState(0);
   const [selectedProjectCode, setSelectedProjectCode] = useState("core");
-  const [selectedRoleKeys, setSelectedRoleKeys] = useState<string[]>([]);
+  const [editedRoleKeys, setEditedRoleKeys] = useState<string[] | null>(null);
 
   const projects = useMemo(() => sortByCode(overview?.projects ?? []), [overview]);
   const activeProjects = useMemo(() => projects.filter((project) => project.is_active), [projects]);
@@ -166,6 +166,7 @@ const CoreAccess = () => {
     () => overview?.users.find((user) => user.id === selectedUserId) ?? overview?.users[0] ?? null,
     [overview, selectedUserId]
   );
+  const selectedRoleKeys = editedRoleKeys ?? selectedUser?.project_roles[selectedAssignmentProject?.code ?? ""] ?? [];
 
   useEffect(() => {
     authRef.current = auth;
@@ -180,7 +181,6 @@ const CoreAccess = () => {
   }, [authCtx.reload]);
 
   const loadOverview = useCallback(async () => {
-    setLoading(true);
     const response = await authRef.current.invoke("GET", "listCoreAccess");
     if (!response.ok) {
       setOverview(null);
@@ -191,6 +191,18 @@ const CoreAccess = () => {
 
     const data = unwrapData<CoreOverview>(response.data);
     setOverview(data);
+    setEditedRoleKeys(null);
+
+    const loadedProjects = sortByCode(data?.projects ?? []);
+    const firstProject = loadedProjects[0];
+    if (firstProject) {
+      setSelectedRoleProjectId((current) => current || firstProject.id);
+      setRoleForm((form) => form.project_id ? form : { ...form, project_id: firstProject.id });
+      setSelectedPermissionProjectId((current) => current || firstProject.id);
+      setPermissionForm((form) => form.project_id ? form : { ...form, project_id: firstProject.id });
+      setSelectedProjectCode((current) => loadedProjects.some((project) => project.code === current) ? current : firstProject.code);
+    }
+    setSelectedUserId((current) => current || data?.users[0]?.id || 0);
     setLoading(false);
   }, []);
 
@@ -199,31 +211,10 @@ const CoreAccess = () => {
     void loadOverview();
   }, [authCtx.is_admin, loadOverview]);
 
-  useEffect(() => {
-    if (!overview) return;
-    if (selectedRoleProjectId === 0 && projects[0]) {
-      setSelectedRoleProjectId(projects[0].id);
-      setRoleForm((form) => ({ ...form, project_id: projects[0].id }));
-    }
-    if (selectedPermissionProjectId === 0 && projects[0]) {
-      setSelectedPermissionProjectId(projects[0].id);
-      setPermissionForm((form) => ({ ...form, project_id: projects[0].id }));
-    }
-    if (selectedUserId === 0 && overview.users[0]) {
-      setSelectedUserId(overview.users[0].id);
-    }
-    if (!projects.some((project) => project.code === selectedProjectCode) && projects[0]) {
-      setSelectedProjectCode(projects[0].code);
-    }
-  }, [overview, projects, selectedPermissionProjectId, selectedProjectCode, selectedRoleProjectId, selectedUserId]);
-
-  useEffect(() => {
-    if (!selectedUser || !selectedAssignmentProject) {
-      setSelectedRoleKeys([]);
-      return;
-    }
-    setSelectedRoleKeys(selectedUser.project_roles[selectedAssignmentProject.code] ?? []);
-  }, [selectedAssignmentProject, selectedUser]);
+  const refreshOverview = async () => {
+    setLoading(true);
+    await loadOverview();
+  };
 
   const mutate = async (action: string, payload: Record<string, unknown>) => {
     setSaving(true);
@@ -241,7 +232,7 @@ const CoreAccess = () => {
   const saveProject = async () => {
     const result = await mutate("saveCoreProject", projectForm);
     if (!result) return;
-    await loadOverview();
+    await refreshOverview();
     modalRef.current.open("Projet enregistre.", "result");
   };
 
@@ -259,14 +250,14 @@ const CoreAccess = () => {
       if (!mappingResult) return;
     }
 
-    await loadOverview();
+    await refreshOverview();
     modalRef.current.open("Role enregistre.", "result");
   };
 
   const savePermission = async () => {
     const result = await mutate("saveCorePermission", permissionForm);
     if (!result) return;
-    await loadOverview();
+    await refreshOverview();
     modalRef.current.open("Permission enregistree.", "result");
   };
 
@@ -278,7 +269,7 @@ const CoreAccess = () => {
       role_keys: selectedRoleKeys,
     });
     if (!result) return;
-    await loadOverview();
+    await refreshOverview();
     await reloadAuthRef.current();
     modalRef.current.open("Roles utilisateur enregistres.", "result");
   };
@@ -349,11 +340,22 @@ const CoreAccess = () => {
   };
 
   const toggleRoleKey = (roleKey: string) => {
-    setSelectedRoleKeys((current) =>
-      current.includes(roleKey)
+    setEditedRoleKeys((draft) => {
+      const current = draft ?? selectedRoleKeys;
+      return current.includes(roleKey)
         ? current.filter((key) => key !== roleKey)
-        : [...current, roleKey]
-    );
+        : [...current, roleKey];
+    });
+  };
+
+  const selectUser = (userId: number) => {
+    setSelectedUserId(userId);
+    setEditedRoleKeys(null);
+  };
+
+  const selectAssignmentProject = (projectCode: string) => {
+    setSelectedProjectCode(projectCode);
+    setEditedRoleKeys(null);
   };
 
   if (!authCtx.is_admin) {
@@ -405,7 +407,7 @@ const CoreAccess = () => {
                     >
                       <div className="flex flex-wrap items-center gap-2">
                         <strong>{project.name}</strong>
-                        <span className={`rounded px-2 py-1 text-xs ${project.is_active ? "bg-green-900 text-green-200" : "bg-red-900 text-red-200"}`}>
+                        <span className={`rounded-sm px-2 py-1 text-xs ${project.is_active ? "bg-green-900 text-green-200" : "bg-red-900 text-red-200"}`}>
                           {project.is_active ? "actif" : "inactif"}
                         </span>
                       </div>
@@ -638,17 +640,17 @@ const CoreAccess = () => {
                       {overview.users.map((user) => (
                         <tr key={user.id} className="border-b border-[#252525] align-top">
                           <td className="py-3 pr-4">
-                            <button type="button" className="text-left text-indigo-300 hover:text-indigo-200" onClick={() => setSelectedUserId(user.id)}>
+                            <button type="button" className="text-left text-indigo-300 hover:text-indigo-200" onClick={() => selectUser(user.id)}>
                               {user.username}
                             </button>
-                            {user.is_global_admin ? <span className="ml-2 rounded bg-green-900 px-2 py-1 text-xs text-green-200">super-admin</span> : null}
+                            {user.is_global_admin ? <span className="ml-2 rounded-sm bg-green-900 px-2 py-1 text-xs text-green-200">super-admin</span> : null}
                           </td>
                           <td className="py-3 pr-4 text-gray-300">{user.email}</td>
                           <td className="py-3">
                             <div className="flex flex-wrap gap-2">
                               {Object.entries(user.project_roles).flatMap(([projectCode, roles]) =>
                                 roles.map((role) => (
-                                  <span key={`${user.id}-${projectCode}-${role}`} className="rounded bg-[#252525] px-2 py-1 text-xs">
+                                  <span key={`${user.id}-${projectCode}-${role}`} className="rounded-sm bg-[#252525] px-2 py-1 text-xs">
                                     {projectCode}.{role}
                                   </span>
                                 ))
@@ -667,7 +669,7 @@ const CoreAccess = () => {
                 <div className="grid gap-3">
                   <select
                     value={selectedUser?.id ?? 0}
-                    onChange={(event) => setSelectedUserId(Number(event.target.value))}
+                    onChange={(event) => selectUser(Number(event.target.value))}
                     className="rounded-md border border-gray-700 bg-[#202020] p-2"
                   >
                     {overview.users.map((user) => (
@@ -676,7 +678,7 @@ const CoreAccess = () => {
                   </select>
                   <select
                     value={selectedAssignmentProject?.code ?? "core"}
-                    onChange={(event) => setSelectedProjectCode(event.target.value)}
+                    onChange={(event) => selectAssignmentProject(event.target.value)}
                     className="rounded-md border border-gray-700 bg-[#202020] p-2"
                   >
                     {activeProjects.map((project) => (
