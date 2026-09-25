@@ -3,7 +3,7 @@
 Frontend principal de l'ecosysteme Shinede, servi sur
 `https://shinederu.ch/`.
 
-Derniere mise a jour documentaire: 2026-08-11.
+Derniere mise a jour documentaire: 2026-09-25.
 
 ## Role
 
@@ -56,11 +56,8 @@ annonces et avatars passent par les APIs proprietaires sous
 Ne pas deployer `.git`, `node_modules`, `src/`, fichiers de config dev, tests,
 caches, brouillons, docs internes ou secrets.
 
-Etat PROD observe le 2026-06-26:
-
-- `assets/index-CCH_IVkH.js`
-- `assets/index-Dz72SXOh.css`
-- `index.html` reference ces deux assets.
+Les noms des assets Vite changent selon le contenu du build; `index.html`
+indique les fichiers JavaScript et CSS courants.
 
 ## Endpoints
 
@@ -358,6 +355,43 @@ Liens externes dashboard:
 Regle importante: ShinedeHub ne doit pas modifier ces projets. Si une correction
 semble necessaire ailleurs, la documenter et attendre une demande explicite.
 
+## Dependances et outillage
+
+Maintenance du 2026-09-25: mises a jour compatibles avec React 18,
+React Router 7, Vite 7, Tailwind CSS 3, TypeScript 5 et ESLint 8.
+Les versions exactes sont verrouillees dans `package-lock.json`.
+
+Validation du 2026-09-25 sur Node.js 24.16.0 et npm 11.13.0:
+installation neuve, lint, verification TypeScript et build reussis;
+`npm audit` et `npm audit --omit=dev` ne signalent aucune vulnerabilite.
+Les migrations de versions majeures restent separees de cette maintenance;
+ESLint 8 est conserve pour la configuration actuelle mais n'est plus maintenu.
+
+- `@typescript-eslint/parser` et `@typescript-eslint/eslint-plugin` sont
+  declares explicitement pour rendre le lint reproductible.
+- PostCSS est declare une seule fois, dans les dependances de developpement.
+- NextUI, son plugin Tailwind, `react-icons`, `tailwind-merge`, l'utilitaire
+  inutilise `src/utils/classNames.ts` et la dependance directe `@eslint/js`
+  ont ete retires.
+- Les transitions conservent leur duree par defaut de 250 ms dans
+  `tailwind.config.js`.
+
+Utiliser Node.js compatible avec Vite 7: `^20.19.0 || >=22.12.0`.
+Executer les commandes depuis le PC Windows dans le repo DEV, y compris
+lorsque `P:` est un lecteur reseau.
+
+Pour recreer les dependances a partir du verrouillage et les verifier:
+
+```powershell
+cd P:\DEV\GitHub\App-ShinedeHub
+npm ci
+npm run lint
+npx tsc --noEmit
+npm run build
+npm audit
+npm audit --omit=dev
+```
+
 ## Configuration
 
 Fichiers suivis:
@@ -394,7 +428,8 @@ npx tsc --noEmit
 npm run build
 ```
 
-`npm run build` peut etre lent sur le partage reseau NAS.
+Executer `npm run build` sur le PC Windows depuis ce repo, meme lorsque
+les fichiers sont sur le partage reseau `P:`.
 
 Smoke HTTP apres deploiement:
 
@@ -430,6 +465,8 @@ Commande de deploiement front:
 cd P:\DEV\GitHub\App-ShinedeHub
 npm run build
 
+if ($LASTEXITCODE -ne 0) { throw 'Build echoue: deploiement annule.' }
+
 $distRoot = Resolve-Path -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist'
 $distAssets = Resolve-Path -LiteralPath 'P:\DEV\GitHub\App-ShinedeHub\dist\assets'
 $prodRoot = Resolve-Path -LiteralPath 'P:\PROD\ShinedeHub'
@@ -439,16 +476,17 @@ if (-not (Test-Path -LiteralPath $prodAssetsPath)) {
 }
 $prodAssets = Resolve-Path -LiteralPath $prodAssetsPath
 
-Copy-Item -LiteralPath (Join-Path $distRoot.Path 'index.html') -Destination (Join-Path $prodRoot.Path 'index.html') -Force
-Copy-Item -LiteralPath (Join-Path $distRoot.Path 'robots.txt') -Destination (Join-Path $prodRoot.Path 'robots.txt') -Force
-Copy-Item -LiteralPath (Join-Path $distRoot.Path 'sitemap.xml') -Destination (Join-Path $prodRoot.Path 'sitemap.xml') -Force
-Copy-Item -Path (Join-Path $distAssets.Path '*') -Destination $prodAssets.Path -Force
-
-$currentAssetNames = @(Get-ChildItem -LiteralPath $distAssets.Path -File | ForEach-Object { $_.Name })
-Get-ChildItem -LiteralPath $prodAssets.Path -File |
-  Where-Object { $currentAssetNames -notcontains $_.Name } |
-  ForEach-Object { Remove-Item -LiteralPath $_.FullName -Force }
+Copy-Item -Path (Join-Path $distAssets.Path '*') -Destination $prodAssets.Path -Force -ErrorAction Stop
+# Si des images ont change, copier les fichiers concernes de dist/img vers PROD/img ici.
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'robots.txt') -Destination (Join-Path $prodRoot.Path 'robots.txt') -Force -ErrorAction Stop
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'sitemap.xml') -Destination (Join-Path $prodRoot.Path 'sitemap.xml') -Force -ErrorAction Stop
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'index.html') -Destination (Join-Path $prodRoot.Path 'index.html') -Force -ErrorAction Stop
 ```
+
+Copier les assets et les images modifiees avant `index.html`, publie en dernier.
+Conserver les anciens assets lors du deploiement; leur nettoyage est une
+operation separee, apres verification qu'ils ne sont plus references.
+Les images dashboard restent conservees telles quelles.
 
 Ne pas copier `README.md`, `REPRISE.md`, `AGENTS.md`, `src/` ou `node_modules`
 en production: ce ne sont pas des artefacts runtime.
@@ -469,8 +507,6 @@ Lire aussi:
 
 - Plusieurs textes historiques dans `CoreAccess.tsx` restent sans accents; cela
   n'impacte pas le fonctionnement.
-- `react-icons` et `@nextui-org/*` semblent peu ou pas utilises dans `src`; a
-  revoir lors d'une future passe dependances.
 - `src/assets/react.svg` semble etre un reliquat Vite; a confirmer avant
   suppression.
 - Les images dashboard sont lourdes mais conservees volontairement.

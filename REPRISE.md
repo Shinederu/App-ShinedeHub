@@ -1,6 +1,6 @@
 # Reprise - ShinedeHub
 
-Derniere mise a jour: 2026-08-11.
+Derniere mise a jour: 2026-09-25.
 
 Projet: **ShinedeHub**
 Repo: `P:\DEV\GitHub\App-ShinedeHub`
@@ -22,9 +22,8 @@ Etat observe:
 
 - frontend React/Vite deploye et fonctionnel;
 - version publique affichee: `0.3.3`;
-- Git propre avant cette mise a jour documentaire;
-- dernier deploiement runtime connu: 2026-06-16;
-- PROD contient uniquement `index.html` et deux assets Vite hors dossier `img`;
+- maintenance des dependances validee le 2026-09-25;
+- les noms des assets Vite courants sont ceux references par `index.html`;
 - les images dashboard lourdes sont conservees volontairement;
 - aucun flux Mercure n'est utilise par ce frontend.
 
@@ -103,10 +102,11 @@ Runtime API:
 ## Stack frontend
 
 - React 18
-- TypeScript
-- Vite
-- Tailwind CSS
-- React Router
+- TypeScript 5
+- Vite 7
+- Tailwind CSS 3
+- React Router 7
+- ESLint 8 et `@typescript-eslint` 8
 - lucide-react
 - `@shinederu/auth-core`
 - `@shinederu/auth-react`
@@ -122,6 +122,27 @@ npm run preview
 ```
 
 `npm run build` lance `tsc && vite build`.
+
+L'installation reproductible utilise `npm ci`. Les deux packages
+`@typescript-eslint/parser` et `@typescript-eslint/eslint-plugin` sont
+declares dans le projet. PostCSS reste uniquement une dependance de
+developpement. Les versions exactes sont conservees dans `package-lock.json`.
+
+Executer les builds sur le PC Windows depuis ce repo DEV, meme lorsque
+`P:` est un lecteur reseau. Vite 7 exige Node.js `^20.19.0 || >=22.12.0`.
+
+La maintenance du 2026-09-25 conserve ces versions majeures et retire NextUI
+avec son plugin Tailwind, `react-icons`, `tailwind-merge`, l'utilitaire
+inutilise `src/utils/classNames.ts` et la dependance directe `@eslint/js`.
+La duree par defaut des transitions reste 250 ms dans `tailwind.config.js`.
+
+Apres une maintenance des dependances, completer lint/typecheck/build par
+`npm audit` et `npm audit --omit=dev`.
+
+Le 2026-09-25, installation neuve (`npm ci`), lint, TypeScript et build
+valides sur Node.js 24.16.0 / npm 11.13.0. Les deux audits ne signalent
+aucune vulnerabilite. ESLint 8 reste compatible mais n'est plus maintenu;
+sa migration, comme celles des autres versions majeures, est distincte.
 
 ## Architecture
 
@@ -497,16 +518,18 @@ if (-not (Test-Path -LiteralPath $prodAssetsPath)) {
 }
 $prodAssets = Resolve-Path -LiteralPath $prodAssetsPath
 
-Copy-Item -LiteralPath (Join-Path $distRoot.Path 'index.html') -Destination (Join-Path $prodRoot.Path 'index.html') -Force
-Copy-Item -LiteralPath (Join-Path $distRoot.Path 'robots.txt') -Destination (Join-Path $prodRoot.Path 'robots.txt') -Force
-Copy-Item -LiteralPath (Join-Path $distRoot.Path 'sitemap.xml') -Destination (Join-Path $prodRoot.Path 'sitemap.xml') -Force
-Copy-Item -Path (Join-Path $distAssets.Path '*') -Destination $prodAssets.Path -Force
-
-$currentAssetNames = @(Get-ChildItem -LiteralPath $distAssets.Path -File | ForEach-Object { $_.Name })
-Get-ChildItem -LiteralPath $prodAssets.Path -File |
-  Where-Object { $currentAssetNames -notcontains $_.Name } |
-  ForEach-Object { Remove-Item -LiteralPath $_.FullName -Force }
+Copy-Item -Path (Join-Path $distAssets.Path '*') -Destination $prodAssets.Path -Force -ErrorAction Stop
+# Si des images ont change, copier les fichiers concernes de dist/img vers PROD/img ici.
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'robots.txt') -Destination (Join-Path $prodRoot.Path 'robots.txt') -Force -ErrorAction Stop
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'sitemap.xml') -Destination (Join-Path $prodRoot.Path 'sitemap.xml') -Force -ErrorAction Stop
+Copy-Item -LiteralPath (Join-Path $distRoot.Path 'index.html') -Destination (Join-Path $prodRoot.Path 'index.html') -Force -ErrorAction Stop
 ```
+
+Executer la copie seulement apres la reussite des verifications et du build.
+Copier les assets et les images modifiees avant `index.html`, publie en dernier.
+Conserver les anciens assets lors du deploiement; leur nettoyage est une
+operation separee, apres verification qu'ils ne sont plus references.
+Les images dashboard restent conservees telles quelles.
 
 Ne pas utiliser `Copy-Item -LiteralPath ...\*`: PowerShell ne developpe pas le
 wildcard en `-LiteralPath`.
@@ -536,9 +559,11 @@ Smoke HTTP:
 curl.exe -sI https://shinederu.ch/
 curl.exe -sI https://shinederu.ch/robots.txt
 curl.exe -sI https://shinederu.ch/sitemap.xml
-curl.exe -sI https://shinederu.ch/assets/index-CCH_IVkH.js
-curl.exe -sI https://shinederu.ch/assets/index-Dz72SXOh.css
+curl.exe -sI https://shinederu.ch/assets/<asset-js-courant>.js
+curl.exe -sI https://shinederu.ch/assets/<asset-css-courant>.css
 ```
+
+Remplacer les noms d'assets par ceux references dans `index.html` deploye.
 
 Smoke manuel public:
 
@@ -619,10 +644,6 @@ Changements fonctionnels importants:
 
 - Pas de tests automatises applicatifs.
 - `CoreAccess.tsx` contient encore des libelles historiques sans accents.
-- Certaines dependances semblent potentiellement inutilisees:
-  - `react-icons`
-  - `@nextui-org/react`
-  - `@nextui-org/theme`
 - `src/assets/react.svg` semble etre un reliquat Vite.
 - Les images dashboard sont lourdes mais conservees volontairement.
 - `updateUserRole` reste une compatibilite cote auth; utiliser `/permissions`
@@ -638,7 +659,6 @@ borne. Ne pas enchainer les autres points « au passage ».
 
 - Ajouter audit log admin pour `/users`.
 - Ajouter pagination/recherche serveur pour `/users`.
-- Nettoyer dependances inutilisees apres verification.
 - Nettoyer `src/assets/react.svg` si confirme inutilise.
 - Harmoniser les libelles FR de `CoreAccess.tsx`.
 - Ajouter tests d'integration API cote repos backend, si ces projets sont ouverts
