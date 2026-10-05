@@ -1,13 +1,18 @@
 import MenuCards from "@/components/cards/MenuCards";
+import Title from "@/components/decoration/Title";
 import { AuthContext } from "@/shared/context/AuthContext";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const authCtx = useContext(AuthContext);
 
   return (
     <div className="grid gap-8">
-      <h1 className="sr-only">Dashboard</h1>
+      <div>
+        <Title title="Tableau de bord" size={1} />
+        <p className="text-gray-300">Retrouve ton profil et les outils de gestion auxquels tu as accès.</p>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <MenuCards active={true} name="Profil" desc="Consulte et modifie ton profil." url="/profile" picture="Profile" />
         {authCtx.can_manage_users ? (
@@ -19,21 +24,14 @@ const Dashboard = () => {
         {authCtx.is_admin ? (
           <MenuCards active={true} name="Permissions" desc="Gère les projets et droits centralisés." url="/permissions" picture="Permission" />
         ) : null}
-        <MenuCards active={true} name="MelodyQuest" desc="Un blindtest amusant !" url="https://melodyquest.shinederu.ch/#/main" picture="MelodyQuest" />
-        {authCtx.can_access_box ? (
-          <MenuCards active={true} name="ShinedeBox" desc="Héberge et partage tes fichiers." url="https://box.shinederu.ch/" picture="ShinedeBox" />
-        ) : null}
-        {authCtx.can_access_wake ? (
-          <MenuCards active={true} name="ShinedeWake" desc="Réveille et gère tes machines à distance." url="https://wake.shinederu.ch/" picture="ShinedeWake" />
-        ) : null}
-        <MenuCards active={false} name="Ananas" desc="Le célèbre réseau social #FUN" url="/Ananas" picture="Ananas" />
       </div>
 
       <div className="flex items-center flex-col justify-center gap-4 rounded-xl border border-[#2f2f2f] bg-[#181818] py-8 px-4">
-        <h2 className="text-center text-2xl font-bold sm:text-3xl">Prochainement ici, encore plus de projets !</h2>
-        <p>
-          <i>Vous verrez, ça va bientôt se remplir !</i>
-        </p>
+        <h2 className="text-center text-2xl font-bold sm:text-3xl">Envie de découvrir mes projets ?</h2>
+        <p className="text-gray-300">Ils ont maintenant leur propre page, accessible à tout le monde.</p>
+        <Link to="/projects" className="rounded-md bg-linear-to-r/srgb from-[#6a11cb] to-[#2575fc] px-5 py-3 font-bold transition-colors hover:from-[#7b2bd8] hover:to-[#3d86ff] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-300">
+          Découvrir les projets
+        </Link>
       </div>
     </div>
   );

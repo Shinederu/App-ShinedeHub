@@ -3,7 +3,7 @@
 Projet courant: **ShinedeHub**, frontend principal servi sur
 `https://shinederu.ch/`.
 
-Derniere mise a jour: 2026-08-11.
+Derniere mise a jour: 2026-10-05.
 
 ## Lecture obligatoire
 
@@ -100,12 +100,16 @@ reference plus.
 
 ## Points d'attention
 
-- Le dashboard affiche ShinedeBox et ShinedeWake uniquement selon les permissions
-  renvoyees par `auth?action=me`.
+- `/projects`, accessible par le menu Projets sans connexion, presente
+  MelodyQuest, ShinedeBox, ShinedeWake et Ananas. Cette vitrine ne change pas
+  les permissions propres aux services; Ananas reste indisponible et sans lien.
+- Le dashboard conserve le profil, les outils admin selon permissions et un
+  lien vers `/projects`; ne pas y reintroduire les quatre cartes projets.
 - Le lecteur Twitch et le widget Discord sont charges a la demande pour limiter
   les scripts/iframes tiers au rendu initial.
 - `Title` gere le niveau semantique des titres; eviter de reintroduire plusieurs
   `h1` visibles sur une meme page.
 - `src/components/seo/Seo.tsx` gere les titres/metadonnees par route; les pages
   admin/auth doivent rester `noindex`.
-- Les images dashboard sont volontairement conservees telles quelles.
+- Les images historiques de `public/img/dashboard` sont conservees telles
+  quelles, dont `ShinedeBox.gif`, reutilise par la page Projets.

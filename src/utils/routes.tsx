@@ -6,6 +6,7 @@ import Homepage from "@/pages/Homepage";
 import NewEmail from "@/pages/NewEmail";
 import NewPassword from "@/pages/NewPassword";
 import Profile from "@/pages/Profile";
+import Projects from "@/pages/Projects";
 import ResetPassword from "@/pages/ResetPassword";
 import Announcements from "@/pages/Announcements";
 import CoreAccess from "@/pages/CoreAccess";
@@ -18,6 +19,7 @@ const anonymous = () => (
     <>
         <Route path="*" element={<Navigate to="/" replace />} /> {/*Redirection pour les routes non-autorisées & inconnue */}
         <Route path="/" element={<Homepage />} />
+        <Route path="/projects" element={<Projects />} />
         <Route path="/channels" element={<Channels />} />
         <Route path="/community" element={<Community />} />
         <Route path="/aboutme" element={<AboutMe />} />

@@ -42,7 +42,7 @@ const MenuCards = (props: MenuCardsType) => {
       }}
     >
       <div className="flex h-full w-full flex-col justify-center rounded-md bg-black/65 px-4 py-5">
-        <Title size={3} title={props.name} />
+        <Title size={3} title={props.name} level={2} />
         <p>{props.desc}</p>
         {!props.active && <i>Prochainement...</i>}
       </div>

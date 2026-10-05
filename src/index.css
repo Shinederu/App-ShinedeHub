@@ -125,3 +125,48 @@
     margin-bottom: 0;
   }
 }
+
+/* Project cards keep their feedback accessible to keyboard and motion-sensitive users. */
+.project-card {
+  transition: border-color 250ms ease, background-color 250ms ease, box-shadow 250ms ease, transform 250ms ease;
+}
+
+.project-card__image {
+  transition: transform 250ms ease;
+}
+
+.project-card--available:focus-visible {
+  outline: 2px solid #a5b4fc;
+  outline-offset: 4px;
+  border-color: #8f6bff;
+  background-color: #211c30;
+}
+
+@media (hover: hover) {
+  .project-card--available:hover {
+    transform: translateY(-3px);
+    border-color: #8f6bff;
+    background-color: #211c30;
+    box-shadow: 0 8px 24px rgb(106 17 203 / 0.18);
+  }
+
+  .project-card--available:hover .project-card__image {
+    transform: scale(1.04);
+  }
+
+  .project-card--unavailable:hover {
+    border-color: #71617f;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card,
+  .project-card__image {
+    transition: none;
+  }
+
+  .project-card--available:hover,
+  .project-card--available:hover .project-card__image {
+    transform: none;
+  }
+}

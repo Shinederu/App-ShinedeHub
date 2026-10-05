@@ -3,7 +3,7 @@
 Frontend principal de l'ecosysteme Shinede, servi sur
 `https://shinederu.ch/`.
 
-Derniere mise a jour documentaire: 2026-09-25.
+Derniere mise a jour documentaire: 2026-10-05.
 
 ## Role
 
@@ -25,7 +25,7 @@ Le site sert a:
 - presenter l'accueil public, les chaines, la communaute et la bio;
 - ouvrir les flux login, inscription, reset password et confirmation email;
 - donner acces au dashboard apres connexion;
-- afficher des tuiles vers les projets Shinede selon les permissions;
+- presenter les projets Shinede dans la page publique `/projects`;
 - administrer les utilisateurs via `/users`;
 - administrer les annonces publiques via `/announcements`;
 - administrer les projets, roles et permissions via `/permissions`.
@@ -112,10 +112,13 @@ Permissions stables consommees:
 - `core.super_admin`: acces `/permissions` et bypass dashboard.
 - `auth.users_manage`: alimente `can_manage_users`.
 - `main.announcements_manage`: alimente `can_manage_announcements`.
-- `box.files_manage`: affiche ShinedeBox.
-- `wake.devices_wake`: affiche ShinedeWake.
-- `wake.devices_manage`: affiche ShinedeWake.
-- `wake.users_manage`: affiche ShinedeWake.
+- `box.files_manage`: alimente `can_access_box`.
+- `wake.devices_wake`, `wake.devices_manage`, `wake.users_manage`: alimentent
+  `can_access_wake`.
+
+Les flags Box/Wake restent dans le contexte, mais ne filtrent pas la vitrine
+publique `/projects`. Les permissions des services eux-memes restent
+inchangees: voir une carte ou suivre son lien n'accorde aucun droit d'acces.
 
 Notation documentaire ecosysteme:
 
@@ -138,6 +141,7 @@ principal de gestion des roles.
 Routes publiques:
 
 - `/`
+- `/projects`
 - `/channels`
 - `/community`
 - `/aboutme`
@@ -188,6 +192,7 @@ doivent jamais exposer le nom technique `ShinedeHub`.
 Pages indexables et presentes dans `public/sitemap.xml`:
 
 - `/`
+- `/projects`
 - `/aboutme`
 - `/channels`
 - `/community`
@@ -220,19 +225,45 @@ si le SEO devenait un objectif majeur.
 - `src/main.tsx`: providers React, auth et modales.
 - `src/utils/routes.tsx`: routes selon auth/permissions.
 - `src/pages/Homepage.tsx`: accueil public + annonces.
+- `src/pages/Projects.tsx`: catalogue public des quatre projets.
+- `src/data/projects.ts`: noms, descriptions, images, liens et disponibilite des projets.
 - `src/pages/Channels.tsx`: Twitch/YouTube, lecteur Twitch charge au clic.
 - `src/pages/Community.tsx`: Discord, widget charge au clic.
 - `src/pages/AboutMe.tsx`: bio publique responsive.
-- `src/pages/Dashboard.tsx`: tuiles projets, visibles selon droits.
+- `src/pages/Dashboard.tsx`: profil, outils admin selon droits et lien vers Projets.
 - `src/pages/Profile.tsx`: profil, avatar, email, reset password, zone sensible.
 - `src/pages/Users.tsx`: management utilisateurs.
 - `src/pages/Announcements.tsx`: CRUD annonces.
 - `src/pages/CoreAccess.tsx`: projets, roles, permissions, assignations.
 - `src/components/decoration/Title.tsx`: titres semantiques `h1` a `h6`.
 - `src/components/cards/MenuCards.tsx`: tuiles dashboard avec mapping image explicite.
+- `src/components/cards/ProjectCard.tsx`: presentation des projets et de leur disponibilite.
 - `src/components/integrations/TwitchEmbed.tsx`: charge le script Twitch au clic.
 - `src/components/modals/ModalLogin.tsx`: login/register, submit avec `Enter`.
 - `src/components/modals/ModalMessage.tsx`: result/error/confirm/prompt.
+
+## Projets
+
+La page publique `/projects`, accessible depuis le menu Projets, presente les
+images historiques et les descriptions de quatre projets, sans exiger de
+connexion:
+
+- MelodyQuest -> `https://melodyquest.shinederu.ch/#/main`
+- ShinedeBox -> `https://box.shinederu.ch/`
+- ShinedeWake -> `https://wake.shinederu.ch/`
+- Ananas -> indisponible, sans lien
+
+Les URLs et les droits propres aux services ne changent pas. Les donnees sont
+centralisees dans `src/data/projects.ts` et rendues par `ProjectCard.tsx`.
+La page dispose de metadonnees SEO et figure dans le sitemap.
+
+Validation du 2026-10-05: lint, typecheck et build reussis sur le PC Windows.
+Un smoke navigateur ponctuel valide 27 controles a 390/768/1024/1440 px:
+acces public et connecte, navigation, dashboard selon droits, images, SEO,
+clavier, survol et mouvements reduits. APIs simulees, aucune ecriture reelle.
+
+Les images restent a leur emplacement historique `public/img/dashboard`,
+sans compression ni remplacement. ShinedeBox utilise toujours `ShinedeBox.gif`.
 
 ## Dashboard
 
@@ -242,15 +273,10 @@ Tuiles:
 - Utilisateurs -> `/users`, visible avec `can_manage_users`
 - Annonces -> `/announcements`, visible avec `can_manage_announcements`
 - Permissions -> `/permissions`, visible avec `is_admin`
-- MelodyQuest -> `https://melodyquest.shinederu.ch/#/main`
-- ShinedeBox -> `https://box.shinederu.ch/`, visible avec `can_access_box`
-- ShinedeWake -> `https://wake.shinederu.ch/`, visible avec `can_access_wake`
-- Ananas -> tuile inactive
 
-Les images dashboard restent volontairement non compressees pour l'instant.
+Un lien vers `/projects` remplace les quatre cartes projets du dashboard.
 `MenuCards` n'essaie plus plusieurs URLs par tuile; les chemins sont explicites
 pour eviter les probes/404 en cascade.
-La tuile ShinedeBox utilise `public/img/dashboard/ShinedeBox.gif`.
 
 ## Utilisateurs
 
@@ -346,7 +372,7 @@ Dependances fonctionnelles:
 - `Module-Auth-Core`: client auth TypeScript.
 - `Module-Auth-React`: provider/hooks React.
 
-Liens externes dashboard:
+Liens externes de la page Projets:
 
 - MelodyQuest
 - ShinedeBox
@@ -457,6 +483,7 @@ Smoke HTTP apres deploiement:
 
 ```powershell
 curl.exe -sI https://shinederu.ch/
+curl.exe -sI https://shinederu.ch/projects
 curl.exe -sI https://shinederu.ch/robots.txt
 curl.exe -sI https://shinederu.ch/sitemap.xml
 curl.exe -sI https://shinederu.ch/assets/<asset-js-courant>.js
@@ -471,6 +498,11 @@ Invoke-WebRequest -Uri 'https://api.shinederu.ch/main-site/?action=listPublicAnn
 
 `auth?action=listUsers` sans session doit renvoyer une erreur auth controlee,
 pas une erreur fatale.
+
+Pour la page Projets, verifier sans connexion et sur mobile: lien du menu,
+quatre cartes et images, trois URLs existantes et Ananas sans lien. Verifier
+le titre/canonical de `/projects`, sa presence dans le sitemap et le dashboard
+connecte recentre sur le profil/admin avec son lien vers Projets.
 
 ## Deploiement
 

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { PUBLIC_PROJECTS } from "@/data/projects";
 
 const SITE_NAME = "Shinederu";
 const SITE_URL = "https://shinederu.ch";
@@ -48,6 +49,35 @@ const routeSeo: Record<string, SeoConfig> = {
         name: SITE_NAME,
         url: `${SITE_URL}/aboutme`,
         sameAs: SOCIAL_PROFILES,
+      },
+    ],
+  },
+  "/projects": {
+    title: "Projets — Shinederu",
+    description:
+      "Découvre les projets de Shinederu : le blindtest MelodyQuest, le partage de fichiers ShinedeBox, la gestion de machines ShinedeWake et le projet Ananas.",
+    path: "/projects",
+    structuredData: [
+      {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": `${SITE_URL}/projects#page`,
+        name: "Les projets de Shinederu",
+        url: `${SITE_URL}/projects`,
+        inLanguage: "fr-CH",
+        mainEntity: {
+          "@type": "ItemList",
+          itemListElement: PUBLIC_PROJECTS.map((project, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: {
+              "@type": "CreativeWork",
+              name: project.name,
+              description: project.description,
+              ...(project.href ? { url: project.href } : {}),
+            },
+          })),
+        },
       },
     ],
   },

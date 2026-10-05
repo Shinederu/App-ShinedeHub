@@ -1,6 +1,6 @@
 # Reprise - ShinedeHub
 
-Derniere mise a jour: 2026-09-25.
+Derniere mise a jour: 2026-10-05.
 
 Projet: **ShinedeHub**
 Repo: `P:\DEV\GitHub\App-ShinedeHub`
@@ -62,7 +62,8 @@ ShinedeHub sert a:
 - afficher les annonces publiques du site principal;
 - ouvrir les flux auth utilisateur;
 - centraliser un dashboard apres connexion;
-- exposer des raccourcis vers MelodyQuest, ShinedeBox et ShinedeWake;
+- presenter MelodyQuest, ShinedeBox, ShinedeWake et Ananas sur `/projects`,
+  accessible sans connexion depuis le menu Projets;
 - administrer les utilisateurs;
 - administrer les annonces;
 - administrer les permissions centralisees.
@@ -92,6 +93,7 @@ Runtime API:
 ## URLs
 
 - Site: `https://shinederu.ch/`
+- Projets: `https://shinederu.ch/projects`
 - Auth API: `https://api.shinederu.ch/auth/`
 - Auth front controller conseille: `https://api.shinederu.ch/auth/index.php`
 - Main-site API: `https://api.shinederu.ch/main-site/`
@@ -190,6 +192,7 @@ Clients API:
 Pages:
 
 - `Homepage.tsx`
+- `Projects.tsx`
 - `Channels.tsx`
 - `Community.tsx`
 - `AboutMe.tsx`
@@ -207,9 +210,15 @@ Composants sensibles:
 - `ModalLogin.tsx`: login/register et reset entrypoint.
 - `ModalMessage.tsx`: result/error/confirm/prompt.
 - `MenuCards.tsx`: tuiles dashboard.
+- `src/components/cards/ProjectCard.tsx`: cartes de la page Projets.
 - `Title.tsx`: titres semantiques.
 - `TwitchEmbed.tsx`: chargement a la demande.
 - `YouTubeEmbed.tsx`: apercu image.
+
+Catalogue public:
+
+- `src/data/projects.ts`: noms, descriptions, images, liens et disponibilite
+  de MelodyQuest, ShinedeBox, ShinedeWake et Ananas.
 
 ## Variables d'environnement
 
@@ -287,11 +296,16 @@ Notation de documentation:
 
 Ne pas changer ce mapping sans verifier `Module-Auth-API`.
 
+Les flags Box/Wake restent calcules, mais ne conditionnent plus l'affichage
+des cartes: `/projects` est une vitrine publique. Les droits d'utilisation
+restent verifies par chaque service; aucun acces supplementaire n'est accorde.
+
 ## Routes et acces
 
 Publiques:
 
 - `/`
+- `/projects`
 - `/channels`
 - `/community`
 - `/aboutme`
@@ -323,18 +337,34 @@ Tuiles:
 - Utilisateurs: visible avec `can_manage_users`.
 - Annonces: visible avec `can_manage_announcements`.
 - Permissions: visible avec `is_admin`.
-- MelodyQuest: visible pour tous les comptes connectes.
-- ShinedeBox: visible avec `can_access_box`.
-- ShinedeWake: visible avec `can_access_wake`.
-- Ananas: inactive.
+
+Un lien vers `/projects` remplace les cartes MelodyQuest, ShinedeBox,
+ShinedeWake et Ananas, deplacees sur la page publique Projets le 2026-10-05.
 
 Images:
 
 - Les images dans `public/img/dashboard` sont conservees telles quelles.
+- Les cartes projets reutilisent ces images, dont `ShinedeBox.gif`.
 - `MenuCards.tsx` utilise un mapping explicite et ne teste plus plusieurs URLs.
 - Ne pas compresser ou remplacer ces images sans demande explicite.
 
 ## Pages publiques
+
+Projets (`/projects`):
+
+- menu Projets visible sans connexion;
+- quatre cartes avec image et description: MelodyQuest, ShinedeBox,
+  ShinedeWake et Ananas;
+- liens historiques vers les trois services disponibles, sans changement de
+  leurs URLs ni de leurs regles d'acces;
+- Ananas reste indisponible, sans lien invente;
+- donnees dans `src/data/projects.ts`, rendu via `ProjectCard.tsx`;
+- metadonnees SEO de route et entree dans `public/sitemap.xml`.
+
+Validation du 2026-10-05: lint/typecheck/build reussis sur le PC; 27 controles
+navigateur a 390/768/1024/1440 px, acces anonyme/basic/admin, dashboard,
+navigation, clavier, hover/focus, mouvements reduits, images et SEO.
+Toutes les APIs de ces tests sont simulees, sans ecriture reelle.
 
 Accueil:
 
@@ -373,6 +403,7 @@ Le JSON-LD `WebSite` dans `index.html` doit garder `name: "Shinederu"`. Ne pas r
 Routes indexables:
 
 - `/`
+- `/projects`
 - `/aboutme`
 - `/channels`
 - `/community`
@@ -578,6 +609,7 @@ Smoke HTTP:
 
 ```powershell
 curl.exe -sI https://shinederu.ch/
+curl.exe -sI https://shinederu.ch/projects
 curl.exe -sI https://shinederu.ch/robots.txt
 curl.exe -sI https://shinederu.ch/sitemap.xml
 curl.exe -sI https://shinederu.ch/assets/<asset-js-courant>.js
@@ -589,6 +621,9 @@ Remplacer les noms d'assets par ceux references dans `index.html` deploye.
 Smoke manuel public:
 
 - ouvrir `/`;
+- ouvrir `/projects` sans connexion depuis le menu Projets;
+- verifier les quatre images/descriptions, les trois liens existants et Ananas
+  indisponible sans lien, puis le titre/canonical et l'entree sitemap;
 - ouvrir `/aboutme`;
 - ouvrir `/channels`;
 - verifier que le lecteur Twitch n'est pas charge avant clic;
@@ -600,7 +635,8 @@ Smoke utilisateur:
 
 - login;
 - ouvrir `/dashboard`;
-- verifier les tuiles selon permissions;
+- verifier les tuiles profil/admin selon permissions, le lien vers `/projects`
+  et l'absence des quatre anciennes cartes projets;
 - ouvrir `/profile`;
 - modifier pseudo dans la limite 4-24;
 - tester upload avatar si besoin.
@@ -649,8 +685,8 @@ Changements fonctionnels importants:
   presents;
 - page `/users` transformee en panneau de management utilisateur;
 - admins peuvent modifier pseudo, mot de passe, avatar et blocage;
-- ShinedeBox ajoute au dashboard;
-- ShinedeWake visible seulement selon permission;
+- historiquement, ShinedeBox ajoute au dashboard et ShinedeWake filtre selon
+  permission; depuis le 2026-10-05, leurs cartes sont sur `/projects`;
 - URL Auth forcee vers `index.php` pour eviter les 405;
 - reload auth limite pour eviter boucle JS;
 - timers UI inutiles retires;
@@ -658,8 +694,10 @@ Changements fonctionnels importants:
 - titres HTML corriges.
 - titres et descriptions SEO reformules pour le public sous le seul nom
   `Shinederu`, avec accents, metadonnees sociales et donnees structurees;
-- GIF historique ShinedeBox reintegre dans les sources et utilise par sa tuile
-  du dashboard.
+- GIF historique ShinedeBox reintegre dans les sources, puis conserve pour sa
+  carte sur `/projects`;
+- 2026-10-05: catalogue public Projets pour les quatre projets, dashboard
+  recentre sur le profil/admin; aucun changement des services ni de leurs droits.
 
 ## Limites connues
 

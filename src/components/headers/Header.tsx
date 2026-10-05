@@ -6,6 +6,7 @@ import ProfileHeader from "./ProfileHeader";
 
 const links = [
   { label: "Accueil", to: "/" },
+  { label: "Projets", to: "/projects" },
   { label: "Les Chaînes", to: "/channels" },
   { label: "Communauté", to: "/community" },
   { label: "À Propos", to: "/aboutme" },
@@ -42,12 +43,12 @@ const Header = () => {
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             onClick={() => setMenuOpen((prev) => !prev)}
-            className="rounded-md bg-[#252525] px-3 py-2 text-sm font-semibold md:hidden"
+            className="rounded-md bg-[#252525] px-3 py-2 text-sm font-semibold lg:hidden"
           >
             {menuOpen ? "Fermer" : "Menu"}
           </button>
 
-          <div className="hidden items-center gap-8 md:flex">
+          <div className="hidden items-center gap-5 lg:flex xl:gap-8">
             {links.map((link) => (
               <NavLink key={link.to} end={link.to === "/"} className={navLinkClass} to={link.to}>
                 {link.label}
@@ -60,7 +61,8 @@ const Header = () => {
 
         <div
           id="mobile-navigation"
-          className={`${menuOpen ? "mt-3 max-h-96 opacity-100" : "max-h-0 opacity-0"} overflow-hidden transition-all duration-300 md:hidden`}
+          inert={!menuOpen}
+          className={`${menuOpen ? "mt-3 max-h-96 opacity-100" : "max-h-0 opacity-0"} overflow-hidden transition-all duration-300 lg:hidden`}
         >
           <div className="flex flex-col items-start gap-3 rounded-md bg-[#202020] p-4">
             {links.map((link) => (
